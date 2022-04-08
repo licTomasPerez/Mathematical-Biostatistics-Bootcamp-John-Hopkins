@@ -1,0 +1,389 @@
+\documentclass{homework}
+\author{Tomás Pérez}
+\class{Mathematical Biostatistics Boot Camp 1}
+\date{\today}
+\title{Homework Assignments and Quizzes}
+
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\section{Homework 1 - Week 1}
+
+\begin{tcolorbox}[title=Question 1]
+$P(B\cap A^C)$ is always equal to?
+\end{tcolorbox}
+
+Solution: Let $U$ denote the universe such that $A, B \subset U$, then ${P}(B) = P(B\cap A)+P(B\cap A^c)$. This is, the probability of B happening is the probability of both B and A happening plus the probability of B happening and not A. Rearranging, we get that $P(B \cap A^c) = P(B) - P(B \cap A)$.\\
+
+\begin{tcolorbox}[title=Question 2]
+When does $P(A \cup B) = P(A) + P(B)$? 
+\end{tcolorbox}
+
+Solution: Let $U$ denote the universe such that $A, B \subset U$. Then, as a direct result of Kolmogorov's principles, it's true that ${\displaystyle P(A\cup B)=P(A)+P(B)-P(A\cap B)}.$ The only case in which the probability of either event A happening or event B happening is the sum of the probabilities occurs only when said events are mutually exclusive \textit{ie.} $A\cap B = \emptyset$. Thus $P(A\cap B)=0$ since the empty set has null measure. \\
+
+\begin{tcolorbox}[title=Question 3]
+What is the probability of getting at least one head on three coin flips expressed as a percentage to one decimal place?
+\end{tcolorbox}
+
+A coin flip is a dichotomic experiment (ruled by a Bernoulli random variable) \textit{ie} having only two outcomes, head or tail. Since the coin flips, as experiments, are independent of each other, let A be the event of getting at least one head. Then $A^c$  is the probability of getting no heads (three tails) with an associated probability of $1/8$. The probability of $A$ is then $1 - \frac{1}{8} = \frac{7}{8} = 87.5$ \\
+
+\begin{tcolorbox}[title=Question 4]
+Suppose a random variable, $X$, follows a uniform distribution. That is, having a density that is a constant 1 between 0 and 1. What is the probability that $X$ is between .1 and .7 expressed as an integer percentage (i.e. no decimal places)?
+\end{tcolorbox}
+
+A uniformly distributed random variable has the following pdf
+
+$$
+f(x)= \left\{ \begin{array}{lcc}
+             1 &  \textnormal{ if } x \in \mathds{R}_{[0,1])}  \\
+             1 &  \textnormal{ if } x \notin \mathds{R}_{[0,1])}
+             \end{array}
+   \right.
+$$
+
+Thus, the probability of $X$ being in the (.1,.7)-interval is the area covered by the pdf in said interval. Namely, $P_{[.1,.7]} = \int_{.1}^{.7} dx = .6$. \\
+
+\begin{tcolorbox}[title=Question 5]
+Suppose a random variable follows a density $cx$ for$ 0\leq x \leq 1$. What is $c$?
+\end{tcolorbox}
+
+All probability density functions describing any random variable are to be normalized, thus $1=\int_{0}^{1} cxdx$ which implies $c=2$. \\
+
+\begin{tcolorbox}[title=Question 6]
+Suppose that a density is of the form $3x^2$ for 
+$x$ between 0 and 1. What is the distribution function associated with this density?
+\end{tcolorbox}
+
+The cumulative distribution function is the integral of the random probability's pdf, thus: $F(x)=\int_{0}^{x} 3t^2 dt=x^3.$ \\
+
+\begin{tcolorbox}[title=Question 7]
+Suppose that the time in days until hospital discharge for a certain patient population follows a density $f(x) = \frac{1}{10}\exp(-x/10)$ for $x > 0$.  Calculate the probability that a person takes longer than 11 days to be discharged. Express it as an integer percentage with no digits after the decimal.
+\end{tcolorbox}
+
+The answer is straightforward, 
+
+$$
+100 \int_{11}^{\infty}\frac{1}{10}\exp\left(-\frac{x}{10}\right)dx =100\exp \left(-\frac{11}{10}\right)\approx 33.
+$$ \\
+
+\begin{tcolorbox}[title=Question 8]
+Suppose $h$ is a real valued function such that $h \geq 0$ and $\int_{-\infty}^\infty h(x)dx > 0$ Then $c \times h$ is a valid density when $c$ is equal to?
+\end{tcolorbox}
+
+According to Kolmogorovian's axioms, all random variables' pdfs are to be normalized. Then the only valid answer is $ \left( \int_{-\infty}^\infty h(x)dx \right)^{-1}$. \\
+
+\begin{tcolorbox}[title=Question 9]
+Consider a health care worker without the flu. Suppose that they have a p=.01 probability of getting infected after an examination of an infected patient. His chance of getting infected after the $i^{th}$ interaction is assumed to be 
+
+$$p(1-p)^{i-1}$$ 
+
+for $i=1, 2, \ldots$. What is the probability of his getting infected after 3 or more interactions expressed as to the nearest integer percentage? (That is, no decimal places.)
+
+\end{tcolorbox}
+
+Solution: All pdfs are normalized to one, so let 
+$X$ be the number of interactions until he is infected. Thus, $P(X \geq 3) + P(X < 3) = 1$. Rearranging we have $ P(X \geq 3) = 1 - P(X = 2) - P(X = 1) = 1 - .01 \times .99 - .01 \approx 98\%$. \\ 
+
+\begin{tcolorbox}[title=Question 10]
+Consider a geometric random variable, $X$ which has mass function
+
+$$p(1-p)^{x-1}$$ 
+
+for $x=1,2,\ldots$. (You can assume this sums to 1.) What is the probability $X > 5$? 
+\end{tcolorbox}
+
+Solution: We have that 
+
+\begin{align*}
+P(X>5)=P(X\geq6)=\sum_{x=6}^{\infty} p(1-p)^{x-1} 
+= p(1-p)^{5} \sum_{x=6}^{\infty} p(1-p)^{x-5-1} \\= p(1-p)^{5} \sum_{x=1}^{\infty} p(1-p)^{x-1} =p(1-p)^{5}.
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 11]
+Let $g(x) = \pi f_1(x) + (1 - \pi)f_2(x)$(x) where $f_1$ and $f_2$ are densities with means $\mu_1$ and $\mu_2$ and associated variances $\sigma_1^2$ and $\sigma_2^2$, respectively. Here $0 \leq \pi \leq 1$. Note that $g$ is a valid density. What is $E[X^2]$ where $X$ is a random variable having density $g$?
+\end{tcolorbox}
+
+Solution: From it's very definition we have $Var(X)+E[X]^2=E[X^2]$ we get 
+
+\begin{align*}
+\int_{-\infty}^{\infty} dx x^2 f_{1}(x), \\
+\int_{-\infty}^{\infty} dx x^2 f_{2}(x),
+\end{align*}
+
+Therefore 
+
+\begin{align*}
+    E[X^2]= \pi \int_{\mathds{R}} dx x^2f_{1}(x)+(1-\pi) \int_{\mathds{R}} dx x^2f_{2}(x) = \pi(\sigma_1^2+\mu_1^2) + (1-\pi)(\sigma_2^2+\mu_2^2)
+\end{align*}. \\
+
+\begin{tcolorbox}[title=Question 12]
+Suppose that a density is of the form $(k+1)x^k$
+for some constant $k > 1$ and $0 \leq x \leq 1$. What is $E[X^n]$ where $n$ is an integer and $X$ is a random variable from this density?
+\end{tcolorbox}
+
+We are to compute the following integral
+
+\begin{align*}
+    E[X^n]=\int_{0}^{1} dx (k+1)x^{k+n}= \frac{k+n+1}{k+1}.
+\end{align*} \\
+
+
+\begin{tcolorbox}[title=Question 13]
+You are playing a game with a friend where you flip a coin and if it comes up heads you give her two dollars and if it comes up tails she gives you one dollar. You play the game ten times. What is the expected total earnings for you?
+\end{tcolorbox}
+
+Let $X_1,\cdots,X_{10}$ be random variables such that said random variables
+
+\begin{itemize}
+    \item take the value -2 with .5 probability
+    \item and take the value 1 with .5 probability,
+\end{itemize}
+
+since the coin is assumed fair. Thus, in order to calculate the net expected earnings we compute the expected value of the sum of the ten random variables
+
+\begin{align*}
+    E\bigg[\sum_{j=1}^{10}X_j\bigg] =  \sum_{j=1}^{10} E\bigg[X_j\bigg] = 10 \times (-2 \times .5 + 1 \times .5) = -5.
+\end{align*}
+
+This means that this game is not favourable to play. \\
+
+\begin{tcolorbox}[title=Question 14]
+When at the free-throw line for two shots, a basketball player makes at least one free throw 90\% of the time. 80\% of the time, the player makes the first shot, while 70\% of the time she makes both shots. Does it appear that the player's second shot success is independent of the first?
+\end{tcolorbox}
+
+Let $A$ denote the event in which the player makes the first shot and let $B$ denote the event in which he makes the second shot. Then, we are given the following data:
+
+\begin{itemize}
+    \item $P(A \cup B) = .9$ - the probability of making at least one free throw -,
+    \item $P(A) = .8$ - the probability of making the first shot -, 
+    \item $P(A\cap B) = .7$ - the probability of making the second shot -,
+\end{itemize}
+
+Then, the probability of making the second shot is $P(B)= P(A \cup B) - P(A) + P(A \cap B) = .8$. Should the events A and B be independent, then $P(A\cap B) = P(A) \times P(B)$. This is not case so the events are not independent.\\
+
+\begin{tcolorbox}[title=Question 15]
+Let $X$ be a random variable with mean $\mu$ and variance $\sigma^2$. What is the variance of $X/\sigma + 10$?
+\end{tcolorbox}
+
+In general, if $X$ is a random variable with mean $\mu$ and variance $\sigma^2$ then $Var[aX+b]=a^2Var[X]$. Thus
+
+\begin{align*}
+    Var\left[\frac{X}{\sigma}+10\right] = \frac{1}{\sigma^2} Var[X] = 1. 
+\end{align*}\\
+
+\begin{tcolorbox}[title=Question 16]
+Let $X_1,\ldots, X_{n_1}$ be random variables independent of $Y_1,\ldots, Y_{n_2}$ , where both groups are iid with associated population means $\mu_1$ and $\mu_2$ and population variances $\sigma_1^2$ and $\sigma_2^2$, respectively. Let $\bar X$ and $\bar Y$ be their sample means. What is the mean of $\bar X - \bar Y$ ?
+\end{tcolorbox}
+
+The expectation value of a sum(difference) of random variables is linear on said random variables, noting that the sample mean of a random variable is in and of itself a random variable.  Thus $E[\bar X - \bar Y] = E[\bar X] - E[\bar Y] = \mu_1 - \mu_2$. \\
+
+\begin{tcolorbox}[title=Question 17]
+The Poisson mass function is given by $P(X = x) = \frac{e^{-\lambda} \lambda^x}{x!}$ for $x=0,1,2,3,\ldots$ and $\lambda >0$. What is $E[X(X-1)]$ where $X$ is a Poisson random variable?
+\end{tcolorbox}
+
+Since this is a discrete random variable we are to compute the following expression:
+
+\begin{align*}
+    E[X(X-1)]=\sum_{x=0}^{\infty} x(x-1) \frac{e^{-\lambda} \lambda^x}{x\!} = \sum_{x=2}^{\infty} \frac{e^{-\lambda} \lambda^x}{(x-2)\!} = \lambda^2  \sum_{x=2}^\infty \frac{e^{-\lambda} \lambda^{x-2}}{(x-2)!} = \lambda^2 \sum_{x=0}^\infty \frac{e^{-\lambda} \lambda^{x}}{(x)!} = \lambda^2.
+\end{align*}
+
+\begin{tcolorbox}[title=Question 18]
+Let $f$ be a density such that $f(x) = f(-x)$. What is the associated mean of this density (assuming that it has a mean)?
+\end{tcolorbox}
+
+It has to be zero. Indeed, 
+
+$$\int_{-\infty}^{\infty} dx xf(x)
+= \int_{0}^{\infty} dx xf(x) + \int_{-\infty}^0 dx xf(x) = \int_{0}^\infty x f(x) dx - \int_{0}^\infty t f(t) dt = 0$$
+
+\begin{tcolorbox}[title=Question 19]
+For a Bernoulli coin flip with probability of  head $p$, what is the value of $p$ that yields the largest variance?
+\end{tcolorbox}
+
+The variance is $p(1-p)$. Taking a derivative yields $1-2p$, solving for 0 yields $p=.5$. The second derivative is $-2$ suggesting that the function is concave and that $p=.5$ is, in fact, the maximum.\\
+
+\begin{tcolorbox}[title=Question 20]
+Let $f$ be a mean $0$ variance $1$ density. Let $g(x) = f\{ (x - \mu) / \sigma \} / \sigma$. Argue to yourself that $g$ is a valid density. What is the variance associated with $g$
+\end{tcolorbox}
+
+We are to compute the following:
+
+\begin{align*}
+    \int_{-\infty}^{\infty} dx f\{ (x - \mu) / \sigma \} / \sigma = \int_{\mathds{R}} dz (z\sigma+\mu)f(z) \textnormal{ where } z=(x-\mu) / \sigma  \\
+    = \sigma  \int_{\mathds{R}} dz z f(z) + \mu  \int_{\mathds{R}} dz f(z) = \mu.
+\end{align*}
+
+So the mean of $g$ is $\mu$. The calculation of the variance is straightforward:
+
+\begin{align*}
+    \int_{\mathds{R}} dx (x-\mu)^2f\{ (x - \mu) / \sigma \} = \int_{\mathds{R}} dz \sigma^2 z^2f(z) = \sigma^2. 
+\end{align*}
+
+\clearpage
+
+\section{Quiz 1 - Week 1}
+
+\begin{tcolorbox}[title=Question 1]
+What is $P(A\cup B)$ always equal to?
+\end{tcolorbox}
+
+Using De Morgan's law we have that $P(A\cup B) = 1 - P(A^c \cap B^c).$\\
+
+\begin{tcolorbox}[title=Question 2]
+Which of the following are always true about $P(\cup_{i=1}^n E_i)$?
+\end{tcolorbox}
+
+N/A\\
+
+\begin{tcolorbox}[title=Question 3]
+Consider influenza epidemics for two parent heterosexual families. Suppose that the probability is 17\% that at least one of the parents has contracted the disease. The probability that the father has contracted influenza is 12\% while the probability that both the mother and father have contracted the disease is 6\%. What is the probability that the mother has contracted influenza?
+\end{tcolorbox}
+
+Let A denote the event in which the mother has contracted the disease and let B denote the event in which the father has contracted the disease, we are given the following information
+
+\begin{itemize}
+    \item The probability that at least one of them has contracted the disease is 17\%, $P (A\cup B) = 0.17$.
+    \item The probability that the father has contracted the disease is 12\%, thus $P (A\cap B) = 0.12$
+    \item and the probability that both of them have contracted is 6\%, $P(B)=0.06$
+\end{itemize}
+
+Since we know $P(A\cup B)=P(A)+P(B)-P(AnB)$, therefore $P(A)=P(A\cup B)-P(B)+P(A\cap B)=.11$ or 11\%. This calculation can be computed in \texttt{R}, with the following code snippet. 
+
+\begin{lstlisting}[language=R]
+# Quiz 1 - Ex. 3
+P_AvB <- 0.17
+P_B <- 0.12
+P_AyB <- 0.06
+
+P_A <- P_AvB - P_B + P_AyB
+P_A
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 4]
+A random variable, $X$ is uniform, so that it's density is $f(x) = 1$ for $0\leq x \leq 1$. What is it's 75th percentile? Express your answer to two decimal places.
+\end{tcolorbox}
+
+Since the pdf is constant, the point at which the area below the pdf is 0.75 is also 0.75. In \texttt{R} we can compute it as follows:
+
+\begin{lstlisting}[language=R]
+# Quiz 1 - Ex. 3
+# This density is a box of inferior lenght 1. The point so that the area below it is  
+qunif(0.75)
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 5]
+A Pareto density is $\frac{1}{x^2}$
+for $1 < x < \infty$. What is the distribution function associated with this density for $1 < x < \infty$?
+\end{tcolorbox}
+
+The cumulative distribution function of a given continuous random variable $X$, ruled by a probability density function $f_X(x)$ such that $\int_{\mathds{R}}dx f_X(x) = 1$, is:
+
+$$
+F_{X}(x)= P(X\geq x) = \int_{1}^{x} dt f_X(t) = 1 - \frac{1}{x}.
+$$\\
+
+\begin{tcolorbox}[title=Question 6]
+What is the quantile $p$ from the density $e^{-x}(1 + e^{-x})^{-2}$?
+\end{tcolorbox}
+
+First, note this pdf has support over $\mathds{R}$. Thus we are to compute the following equation
+
+\begin{align*}
+    \int_{-\infty}^{x_p} dx \cdot e^{-x}(1+e^{-x})^{-2} = p \\
+    \frac{1}{1+ e^{-x}}\bigg |_{-\infty}^{x_p} = \frac{e^{x_p}}{1+e^{x_p}} = p \longrightarrow e^{x_p}=p+pe^{x_p} \longrightarrow e^{x_p} (1-p) = p \longrightarrow \ln (e^{x_p} (1-p)) = \ln p \\ \longrightarrow x_p + \ln (1-p) = \ln p \longrightarrow x_p = \ln p - \ln (1-p) \Longrightarrow x_p = \ln \frac{p}{1-p}.
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 7]
+Suppose that a density is of the form $cx^k$ for some constant $k > 1$ and $0 < x < 1$. What is the value of $c$?
+\end{tcolorbox}
+
+The calculation is straightforward.
+
+\begin{align*}
+    \int_{\mathds{R}_{[0,1]}}dx cx^{k} = 1 \longrightarrow c = k+1.
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 8]
+Suppose that the time in days until hospital discharge for a certain patient population follows a density $f(x) = \frac{1}{2} \exp(-x/2)$ for $x > 0$.  What is the median discharge time in days?
+\end{tcolorbox}
+
+Let $X$ be a random variable which describes the hospital discharge time, in days, of a certain patient population. The pdf is given by 
+
+$$
+f_X(x)= \frac{1}{2} \exp(-x/2) \textnormal{ for } x > 0,
+$$
+
+which has support in $\mathds{R}_{+}$. Thus we are to find it's expected value
+
+\begin{align*}
+    E[X] = \int_{\mathds{R}_{+}} dx \cdot x f_{X}(x) =  \int_{\mathds{R}_{+}} dx \cdot x \cdot \frac{1}{2} \exp(-x/2) = 2. 
+\end{align*} \\
+
+
+\begin{tcolorbox}[title=Question 9]
+Consider the density given by $2x \exp\left(-x^2 \right)$ for $x > 0$. What is the median?
+\end{tcolorbox}
+
+We are to find the value $\alpha_{\frac{1}{2}}$ such that 
+
+\begin{align*}
+    \int_{0}^{\alpha_{\frac{1}{2}}} dx \cdot 2x \exp\left(-x^2 \right) = \frac{1}{2}.
+\end{align*}
+
+Then
+
+\begin{align*}
+    \int_{0}^{\alpha_{\frac{1}{2}}} dx \cdot 2x \exp\left(-x^2 \right) = \mathrm{e}^{\alpha_{\frac{1}{2}}^2}\cdot\left(\mathrm{e}^{\alpha_{\frac{1}{2}}^2}-1\right) = \frac{1}{2} \\
+    1 - e^{-\alpha_{\frac{1}{2}}^{2}} = \frac{1}{2} \\
+    \frac{1}{2} = e^{-\alpha_{\frac{1}{2}}^{2}} = \frac{1}{2} \longrightarrow \alpha_{\frac{1}{2}} = \sqrt{\ln 2}
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 10]
+Suppose $h(x)$ is such that $\infty > h(x) > 0$ for $x=1,2,\ldots, I$. Then $c\times h(x)$ is a valid pmf when $c$ is equal to what?
+\end{tcolorbox}
+
+Here we are dealing with a discrete random variable (reason for which a pmf is used rather than a pdf). It must be normalized to one, so $h(x)$ is a valid pmf if and only if $c= 
+\left(\sum_{x=1}^I h(x) \right)^{-1}$. \\
+
+\begin{tcolorbox}[title=Question 11]
+Let $g(x) = \pi f_1(x) + (1 - \pi)f_2(x)$(x) where $f_1$ and $f_2$ are densities with means $\mu_1$ and $\mu_2$, respectively. Here $0 \leq \pi \leq 1$. Note that $g$ is a valid density. What is it's associated mean?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 12]
+Suppose that a density is of the form $(k + 1)x^k$
+for some constant $k > 1$ and $0 \leq x \leq 1$. What is the mean associated with this density?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 13]
+You are playing a game with a friend where you flip a coin and if it comes up heads you give her $X$ dollars and if it comes up tails she gives you $Y$ dollars. The probability that the coin is heads in $p$ (some number between 0 and 1.)  What has to be true about $X$ and $Y$ to make so that both of your expected total earnings is 0. (The game would then be called "fair".)
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 14]
+You are playing a game with a friend where you flip a coin and if it comes up heads you give her 1 dollar and if it comes up tails she gives you one dollar.  If you play the game 10 times what would be the variance of your earnings?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 15]
+When at the free-throw line for two shots, a basketball player makes at least one free throw 90\% of the time. 80\% of the time, the player makes the first shot, while 70\% of the time she makes both shots. Which number is closest to the conditional probability that the player makes the second shot given that she missed the first?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 16]
+Let $X_1,\ldots, X_{n_1}$ be random variables independent of $Y_1,\ldots, Y_{n_2}$, where both groups are iid with associated population means $\mu_1$ and $\mu_2$ and population variances $\sigma_1^2$ and $\sigma_2^2$, respectively. Let $\bar X$ and $\bar Y $ be their sample means. What is the variance of $\bar X - \bar Y$ ?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 17]
+Quality control experts estimate that the time (in years) until a specific electronic part from an assembly line fails follows (a specific instance of) the Pareto density, $f(x) = \frac{3}{x^4}$  for $1 < x < \infty$. Which option is closest to the mean failure time?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 18]
+Let $f$ be a continuous density having a finite mean and $\mu$ be any number. Suppose that $f(x)= f(-x)$ (i.e. $f$ is symmetric about 0). Convince yourself that $f(x-\mu)$ is a valid density. What is its associated mean?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 19]
+Suppose that $f$ be a mean 0 density having variance 1. What is the variance associated with the density $g(x) = f( x  / \sigma) / \sigma$
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 20]
+If $X$ and $Y$ are mean 0, variance 1 independent random variables, what is $E[X^2Y^2]$?
+\end{tcolorbox}
+\end{document}
