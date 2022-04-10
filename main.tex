@@ -496,7 +496,6 @@ If $X$ and $Y$ are mean 0, variance 1 independent random variables, what is $E[X
 Since they are independent random variables, the expected value of the product of random variables is the product of said random variables' expected values, thus $E[X^2Y^2]=1$.
 
 \clearpage
-
 \section{Homework 2 - Week 2}
 
 \begin{tcolorbox}[title=Question 1]
@@ -665,38 +664,45 @@ So, the maximum likelihood estimator $\hat{p}$ is:
 
 $$ \hat{p}=\frac{n}{\left(\sum_{1}^{n}{X}_{i} \right)}=\frac{1}{X} $$
 
-This agrees with the intuition because, in n observations of a geometric random variable, there are $n$ successes in the $\sum_{i=1}^{n}{X}_{i} $ trials. Thus the estimate of p is the number of successes divided by the total number of trials.
+This agrees with the intuition because, in n observations of a geometric random variable, there are $n$ successes in the $\sum_{i=1}^{n}{X}_{i} $ trials. Thus the estimate of p is the number of successes divided by the total number of trials. \\
 
 \begin{tcolorbox}[title=Question 6]
+Let $X$ be a Poisson count with mean $\mu$. Recall the Poisson mass function with mean $\mu$ is
 
+$$ \frac{\mu^x e^{-\mu}}{x!}  $$
+
+for $x = 0,1,\ldots$. What is the maximum likelihood estimate for $\mu$?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 7]
-
+Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. What is the probability that a random 35-44 year old has a  DBP greater than 100 (mm Hg)?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 8]
-
+Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. About what brain volume representes the 10th percentile?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 9]
-
+Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 144 random adult women from this population. Around what is the 10th percentile of the distribution of the distribution of sample means of 144 women?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 10]
-
+Question 10
+Consider two sample means, $\bar X_1$ and $\bar X_2$ from a the same normal population having mean $\mu$ and standard deviation $\sigma$.  The first sample mean is based on $n_1 = 10^{k}$  observations while the second is based on $n_2 = 10^{k+2}n $ observations for some positive integer $k$. Take any percentile, say 100 $\times \alpha$, from the distribution of the means for each sample size excluding the median. What is the ratio of the distance of the two percentiles from the $\mu$ dividing distance 1 by distance 2?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 11]
-
+You flip a fair coin 6 times, which count of heads is most likely (0, 1, 2, 3, 4, 5, 6)?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 12]
-
+The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 1515 (sleep events per hour) and a standard deviation of 1010. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100100 people is above 1717.
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 13]
-
+Consider a standard uniform density. The mean for this density is .5 and the variance is 1 / 12. You sample 1,000 sample means where each sample mean is comprised of 100 observations. You take the mean of the 1,000 sample means. About what number would you expect it to be?
 \end{tcolorbox}
+
+According to the central limit theorem and given that the sample mean is unbiased, the mean of the thousand sample means is about 0.5.
 
 \end{document}
