@@ -492,8 +492,211 @@ $$
 
 \begin{tcolorbox}[title=Question 20]
 If $X$ and $Y$ are mean 0, variance 1 independent random variables, what is $E[X^2Y^2]$?
-
+\end{tcolorbox}
 Since they are independent random variables, the expected value of the product of random variables is the product of said random variables' expected values, thus $E[X^2Y^2]=1$.
 
+\clearpage
+
+\section{Homework 2 - Week 2}
+
+\begin{tcolorbox}[title=Question 1]
+A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: "When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75\%. Specificity was also low, in the range 52\% to 75\%." Suppose a subject has a negative test. Assume the lower bound for the specificity. What number is closest to the multiplier of the pre-test odds of pregnancy to obtain the post-test odds of pregnancy given a negative test result?
 \end{tcolorbox}
+
+We are given the following parameters,
+
+\begin{itemize}
+    \item Overall sensitivity of the test: .75. This is probability of a positive test, conditioned on truly being positive.
+    \item Specificity of the test: .52. This is the probability of a negative test, conditioned on truly being negative.
+\end{itemize}
+
+The definitions for test sensitivity and test specificity are as follows
+
+\begin{align*}
+    {\displaystyle {\begin{aligned}{\text{sensitivity}}&={\frac {\text{number of true positives}}{{\text{number of true positives}}+{\text{number of false negatives}}}}\\[8pt]&={\frac {\text{number of true positives}}{\text{total number of sick individuals in population}}}\\[8pt]&={\text{probability of a positive test given that the patient has the disease}}\end{aligned}}}
+\end{align*}
+\begin{align*}
+    {\displaystyle {\begin{aligned}{\text{specificity}}&={\frac {\text{number of true negatives}}{{\text{number of true negatives}}+{\text{number of false positives}}}}\\[8pt]&={\frac {\text{number of true negatives}}{\text{total number of well individuals in population}}}\\[8pt]&={\text{probability of a negative test given that the patient is well}}\end{aligned}}}
+\end{align*}
+
+A negative result in a test with high sensitivity is useful for \textbf{ruling out disease}. A test with 100\% sensitivity will recognize all patients with the disease by testing positive. \underline{A negative test result would} \underline{definitively rule out presence of the disease in a patient}. However, a positive result in a test with high sensitivity is not necessarily useful for ruling in disease. 
+
+A positive result in a test with high specificity is useful for \textbf{ruling in disease}. The test rarely gives positive results in healthy patients. A positive result signifies a high probability of the presence of disease. \underline{A test with 100\% specificity} \underline{will recognize all patients without the disease by testing negative}, so a positive test result would definitely \textbf{rule in} the presence of the disease.
+
+Here we have to calculate the DLR for a negative test result. The DLR for a negative and positive test result are given by
+
+\begin{align*}
+    {\displaystyle {\text{DLR}}+={\frac {\text{sensitivity}}{1-{\text{specificity}}}}} = {\displaystyle ={\frac {\Pr({T+}\mid D+)}{\Pr({T+}\mid D-)}}} \\ 
+    {\displaystyle {\text{DLR}}-={\frac {1-{\text{sensitivity}}}{\text{specificity}}}} = {\displaystyle ={\frac {\Pr({T-}\mid D+)}{\Pr({T-}\mid D-)}}}
+\end{align*}
+
+Here $T+$ or $T-$ denote the result of the test being positive or negative and $D+$ or $D-$ denote the disease is present or absent, respectively. 
+
+\begin{itemize}
+    \item So "true positives" are those that test positive $T+$ and have the disease $D+$,
+    \item and "false positives" are those that test positive $T+$ but do not have the disease $D-$.
+\end{itemize}
+
+Then, we calculate the $DLR_- = \frac{1-.75}{.52} \approx .481$.\\
+
+\begin{tcolorbox}[title=Question 2]
+Question 2
+A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: "When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75\%. Specificity was also low, in the range 52\% to 75\%." Assume the lower value for the specificity. Suppose a subject has a negative test and that 30\% of women taking pregnancy tests are actually pregnant. What number is closest to the probability of pregnancy given a negative test?
+\end{tcolorbox}
+
+We are given the following information
+
+\begin{itemize}
+    \item Sensitivy: .75,
+    \item Specificity between .52 and .75. We assume the lower bound.
+    \item Only .30 of women taking pregnancy tests are actually pregnant. 
+\end{itemize}
+
+Thus, Let A be the event of positive test and let B the event of a woman being actually pregnant, then we have
+
+\begin{itemize}
+    \item $P(B) = .3$, the probability of the patient being pregnant. 
+    \item Sensitivity: $.75 = P(A|B) = \frac{P(A\cap B)}{P(B)}$, the probability of a positive test given the patient is pregnant.
+    \item Specificity: $.52 = P(A^c | B^c) = \frac{P(A^c\cap B^c)}{P(B^c)}$, the probability of a negative test given that the patient is not pregnant. 
+\end{itemize}
+
+Then, accordding to Bayes' theorem, 
+
+\begin{align*}
+    P(B|A) = \frac{P(A \cap B)}{P(B)} = \frac{P(A|B) P(A)}{P(B)P(A|B)+P(B^c)P(A|B^c)} \\
+    = \frac{P(A|B)P(B)}{P(B)P(A|B)+P(B^c)(1-P(A^c|B^c))} = \frac{.75 \times .3}{.3 \times .75 + (1-.3)\times (1-.52)} \approx 0.401.
+\end{align*}\\
+
+\begin{tcolorbox}[title=Question 3]
+Suppose that hospital infection counts are models as Poisson with mean $\mu$. Recall the Poisson mass function with mean $\mu$ is
+
+$$ 
+\frac{\mu^x e^{-\mu}}{x!} 
+$$ 
+
+for $x = 0,1,\ldots$. Three independent hospitals are observed for one year and their infection counts where 5, 4 and 6, respectively. What is the ML estimate for $\mu$?
+\end{tcolorbox}
+
+Let $X_1, X_2, X_3$ be the observed random variables, each one associated with a given hospital, which describe their infection counts. We are give $K=15$ data points. Then the likelihood is obtained as the product of three iid Poisson pdfs, 
+
+\begin{align*}
+    \prod_{j=1}^{3} \frac{\mu^x_j e^{-\mu}}{x_j!} \propto \prod_{j=1}^{3} {\mu^x_j e^{-\mu}} \propto \mu^{\sum_{j=1}^{K}x_j} e^{-3\mu} = \mu^{15}e^{-3\mu}. 
+\end{align*}
+In order to compute the ML estimate $\hat \mu = \arg \max_{\mu} L(\mu; x_k)$ it's convenient to calculate first (and maximize) the log-likelihood function, given $\log x$ is a monotone function on $x$. Then, the log-likelihood function is 
+
+\begin{align*}
+    \log x^{15}e^{-3\mu} = 15 \log \mu - 3 \mu
+\end{align*}
+
+Differentiating with respect to $\mu$ yields
+
+\begin{align*}
+    \frac{d}{d\mu} \log L(\mu;x_k)\bigg|_{\mu = \hat{\mu}} = 0 \\
+    \frac{15}{\hat{\mu}} - 3 = 0 \longrightarrow \hat{\mu} = \frac{15}{3} = 5. 
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 4]
+Let $X_1,\ldots, X_n$ be iid exponential$(\beta)$. That is, having density
+$$\frac{1}{\beta} e^{-x/\beta} $$
+for $x > 0$. What is the ML estimate for $\beta$?
+\end{tcolorbox}
+
+We are given $n$ iid exponential random variables, their pdfs having support over $\mathds{R}_{+}$. Thus, the likelihood function is
+
+\begin{align*}
+    L(\beta; x_1, \cdots, x_k) = \prod_{k=1}^{n} f_{X}(\beta; x_k) 
+    = \prod_{k=1}^{n} \frac{1}{\beta} e^{-x/\beta} \\
+    = \beta^{-n} \exp\left(-\sum_{k=1}^{n} x_k/\beta\right)  
+\end{align*}
+
+Thus, the log-likelihood function is 
+
+\begin{align*}
+    I(\beta, x_1, \cdot, x_k) = \log L(\beta; x_1, \cdots, x_k) \\
+    = \log \bigg( \beta^{-n} \exp(-\sum_{k=1}^{n} x_k/\beta) \bigg)\\
+    = \log\left(\beta^{-n}\right) + \log\left( \exp(-\sum_{k=1}^{n} x_k/\beta)\right) \\
+    = -n \log(\beta) - \frac{1}{\beta} \sum_{k=1}^{n} x_k.
+\end{align*}
+
+Then, we can find the ML estimate:
+
+\begin{align*}
+    \hat{\beta} = \arg \max_{\beta} I(\beta, x_1, \cdots, x_k).
+\end{align*}
+
+Thus
+
+\begin{align*}
+    \frac{d}{d\beta} I(\beta, x_1, \cdot, x_k)\bigg|_{\beta= \hat{\beta}} = 0 \\
+    = -\frac{n}{\hat{\beta}} + \frac{\sum_{k=1}^{n} x_k}{\hat{\beta}} \longrightarrow \hat{\beta} = \frac{\sum_{k=1}^{n} x_k}{n}.
+\end{align*} \\
+
+\begin{tcolorbox}[title=Question 5]
+Let $X$ be a geometric random variable. That is $X$ counts the number of coin flips until one obtains the first head. The mass function is 
+
+$$
+ P(X = x) = p(1 - p)^{x-1}. 
+$$
+
+for $x=1,2,\ldots$. What is the maximum likelihood estimate for $p$ if one observes a geometric random variable?
+\end{tcolorbox}
+
+Note that said pmf has support over $\mathds{Z}_{+}$. Let $ {X}_{1}, {X}_{2}, {X}_{3}.....{X}_{n} $ be a random sample from the geometric distribution with p.d.f.
+
+$$ f_{X}\left(x;p \right)=p{\left(1-p \right)}^{x-1}\textnormal{, } x \in \mathds{Z}_{+}$$
+
+The likelihood function $L(p;x_1, \cdot, x_n)$ is given by:
+
+$$ L(p;x_1, \cdot, x_n)=\prod_{k=1}^{n} f_{X_{k}}(p;x_k)={p}^{n}{\left(1-p \right)}^{\sum_{i=1}^{n}{x}_{i}-n} $$
+
+Taking log,
+
+$$ I(p, x_1, \cdot, x_n) = \log L(p;x_1, \cdot, x_n)= n\log{p}+\left(\sum_{i=1}^{n}{x}_{i}-n \right)\log{\left(1-p \right)} $$
+
+Differentiating and equating to zero, we get,
+
+$$ \frac{dI(p, x_1, \cdot, x_n)}{dp}\bigg|_{p=\hat{p}}=\frac{n}{\hat{p}} -\frac{\left(\sum_{i=1}^{n}{x}_{i}-n \right)}{\left(1-\hat{p} \right)}=0 $$
+
+Therefore,
+
+$$ \hat{p}=\frac{n}{\left(\sum_{i=1}^{n}{x}_{i} \right)} $$
+
+So, the maximum likelihood estimator $\hat{p}$ is:
+
+$$ \hat{p}=\frac{n}{\left(\sum_{1}^{n}{X}_{i} \right)}=\frac{1}{X} $$
+
+This agrees with the intuition because, in n observations of a geometric random variable, there are $n$ successes in the $\sum_{i=1}^{n}{X}_{i} $ trials. Thus the estimate of p is the number of successes divided by the total number of trials.
+
+\begin{tcolorbox}[title=Question 6]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 7]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 8]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 9]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 10]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 11]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 12]
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 13]
+
+\end{tcolorbox}
+
 \end{document}
