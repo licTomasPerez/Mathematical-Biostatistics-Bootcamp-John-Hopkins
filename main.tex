@@ -347,43 +347,153 @@ Here we are dealing with a discrete random variable (reason for which a pmf is u
 \left(\sum_{x=1}^I h(x) \right)^{-1}$. \\
 
 \begin{tcolorbox}[title=Question 11]
-Let $g(x) = \pi f_1(x) + (1 - \pi)f_2(x)$(x) where $f_1$ and $f_2$ are densities with means $\mu_1$ and $\mu_2$, respectively. Here $0 \leq \pi \leq 1$. Note that $g$ is a valid density. What is it's associated mean?
+Let $g(x) = \pi f_1(x) + (1 - \pi)f_2(x)$ where $f_1$ and $f_2$ are densities with means $\mu_1$ and $\mu_2$, respectively. Here $0 \leq \pi \leq 1$. Note that $g$ is a valid density. What is it's associated mean?
 \end{tcolorbox}
+
+The expected value of a linear combination of random variables is the linear combination of the expected values of said random variables \textit{ie.}
+
+$$
+E[aX+by] = a E[x]+bE[y].
+$$
+
+Thus, in our particular case, we have
+
+\begin{align*}
+    E[\pi f_1(x) + (1 - \pi)f_2(x)] = \pi E[f_1(x)] + (1 - \pi) E[f_2(x)] = \pi \mu_1 + (1-\pi) \mu_2. 
+\end{align*}\\
 
 \begin{tcolorbox}[title=Question 12]
 Suppose that a density is of the form $(k + 1)x^k$
 for some constant $k > 1$ and $0 \leq x \leq 1$. What is the mean associated with this density?
 \end{tcolorbox}
 
+Given a random variable $X$ with an associated pdf $(k+1)x^k$, with support in $\mathds{R}_{[0,1]}$, we are to compute the following integral
+
+\begin{align*}
+E[X] = \int_{\mathds{R}_{[0,1]}} dx \cdot x \cdot(k + 1)x^k = \frac{k+1}{k+2}.     
+\end{align*}
+
+This integral can be computed with Sympy, running the following code snippet 
+
+\begin{lstlisting}[language=Python]
+# Quiz 1 - Week 1 - Ex 12
+## Suppose that a density is of the form $(k + 1)x^k$ for some constant $k > 1$ and $0 \leq x \leq 1$. 
+## What is the mean associated with this density?
+
+from sympy import *
+from numpy import *
+from math import *
+from sympy.solvers import solve
+
+x = Symbol('x')
+
+print('The pdf is normalized', integrate((k+1)*x**k,(x,0,1)))
+print('The expected value is', integrate(x*(k+1)*x**k, (x,0,1)))
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 13]
 You are playing a game with a friend where you flip a coin and if it comes up heads you give her $X$ dollars and if it comes up tails she gives you $Y$ dollars. The probability that the coin is heads in $p$ (some number between 0 and 1.)  What has to be true about $X$ and $Y$ to make so that both of your expected total earnings is 0. (The game would then be called "fair".)
 \end{tcolorbox}
+
+Here we are presented with a dichotomic experiment in which, in a given coin flip, if a coin comes up heads we have a net loss of $X$ dollars and if it comes up tails we have a net gain of $Y$ dollars. The coin flip is a random variable $\mathbf{X}$, a Bernoulli random variable, with $p$ being the probability of getting a head in a coin flip and $1-p$ being the probability of getting a tail.
+
+Thus, in order for the net gain to be zero, the expected losses should be equal to the expected earnings where 
+
+\begin{itemize}
+    \item $pX$ is the expected loss, roughly the probability of the coin coming up a head times the loss of $X$ dollars
+    \item whereas $(1-p)Y$ is the expected earnings, roughly the probability of the coin coming up a tail times the gain of $Y$ dollars.
+\end{itemize}
+
+Then, the balance equation can be written as
+
+$$
+pX = (1-p)Y \longrightarrow \frac{Y}{X} = \frac{p}{1-p}.
+$$\\
 
 \begin{tcolorbox}[title=Question 14]
 You are playing a game with a friend where you flip a coin and if it comes up heads you give her 1 dollar and if it comes up tails she gives you one dollar.  If you play the game 10 times what would be the variance of your earnings?
 \end{tcolorbox}
 
+Here we have $X_{1},\cdots,X_{10}$ iid Bernoulli random variables, describing each coin flip; with the implicit assumption that the coin is fair. Their pmf take -1 and +1 as a value with .5 probability each. Let $X = \sum_{j=1}^{10} X_j$ be the net earnings. Since the coin is fair and according to the results obtained to Question 14, $E[X] =0$. Thus $Var[X_j] = .5(-1)^2+.5(1)^2=1$, then $Var[X]=10$ since the variance of the sum is the sum of the variances. \\
+
 \begin{tcolorbox}[title=Question 15]
 When at the free-throw line for two shots, a basketball player makes at least one free throw 90\% of the time. 80\% of the time, the player makes the first shot, while 70\% of the time she makes both shots. Which number is closest to the conditional probability that the player makes the second shot given that she missed the first?
 \end{tcolorbox}
+
+Let $A$ be the event in which the player makes the first shot and let $B$ denote the event in which said player makes the second shot. We are given the following information.
+
+\begin{itemize}
+    \item $P(A) = .8$, the probability for the player to make the first shot,
+    \item $P(A \cup B) = .9$, the probability for the player to make at least one shot
+    \item and $P(A \cap B) = .7$, the probability for the player to make both shots.
+\end{itemize}
+
+Then $P(B) = P(A \cup B) + P(A \cap B) - P(A) = .8$. We need $P(B|A^{c}) = \frac{P(B \cap A^{c})}{P(A^{c})} = \frac{P(B) - P(B \cap A)}{1-P(A)} = \frac{.8-.7}{.2}=.5$. \\
 
 \begin{tcolorbox}[title=Question 16]
 Let $X_1,\ldots, X_{n_1}$ be random variables independent of $Y_1,\ldots, Y_{n_2}$, where both groups are iid with associated population means $\mu_1$ and $\mu_2$ and population variances $\sigma_1^2$ and $\sigma_2^2$, respectively. Let $\bar X$ and $\bar Y $ be their sample means. What is the variance of $\bar X - \bar Y$ ?
 \end{tcolorbox}
 
+The variance of the sum/difference of two random variables is the sum of said random variables' variances. Thus
+
+$$
+Var(\bar X - \bar Y) = Var(\bar X)+Var(\bar Y) = \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}.
+$$ \\
+
 \begin{tcolorbox}[title=Question 17]
 Quality control experts estimate that the time (in years) until a specific electronic part from an assembly line fails follows (a specific instance of) the Pareto density, $f(x) = \frac{3}{x^4}$  for $1 < x < \infty$. Which option is closest to the mean failure time?
 \end{tcolorbox}
+
+This pdf has support over $\mathds{R}_{[1,\infty)}$. We calculate the following expression
+
+\begin{align*}
+    E[X] = \int_{[1,\infty)} dx \cdot \frac{3}{x^4} = \frac{3}{2}.
+\end{align*}
+
+This integral can be calculated using the Sympy package for Python, by running the following code snippet
+
+\begin{lstlisting}[language=Python]
+# Quiz 1 - Week 1 - Ex 17
+##Quality control experts estimate that the time (in years) until a specific electronic part from an assembly line fails follows (a specific instance of) the Pareto density,
+## $f(x) = \frac{3}{x^4}$  for $1 < x < \infty$. Which option is closest to the mean failure time?
+
+from sympy import *
+from numpy import *
+from math import *
+
+pos_infinity=math.inf
+neg_infinity=-math.inf
+
+x = Symbol('x')
+
+print('The pdf is normalized since', integrate(3*x**-4, (x, 1, pos_infinity)))
+print('The expected value is', integrate(3*x*x**-4, (x, 1, pos_infinity)))
+\end{lstlisting} 
 
 \begin{tcolorbox}[title=Question 18]
 Let $f$ be a continuous density having a finite mean and $\mu$ be any number. Suppose that $f(x)= f(-x)$ (i.e. $f$ is symmetric about 0). Convince yourself that $f(x-\mu)$ is a valid density. What is its associated mean?
 \end{tcolorbox}
 
+Note that $g(x)=f(x-\mu)$ is symmetric about $\mu$. Thus
+
+$$
+E[X_f] = \int_{\mathds{R}} dx \cdot x f(x-\mu) =_{y= x-\mu}\int_{\mathds{R}} dy (y+\mu) f(y) = \cancel{\int_{\mathds{R}} dy y f(y)} + \mu = \mu
+$$.
+
 \begin{tcolorbox}[title=Question 19]
 Suppose that $f$ be a mean 0 density having variance 1. What is the variance associated with the density $g(x) = f( x  / \sigma) / \sigma$
 \end{tcolorbox}
 
+The mean asociated with $g(x) = f(x/\sigma)/\sigma$ is zero (to complete). Then the variance is 
+
+$$
+\int_{\mathds{R}} dx \cdot x^2f( x  / \sigma) / \sigma =_{y = x/\sigma} \int_{\mathds{R}} dy \cdot (\sigma y)^2f( y) = \sigma^2 \int_{\mathds{R}} dy \cdot y^2 f(y) = \sigma^2.
+$$
+
 \begin{tcolorbox}[title=Question 20]
 If $X$ and $Y$ are mean 0, variance 1 independent random variables, what is $E[X^2Y^2]$?
+
+Since they are independent random variables, the expected value of the product of random variables is the product of said random variables' expected values, thus $E[X^2Y^2]=1$.
+
 \end{tcolorbox}
 \end{document}
