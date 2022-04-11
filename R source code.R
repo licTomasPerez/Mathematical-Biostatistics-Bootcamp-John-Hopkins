@@ -48,7 +48,9 @@ targetVolume
 
 
 # Homework 2 - Week 2 - Ex 9
-## Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 144 random adult women from this population. Around what is the 10th percentile of the distribution of the distribution of sample means of 144 women?
+## Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. 
+## Consider the sample mean of 144 random adult women from this population. Around what is the 10th percentile of the distribution of 
+## the distribution of sample means of 144 women?
 
 qtile <- .1
 mu <- 1100
