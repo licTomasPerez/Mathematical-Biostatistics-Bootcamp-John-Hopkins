@@ -597,7 +597,7 @@ Differentiating with respect to $\mu$ yields
 \begin{tcolorbox}[title=Question 4]
 Let $X_1,\ldots, X_n$ be iid exponential$(\beta)$. That is, having density
 $$\frac{1}{\beta} e^{-x/\beta} $$
-for $x > 0$. What is the ML estimate for $\beta$?
+for $x \mbox{\textgreater} 0$. What is the ML estimate for $\beta$?
 \end{tcolorbox}
 
 We are given $n$ iid exponential random variables, their pdfs having support over $\mathds{R}_{+}$. Thus, the likelihood function is
@@ -664,7 +664,7 @@ So, the maximum likelihood estimator $\hat{p}$ is:
 
 $$ \hat{p}=\frac{n}{\left(\sum_{1}^{n}{X}_{i} \right)}=\frac{1}{X} $$
 
-This agrees with the intuition because, in n observations of a geometric random variable, there are $n$ successes in the $\sum_{i=1}^{n}{X}_{i} $ trials. Thus the estimate of p is the number of successes divided by the total number of trials. \\
+This agrees with the intuition because, in n observations of a geometric random variable, there are $n$ successes in the $\sum_{i=1}^{n}{X}_{i} $ trials. Thus the estimate of $p$ is the number of successes divided by the total number of trials. \\
 
 \begin{tcolorbox}[title=Question 6]
 Let $X$ be a Poisson count with mean $\mu$. Recall the Poisson mass function with mean $\mu$ is
@@ -674,17 +674,122 @@ $$ \frac{\mu^x e^{-\mu}}{x!}  $$
 for $x = 0,1,\ldots$. What is the maximum likelihood estimate for $\mu$?
 \end{tcolorbox}
 
+Note that $f_{X}(\mu;x)$, as a function, has support over $\mathds{Z}_{+}$. First and foremost, the likelihood function is 
+
+\begin{align*}
+    L(\mu;x_1,\cdots,x_n) = \prod_{j=1}^{n} f_{X_j}(\mu;x_j) = \prod_{j=1}^{n} \frac{\mu^x_j e^{-\mu}}{x_j!} 
+\end{align*}
+
+Then the log-likelihood function is 
+
+\begin{dmath*}
+    I(\mu;x_1,\cdots,x_n) = \log (L(\mu;x_1,\cdots,x_n) ) = \log \left(\prod_{j=1}^{n} \frac{\mu^x_j e^{-\mu}}{x_j!}\right) 
+    = \sum_{j=1}^{n} \log \left(\frac{\mu^x_j e^{-\mu}}{x_j!} \right) \\
+    = \sum_{j=1}^{n}  \left[\log \mu^x_j + \log e^{-\mu} - \log x_j! \right] \\
+    = \sum_{j=1}^{n}  \left[\log \mu x_j - \mu - \log x_j!\right] \\
+    = -n \mu + \log \mu \sum_{j=1}^{n} x_j - \sum_{j=1}^{n} \log x_j!.
+\end{dmath*}
+
+The maximum likelihood estimate $\hat{\mu}$ for $\mu$ is found as $\hat{\mu} = \arg \max_{\mu}  I(\mu;x_1,\cdots,x_n)$, then
+
+\begin{dmath*}
+    \frac{d}{d\mu}I(\mu;x_1,\cdots,x_n)\bigg|_{\mu\rightarrow\hat{\mu}}=0\\
+    = -n + \frac{1}{\hat{\mu}} \sum_{j=1}^{n} x_j = 0.
+\end{dmath*}
+
+Thus $\hat{\mu} = \frac{1}{n} \sum_{j=1}^{n} x_j.  $ is the ML estimate for $\mu$. \\
+
 \begin{tcolorbox}[title=Question 7]
 Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. What is the probability that a random 35-44 year old has a  DBP greater than 100 (mm Hg)?
 \end{tcolorbox}
+
+Let $X$ be the random variable which describes the DBPs, such that $X \sim \mathcal{N}(80\textnormal{ mmHg},(10\textnormal{ mmHg})^2)$. We are interested in $P(x \mbox{\textgreater} 100 \textnormal{ mmHg}) = 1-P(x \mbox{\textless} 100 \textnormal{ mmHg})$, which can be computed both numerically and analytically. In R, the desired routine is
+\begin{lstlisting}[language=R]
+# Homework 2 - Week 2 - Ex 7
+## Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. What is the probability that a random 35-44 year old has a  DBP greater than 100 (mm Hg)?
+
+#One way to calculate this probability is 
+
+targetDBP <- 100
+mu <- 80
+sigma <- 10
+percentage <- (1-pnorm(targetDBP, mean = mu, sd = sigma)) * 100
+percentage
+
+[1] 2.275013%
+
+# while a more succinct option is simply
+
+pnorm(100, mean = 80, sd = 10, lower.tail = FALSE)
+
+[1] 0.02275013
+\end{lstlisting}
+
+As previously stated, it can also be determined analytically. Let $Z=\frac{X-\mu}{\sigma} \sim \mathcal{N}(0,1)$ be the standard normal distribution, then 
+
+\begin{align*}
+P(x \mbox{\textgreater} 100 \textnormal{ mmHg}) = P\left(\frac{x-\mu}{\sigma} \mbox{\textgreater} \frac{100-\mu}{\sigma}\right) = P(z\mbox{\textgreater}2) = 1 - P(z\mbox{\textless}2).
+\end{align*} 
+
+This last probability, $P(z\mbox{\textless}2)$, can be found in tables and it's numerical value is $.97725$.
+
+Thus $P(x \mbox{\textgreater} 100 \textnormal{ mmHg}) = 1-.97725 = 0.02275,$ which agrees with the numerical result obtained in R. \\
 
 \begin{tcolorbox}[title=Question 8]
 Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. About what brain volume representes the 10th percentile?
 \end{tcolorbox}
 
+Let $X$ be the random variable which describes the brain volume for adult women, such that $X\sim \mathcal{N}(1100 \textnormal{ cc}, (75 \textnormal{ cc})^2)$. We are interested in the 10th quantile, this is we want $x_{10}$ such that $F(x_{10}) = 10$ where 
+
+$$
+F(x) = \int_{-\infty}^{x}dt\cdot f_{X}(x)
+$$
+
+and where $f_{X}(x)$ is a Gaussian with mean $\mu =1100 \textnormal{ cc}$ and standard deviation $\sigma^2 = (75 \textnormal{ cc})^2)$. This can be computed numerically, with the following routine
+
+\begin{lstlisting}[language=R]
+# Homework 2 - Week 2 - Ex 8
+## Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. About what brain volume representes the 10th percentile?
+qtile <- .10
+mu <- 1100
+sigma <- 75
+
+targetVolume <- qnorm(qtile, mean = mu, sd = sigma)
+targetVolume
+
+[1] 1003.884
+\end{lstlisting}
+
+Also, note that $z_{10} = -1.28 = \frac{x_{10} - \mu}{\sigma}$ represents the 10th percentile from the standard normal $Z =\frac{X-\mu}{\sigma}$. Thus the answer is $x_{10}=\mu +\sigma z_{10} = 1100 - 1.28 * 75$ which is around 1000 cc.  \\
+
 \begin{tcolorbox}[title=Question 9]
 Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 144 random adult women from this population. Around what is the 10th percentile of the distribution of the distribution of sample means of 144 women?
 \end{tcolorbox}
+
+Here we have a population sample of $144$ random adult women, \textit{ie}. $X_1, \cdots, X_{144}$ describe each women's brain volume. Then the population mean and the standard deaviation for the sample mean are, respectively,
+
+$$
+\mu_{X} = \mu \textnormal{ and } s_N = \frac{\sigma}{\sqrt{N}} = 
+{\displaystyle {\sqrt {{\frac {1}{N}}\sum _{i=1}^{N}\left(x_{i}-{\bar {x}}\right)^{2}}},}
+$$
+
+where ${\displaystyle \{x_{1},\,x_{2},\,\ldots ,\,x_{N}\}}$ are the observed values of the sample items, and ${\displaystyle {\bar {x}}}$ is the mean value of these observations, while the denominator $N$ stands for the size of the sample: this is the square root of the sample variance, which is the average of the squared deviations about the sample mean. Note that $\hat{s}_N$ is a consistent estimator (it converges in probability to the population value as the number of samples goes to infinity), and is the maximum-likelihood estimate when the population is normally distributed.
+
+Then $\mu_X = 1100 \textnormal{ cc}$ and $s_{144} = 6.25 \textnormal{ cc}$. Since $z_{10} = -1.28 = \frac{x_{10} - \mu}{s_N}$ represents the 10th percentile from the standard normal $Z =\frac{X-\mu}{s_N}$, the answer is $x_{10}^{N=144} = \mu + s_N z_{10} = 1100 - 1.28 \times 6.25 = 1092$. Numerically, this can be computed with an R routine
+
+\begin{lstlisting}[language=R]
+# Homework 2 - Week 2 - Ex 9
+## Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 144 random adult women from this population. Around what is the 10th percentile of the distribution of the distribution of sample means of 144 women?
+
+qtile <- .1
+mu <- 1100
+sigma <- 75
+N <- 144
+s_variance <- sigma/sqrt(N)
+round(qnorm(qtile, mean = mu, sd = s_variance))
+------
+[1] 1092
+\end{lstlisting}
 
 \begin{tcolorbox}[title=Question 10]
 Question 10
