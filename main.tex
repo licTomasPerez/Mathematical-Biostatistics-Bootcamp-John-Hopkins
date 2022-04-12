@@ -792,17 +792,23 @@ round(qnorm(qtile, mean = mu, sd = s_variance))
 \end{lstlisting}
 
 \begin{tcolorbox}[title=Question 10]
-Question 10
-Consider two sample means, $\bar X_1$ and $\bar X_2$ from a the same normal population having mean $\mu$ and standard deviation $\sigma$.  The first sample mean is based on $n_1 = 10^{k}$  observations while the second is based on $n_2 = 10^{k+2}n $ observations for some positive integer $k$. Take any percentile, say 100 $\times \alpha$, from the distribution of the means for each sample size excluding the median. What is the ratio of the distance of the two percentiles from the $\mu$ dividing distance 1 by distance 2?
+Consider two sample means, $\bar X_1$ and $\bar X_2$ from a the same normal population having mean $\mu$ and standard deviation $\sigma$.  The first sample mean is based on $n_1 = 10^{k}$  observations while the second is based on $n_2 = 10^{k+2} $ observations for some positive integer $k$. Take any percentile, say 100 $\times \alpha$, from the distribution of the means for each sample size excluding the median. What is the ratio of the distance of the two percentiles from the $\mu$ dividing distance 1 by distance 2?
 \end{tcolorbox}
+
+A priori, we don't know the distribution of neither $\bar X_1$ nor $\bar X_2$ but according to the central limit theorem we can assume them to be normal distributions, provided $n_1 = 10^{k} \gg 1$ and  $n_2 = 10^{k+2} \gg 1$, this is $\bar X_1 \sim \mathcal{N}(\mu, \sigma^2)$ and $\bar X_2 \sim \mathcal{N}(\mu, \sigma^2)$. Then, let's consider the $100\times\alpha$th percentile. The percentile of the first distribution is $x_{1,\alpha} = \mu + z_{a}\frac{\sigma}{\sqrt{n_1}}$ whilst the percentile for the second distribution is $x_{2,\alpha} = \mu + z_{a}\frac{\sigma}{\sqrt{n_2}}$. Thus, the ratio of percentiles is proportional to $\frac{\sqrt{n_1}}{\sqrt{n_1}}=10$ \textit{ie.} every time you increase your sample size by a factor of one hundred, you shrink the percentiles of the distributions of the sample mean toward the population mean by a factor of ten. For example, if $n_1$ is much bigger than $n_2$ , the percentile for the mean based on $n_1$ observations will be much closer to $\mu$ than that of the mean based on $n_2$ observations.
 
 \begin{tcolorbox}[title=Question 11]
 You flip a fair coin 6 times, which count of heads is most likely (0, 1, 2, 3, 4, 5, 6)?
 \end{tcolorbox}
 
+A coin flip is a dichotomic Bernoulli random variable. Thus, the probability is $\binom{6}{k} 2^{-6} = 3$.
+
 \begin{tcolorbox}[title=Question 12]
-The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 1515 (sleep events per hour) and a standard deviation of 1010. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100100 people is above 1717.
+The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 15 (sleep events per hour) and a standard deviation of 10. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100 people is above 17.
 \end{tcolorbox}
+
+The standard error of the mean is $10 / \sqrt{100}
+= 1$. Thus $17$ is two standard deviations above the 15 for the distribution of the sample mean. Using the CLT, we guess this should be about 2.5\%.
 
 \begin{tcolorbox}[title=Question 13]
 Consider a standard uniform density. The mean for this density is .5 and the variance is 1 / 12. You sample 1,000 sample means where each sample mean is comprised of 100 observations. You take the mean of the 1,000 sample means. About what number would you expect it to be?
