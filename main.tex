@@ -819,20 +819,52 @@ According to the central limit theorem and given that the sample mean is unbiase
 \section{Quiz 2 - Week 2}
 
 \begin{tcolorbox}[title=Question 1]
-Question 1
 You meet a person at the bus stop and strike up a conversation. In the conversation, the person gives the strange answer that at least one of his two children is a girl. Thinking on this, you decide to do a probability calculation. Assuming only that genders are iid with 50\% probability each, what is the chance of a two child family having two girls given the information that at least one is a girl?
 \end{tcolorbox}
+
+This is the boy and girl paradox. In a nutshell, the answer is $\frac{1}{3}$.
 
 \begin{tcolorbox}[title=Question 2]
 A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: "When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75\%. Specificity was also low, in the range 52\% to 75\%." Suppose a subject has a positive test. Assume the lower bound for the specificity. What number is closest to the multiplier of the pre-test odds of pregnancy to obtain the post-test odds of pregnancy given a positive test result?
 \end{tcolorbox}
 
+The DLR for a positive test is 
+
+$$
+DLR_{+} = \frac{sensitivity}{1-specificity} = \frac{.75}{1-.52} = 1.5625. 
+$$ \\
+
 \begin{tcolorbox}[title=Question 3]
 A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: "When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75\%. Specificity was also low, in the range 52\% to 75\%." Assume the lower value for the specificity. Suppose a subject has a positive test and that 30\% of women taking pregnancy tests are actually pregnant. What number is closest to the probability of pregnancy given the positive test?
 \end{tcolorbox}
 
+We are given the following information
+
+\begin{itemize}
+    \item Sensitivy: .75,
+    \item Specificity between .52 and .75. We assume the lower bound.
+    \item Only .30 of women taking pregnancy tests are actually pregnant. 
+\end{itemize}
+
+Thus, Let A be the event of positive test and let B the event of a woman being actually pregnant, then we have
+
+\begin{itemize}
+    \item $P(B) = .3$, the probability of the patient being pregnant. 
+    \item Sensitivity: $.75 = P(A|B) = \frac{P(A\cap B)}{P(B)}$, the probability of a positive test given the patient is pregnant.
+    \item Specificity: $.52 = P(A^c | B^c) = \frac{P(A^c\cap B^c)}{P(B^c)}$, the probability of a negative test given that the patient is not pregnant. 
+\end{itemize}
+
+Then, according to Bayes' theorem, 
+
+\begin{align*}
+    P(B|A) = \frac{P(A \cap B)}{P(B)} = \frac{P(A|B) P(A)}{P(B)P(A|B)+P(B^c)P(A|B^c)} \\
+    = \frac{P(A|B)P(B)}{P(B)P(A|B)+P(B^c)(1-P(A^c|B^c))} = \frac{.75 \times .3}{.3 \times .75 + (1-.3)\times (1-.52)} \approx 0.401.
+\end{align*}\\
+
+Note that this result (the probability of pregnancy given a positive test given that 30\% of women taking the test are actually pregnant) is the same to that obtained in Homework 2 - Week 2 - Question 2 (where we find the probability of pregnancy given a negative test given that 30\% of women taking the test are actually pregnant).
+
 \begin{tcolorbox}[title=Question 4]
-Let $X_1\ldots X_K$ be independent Poisson counts with means $t_i \lambda$for some known value $t_i$ $Recall the Poison mass function with mean \mu$ is
+Let $X_1\ldots X_K$ be independent Poisson counts with means $t_i \lambda$ for some known value $t_i$. Recall the Poison mass function with mean $\mu$ is
 
 $$
  \frac{\mu^x e^{-\mu}}{x!}  
@@ -841,9 +873,35 @@ $$
 for $x = 0,1,\ldots$. What is the maximum likelihood estimate for $\lambda$?
 \end{tcolorbox}
 
+Given $X_i \in \{X_{j}\}_{j=1}^{K}$, an independent Poisson count with mean $t_i \lambda$ for some known value $t_i$. Then the likelihood function is
+ 
+\begin{dmath*}
+    L(t_i; x_1\ldots x_K) = \prod_{j=1}^{K} f_{X_j}(t_j; x_j) = \prod_{j=1}^{K} \frac{(t_j \lambda)^{x_j}e^{-t_j \lambda}}{x_j!}.
+\end{dmath*}
+
+Then, the log-likelihood function is 
+
+\begin{dmath*}
+I(t_i; x_1\ldots x_K) = \log L (t_i; x_1\ldots x_K) = \log \prod_{j=1}^{K} \frac{(t_j \lambda)^{x_j}e^{-t_j \lambda}}{x_j!} = \sum_{j=1}^{K} \log \bigg(\frac{(t_j \lambda)^{x_j}e^{-t_j \lambda}}{x_j!}\bigg) = \sum_{j=1}^{K} x_j \log(t_j \lambda) -t_j \lambda - \log{x_j!} = \sum_{j=1}^{K} x_j (\log(t_j)+\log(\lambda)) - \lambda \sum_{j=1}^{K}t_j - \sum_{j=1}^{K}\log{x_j!}.
+\end{dmath*}
+
+Thus, the Maximum likelihood estimator $\hat{\lambda} = \arg \max_{\lambda} I(t_i; x_1\ldots x_K)$. Then, taking the derivative and evaluating it to zero we get
+
+\begin{dmath*}
+\frac{d}{d\lambda} I(t_i; x_1\ldots x_K)\bigg|_{\lambda=\hat{\lambda}} = \frac{1}{\hat{\lambda}} \sum_{j=1}^{K} x_j -  \sum_{j=1}^{K}t_j = 0
+\end{dmath*}
+
+Thus, 
+
+\begin{align*}
+\frac{1}{\hat{\lambda}} \sum_{j=1}^{K} x_j = \sum_{j=1}^{K}t_j \longrightarrow \hat{\lambda}=\frac{\sum_{j=1}^{K} x_j}{\sum_{j=1}^{K}t_j}. 
+\end{align*}
+
 \begin{tcolorbox}[title=Question 5]
 Suppose that a person is flipping  a biased coin with success probability pp. She flips the coin 1010 times yielding 11 head. Consider two possibilities: 1) the person planned on flipping the coin ten times and got one head, 2) the person planned to flip the coin until the first head and it took ten times. What can you say about the likelihood in these two circumstances?
 \end{tcolorbox}
+
+The likelihood function is $p^1(1-p)^9$ in either case, should the coin be a geometric or a Bernoulli trial. As far as the likelihood is concerned, there are 10 trials and only one head. The intention of the flipper is utterly irrelevant.
 
 \begin{tcolorbox}[title=Question 6]
 Let $X$ be a uniform random variable with support of length 1, but where we don't know where it starts. So that the density is
