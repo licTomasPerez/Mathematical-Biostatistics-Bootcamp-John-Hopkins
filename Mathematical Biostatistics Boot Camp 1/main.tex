@@ -1051,4 +1051,81 @@ Consider a standard uniform density. The mean for this density is .5 and the var
 
 Yet again, according to the Law of Large Numbers, the answer is $\frac{1}{12}$.
 
+\section{Homework 3 - Week 3}
+
+\begin{tcolorbox}[title=Question 1]
+Researchers are studying the relative concentration of blood lead for factory workers. They took the natural logarithm of ratio of blood lead concentration for 8 factory workers and 8 control subjects. The measurements resulted in a mean log concentration of 6 (log parts per volume) for the factory workers and 4 for the control subjects. The sample variance in the factory workers was 3 while it was 5 in the control group. Assuming equal variances, create a 95\% confidence interval for the difference in the population means of log blood lead concentration between factory workers and controls (Factory works - Controls).
+\end{tcolorbox}
+
+Let $X$ be the random variable describing the relative concentration of blood lead for the first group, the eight factory workers, and let $Y$ be the random variable describing the blood lead concentration for the control subjects. We assume $X \sim \mathcal{N}(\mu_X, \sigma^2)$ and $Y \sim \mathcal{N}(\mu_X, \sigma^2)$, assumption justified by the Central Limit Theorem. Let $\bar X, \bar Y, S_X, S_Y$ be their means and standard deviations, the pooled variance estimator can be found as
+
+$$
+S_p^2 = \frac{(n_X-1)S_x^2 + (n_Y-1)S_y^2 }{n_X+n_Y-2} = \pi S_X^2 + (1-\pi) S_Y^2 \textnormal{  where } \pi = \frac{n_x-1}{n_x+n_y-2}.
+$$
+
+and is a good (unbiased) estimator for the variance $\sigma^2$. It's a mixture of the group variances, placing greater weight on whichever has a larger sample size. Should the sample sizes be equal, the pooled variance estimate is the average of the group variances. 
+
+We know the sum of two independent Chi-squared random variables is a Chi-squared random variable with its degrees of freedom equal to the sum of the degrees of freedom of the summands, \textit{ie.} 
+
+\begin{dmath*}
+(n_X+n_Y-2)\frac{S_p^2}{\sigma^2} = {n_X-1} \frac{S_X^2}{\sigma^2} +  (n_y-1) \frac{S_Y^2}{\sigma^2} =\chi^2_{n_X-1}+\chi^2_{n_Y-1} = \chi^2_{n_X-n_Y-2}
+\end{dmath*}
+
+The $t$-statistic is 
+
+$$
+\frac{\frac{\bar{Y}-\bar{X} - (\mu_Y-\mu_X) }{\sigma\left(\frac{1}{n_X}+\frac{1}{n_Y}\right)}}{\sqrt{\frac{(n_X+n_Y-2)S_p^2}{n_X+n_Y-2\sigma^2}}} = \frac{\bar{Y}-\bar{X}- (\mu_Y-\mu_X)}{S_p \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)^{1/2}},
+$$
+
+a standard normal (since $\bar{Y}-\bar{X} \sim \mathcal{N}\left(\mu_{Y}-\mu_{X},\sigma^2 \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)\right)$) divided by  the square root of an independent Chi-squared divided by its degrees of freedom. Thus, this statistic follows a Gosset's $t$ distribution with $n_X+n_Y-2$ degrees of freedom.
+
+Therefore a $(1-\alpha)\times 100\%$-confidence interval for $\mu_Y-\mu_X$ can be written as follows
+
+$$
+\bar{Y}-\bar{X}\pm t_{n_{X}+n_{Y}-2,1-\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}.
+$$
+
+In our particular case, $\pi = \frac{1}{2}$ and $S_p = \sqrt{\frac{S_X^2}{n_x}+\frac{S_Y^2}{n_y}} = \sqrt{\frac{3}{2}+\frac{5}{2}} = 2.$ and
+we are interested in a central 95\% confidence interval (\textit{ie.} $\alpha=2.5$), with $t_{14,.975} = 2.145$. Then, the confidence interval is 
+
+$$
+6-4 \pm 2.145 \times 2 \times \sqrt{\frac{1}{8}+\frac{1}{8}} = [-.145,4.145].
+$$\\
+
+\begin{tcolorbox}[title=Question 2]
+Consider the previous question. Suppose that the interval was [-0.2, 3.0] log parts per volume. What would this say about factory workers versus controls?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 3]
+Let $S_1^2$, $S_2^2$ and $S_3^2$ be sample variances from random samples of size $n_1$, $n_2$ and $n_3$ respectively. The populations have means $\mu_1$, $\mu_2$ and $\mu_3$ respectively, and a common variance $\sigma^2$. When is $\pi_1 S_1^2  + \pi_2 S_2^2 + \pi_3 S_3^2$ unbiased?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 4]
+In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 randomly selected out of 10 patients were tracked in a mock ER the old triage system while the remaining ones were tracked under the new. The waiting times were recorded for all ten patients. Would it be better to use an independent group or paired T confidence interval in this setting?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 5]
+Suppose that you create a 95\% confidence interval. Later, you decide to create a 99\% interval. What can be said about the new interval with respect to the 95\% interval?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 6]
+You have three data points {1, 3, 7}. What is the exact bootstrap distribution of the sample median? (Note - specifically - the bootstrap distribution of the median.)
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 7]
+Suppose we simulated a large amount of random uniform numbers and a large amount of exponential(1) numbers. What would a plot of the quantiles of one versus the other look like? (Uniform on the horizontal axis and the exponential on the vertical axis.)
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 8]
+Consider any distribution function FF with associated mean 00 and variance 11. Notice that if $X$ is a random variable from FF, then $Y = \mu + \sigma X$ has mean $\mu$ and variance $\sigma^2$. What is the distribution function associated with $Y$? (Call it $G$.)
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 9]
+Let $F$ and $G$ be distribution functions. If you do a quantile-quantile (QQ) plot with quantiles of $F$ on the horizontal axis and quantiles of $G$ on the vertical axis, what must it look like?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 10]
+Consider the points in a QQ plot, going from left to right in the plot, can a point ever be lower than the previous point?
+\end{tcolorbox} 
+
 \end{document}
