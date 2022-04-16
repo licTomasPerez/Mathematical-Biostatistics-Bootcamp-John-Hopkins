@@ -901,7 +901,7 @@ Thus,
 Suppose that a person is flipping  a biased coin with success probability pp. She flips the coin 1010 times yielding 11 head. Consider two possibilities: 1) the person planned on flipping the coin ten times and got one head, 2) the person planned to flip the coin until the first head and it took ten times. What can you say about the likelihood in these two circumstances?
 \end{tcolorbox}
 
-The likelihood function is $p^1(1-p)^9$ in either case, should the coin be a geometric or a Bernoulli trial. As far as the likelihood is concerned, there are 10 trials and only one head. The intention of the flipper is utterly irrelevant.
+The likelihood function is $p^1(1-p)^9$ in either case, should the coin be a geometric or a Bernoulli trial. As far as the likelihood is concerned, there are 10 trials and only one head. The intention of the flipper is irrelevant. \\
 
 \begin{tcolorbox}[title=Question 6]
 Let $X$ be a uniform random variable with support of length 1, but where we don't know where it starts. So that the density is
@@ -911,21 +911,76 @@ $ f(x) = 1$
 for $x \in (\theta, \theta + 1)$ and $0$ otherwise. We observe a random variable from this distribution, say $x_1$. What does the likelihood look like?
 \end{tcolorbox}
 
+The likelihood looks like a flat line since it's non-zero only for a compact interval, 
+
+\begin{equation*}
+    L(\theta,x_1,\cdots, x_n) = \Pi f(x_i; \theta) = \left\{ \begin{array}{lcc}
+             1 &  \textnormal{ if } \forall i\in \mathds{N}, \theta \leq x_i \leq \theta+1  \\
+             0 &  \textnormal{ otherwise } 
+             \end{array}
+   \right.
+\end{equation*}
+
+In terms of $\theta$, this can be written as
+$ L(\theta,x_1,\cdots, x_n) = 1$ in $X_{max}-1\leq \theta \leq X_{min}$. Then, in said interval, it looks like a flat line. \\
+
 \begin{tcolorbox}[title=Question 7]
 Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. What is the probability that a random 35-44 year old has a  DBP less than 70?
 \end{tcolorbox}
+
+We are interested in calculating $P(X \geq 70)$ given that $X \sim \mathcal{N}(80 \textnormal{ mmHg}, (10\textnormal{ mmHg})^2)$. Then, analytically,
+
+\begin{align*}
+    P(X \leq 70) = P \bigg(\frac{X-\mu}{\sigma} \leq \frac{70-\mu}{\sigma}\bigg) = P\left(Z \leq -1 \right) = .16  
+\end{align*}
+
+Or numerically
+
+\begin{lstlisting}[language=R]
+## Quiz 2 - Week 2 - Exercise 7
+##Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. What is the probability that a random 35-44 year old has a  DBP less than 70?
+
+pnorm(70,mean=80,sd=10,lower.tail = TRUE)
+
+[1] 0.1586553
+\end{lstlisting}
 
 \begin{tcolorbox}[title=Question 8]
 Brain volume for adult women is normally distributed with a mean of about 1,100 cc for women with a standard deviation of 75 cc. About what brain volume represents the 95th percentile? 
 \end{tcolorbox}
 
+Let $X$ be the random variable which describes the brain volume for adult women, then 
+
+\noindent $X \sim \mathcal{N}(1100 \textnormal{ cc}, (750\textnormal{ cc})^2)$. We need to calculate the quantile corresponding to a probability of 0.95. This can be computed numerically with the following routine
+
+\begin{lstlisting}[language=R]
+# Quiz 2 - Week 2 - Exercise 8
+#Brain volume for adult women is normally distributed with a mean of about 1,100 cc for women with a standard deviation of 75 cc. About what brain volume represents the 95th percentile?
+
+qnorm(0.95,mean=1100,sd=75,lower.tail = TRUE)
+
+[1] 1223.364
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 9]
 Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 100 random adult women from this population. Around what is the 95th percentile of the distribution of that sample mean?
 \end{tcolorbox}
 
+According to the central limit theorem and since the sample size is large, we can consider the sample mean as a normal distribution $\mathcal{N}(\mu,\sigma^2/n)$, where $\mu$=1100, $\sigma$=75 and $n$=100. Then,
+
+\begin{lstlisting}[language=R]
+# Quiz 2 - Week 2 - Exercise 9
+## Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 100 random adult women from this population. Around what is the 95th percentile of the distribution of that sample mean?
+
+qnorm(0.95,mean=1100,sd=75/10,lower.tail = TRUE)
+[1] 1112.336
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 10]
-Return to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 100 random adult women from this population. Around what is the 95th percentile of the distribution of that sample mean?
+Recall from an earlier question. Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10.  What's the probability that in a random sample of 5 subjects, 4 or more have DBPs more than 90?
 \end{tcolorbox}
+
+
 
 \begin{tcolorbox}[title=Question 11]
 Consider two sample means, $\bar X_1$ and $\bar X_2$ from a the same normal population having mean zero and standard deviation $\sigma$.  The first sample mean is based on $n_1$ observations while the second is based on $n_2$ observations. Take any percentile, say $100 \times \alpha$,  for the distribution of sample means based on the two sample sizes excluding the median. What is the ratio of the two percentiles where it is the percentile of the first group divided by the second?
@@ -935,20 +990,65 @@ Consider two sample means, $\bar X_1$ and $\bar X_2$ from a the same normal popu
 You flip a fair coin 5 times, what's the probability of getting 4 or 5 heads?
 \end{tcolorbox}
 
+As the coin is fair, the probability of getting 1 head at each flip is 0.5. The probability of getting at least 4 heads after 5 flips can be computed using the binomial law 
+
+$$
+p=\mathcal{C}_{4}^{5}.(0.5)^4(1-0.5)+\mathcal{C}_{5}^{5}.(0.5)^5
+$$.
+
+In R, 
+
+\begin{lstlisting}[language=R]
+## Quiz 2 - Week 2 - Exercise 12
+
+pbinom(3,size=5,prob=0.5, lower.tail = FALSE)
+## [1] 0.1875
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 13]
-The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 1515 (sleep events per hour) and a standard deviation of 1010. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100100 people is between 1414 and 1616 events per hour?
+The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 15 (sleep events per hour) and a standard deviation of 10. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100 people is between 14 and 16 events per hour?
 \end{tcolorbox}
+
+The standard error of the mean is $\frac{\sigma}{n}$, where $\sigma$=10 and $n$=100. So the value is 1. We then want to measure the probability of the RDI being inside 1 standard deviation around the mean \textit{ie.} should be around 68\%.
+
+Indeed, the Central Limit Theorem (CLT) states that for a large enough sample size $n$, the distribution of the sample mean $\bar x$ will approach a normal distribution.
+\begin{lstlisting}[language=R]
+# Quiz 2 - Week 2 - Exercise 13.
+# The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 15 (sleep events per hour) and a standard deviation of 10. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100 people is between 14 and 16 events per hour?
+mu <- 15
+sigma <- 10
+n <- 100
+SE <- sigma/sqrt(n)
+
+left <- 14
+right <- 16
+
+percentageLeft <- pnorm(left, mean = mu, sd = SE) * 100
+percentageRight <- pnorm(right, mean = mu, sd = SE) * 100
+
+probPercentage <- round(percentageRight - percentageLeft)
+probPercentage
+
+[1] 68
+\end{lstlisting}
 
 \begin{tcolorbox}[title=Question 14]
 Consider a standard uniform density. The mean for this density is .5 and the variance is 1 / 12. You sample 1,000 observations from this distribution and take the sample mean, what value would you expect it to be near?
 \end{tcolorbox}
 
+Using the Law of Large Numbers, the value should be approximately 0.5.
+
 \begin{tcolorbox}[title=Question 15]
 Consider a standard uniform density. The mean for this density is .5 and the variance is 1 / 12. You sample 1,000 sample means where each sample mean is comprised of 100 observations. You take the standard deviation of the 1,000 sample means. About what number would you expect it to be?
 \end{tcolorbox}
 
+The standard deviation of the sample mean $\mu$
+is $s_{X} = \frac{\sigma}{n}$, where $n$ is the number of observations per sample. Thus $s_X = \frac{1}{\sqrt{12 \times 100}}$.
+
 \begin{tcolorbox}[title=Question 16]
 Consider a standard uniform density. The mean for this density is .5 and the variance is 1 / 12. You sample 1,000 sample variances where each sample variance is comprised of 100 observations. You take the average of the 1,000 sample variances. What number would you expect that to be near?
 \end{tcolorbox}
+
+Yet again, according to the Law of Large Numbers, the answer is $\frac{1}{12}$.
 
 \end{document}
