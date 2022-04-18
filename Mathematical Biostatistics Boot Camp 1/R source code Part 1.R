@@ -147,3 +147,15 @@ In[1]: The pooled sample variance is 2
 In [2]: The 95th t-quantile for a t-distribution with 14 dof is 2.144787
 In [3]: The 95th interval is [ -0.1447867 4.144787 ]
 [Execution complete with exit code 0]
+
+
+------
+
+# Homework 3 - Week 3 - Exercise 6
+temp <- expand.grid(c(1, 3, 7), c(1, 3, 7), c(1, 3, 7)) 
+
+table(apply(temp, 1, median))
+
+In [1]: 
+1  3  7 
+7 13  7 
