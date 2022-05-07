@@ -1210,41 +1210,175 @@ No, both the empirical and theoretical quantiles must be non-decreasing.
 In a new population, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95\% Student's T confidence interval for the mean brain volume in this new population?
 \end{tcolorbox}
 
+Let $\{X_i\}_{i=1}^{n=9}$ be the iid Gaussian variables describing the men's brain volume, drawn from the $\mathcal{N}(\mu, \sigma^2)$ distribution with $\mu = 1100cc$ and $\sigma = 30cc$. Let 
+
+$$
+\bar X = \frac{1}{n}\sum_{i=1}^{n} X_i
+$$
+be the sample mean and let
+
+$${\displaystyle S^{2}={\frac {1}{n-1}}\sum _{i=1}^{n}(X_{i}-{\bar {X}})^{2}}$$
+
+be the (Bessel-corrected) sample variance. Then the random variable
+
+\begin{align*}
+{\frac {{\bar {X}}-\mu }{\sigma /{\sqrt {n}}}} \sim & {\mathcal{N}(0,1)}, & \frac{\bar X - \mu}{S / \sqrt{n}}\ \sim t_{n-1}    
+\end{align*}
+
+where $t_{n-1}$ is the Gosset's distribution for $n-1$ degrees of freedom. We are interested in a central 95\% confidence interval (ie. given Student's distribution's two tails, we are interested in the 97.5th percentile of said Student's distribution at the upper tail). For unknown mean and known standard deviation, a confidence interval for the population mean, based on a simple random sample of size $n$ is 
+
+$$
+CI = \mu \pm t_{\textnormal{0.975, } n-1}\frac{S}{\sqrt{n}}.
+$$
+
+In our case, $\mu = 1100cc$, $S=30cc$, $n=9$ dofs, then $t_{0.975, 8} = 2.306004$. Thus our confidence interval is 
+
+$$
+CI= [1076.94cc, 1123.06 cc].
+$$
+
+This CI can be computed with the following R routine
+
+\begin{lstlisting}[language=R]
+# Quiz 3 - Week 3 - Exercise 1
+## In a new population, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95\% Student's T confidence interval for the mean brain volume in this new population?
+
+mean <- 1100
+sd <- 30
+n <- 9
+
+p <- .95 + (1-.95)/2
+error <- qt(p, df=n-1)*sd/sqrt(n)
+ci <- mean + c(-1,1)*error
+ci
+
+In [1]: 
+1076.94 1123.06
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 2]
 A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation have to be for the 95\% T confidence interval to lie entirely below 0?
 \end{tcolorbox}
+
+As previously stated, the Student's 95th CI is
+
+$$
+CI = \mu \pm t_{\textnormal{0.975, } n-1}\frac{S}{\sqrt{n}},
+$$
+
+which in our case is zero. So $-2 + t_{\textnormal{0.975, } 8}\frac{\sigma}{\sqrt{n}} = 0 \rightarrow \sigma = \frac{-(-2) \times \sqrt{n}}{t_{\textnormal{0.975, } 8}} = 2.601903$. This can be computed with the following R routine
+
+\begin{lstlisting}[language=R]
+# Quiz 3 - Week 3 - Exercise 2
+## A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation have to be for the 95\% T confidence interval to lie entirely below 0?
+
+mu <- -2
+n <- 9
+sigma <- -mu*sqrt(n)/qt(0.975,df=n-1)
+sigma
+
+In [1] 
+2.601903
+\end{lstlisting}
 
 \begin{tcolorbox}[title=Question 3]
 Refer to the previous question. The interval would up being [-3.5, -0.5] pounds. What can be said about the population mean weight loss at 95\% confidence? 
 \end{tcolorbox}
 
+We can confirm there was an effective weight loss. \\
+
 \begin{tcolorbox}[title=Question 4]
 In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock ER under both the new and old triage system. Their waiting times were recorded. Would it be better to use an independent group or paired T confidence interval in this setting?
 \end{tcolorbox}
+
+N/A
 
 \begin{tcolorbox}[title=Question 5]
 Refer to the setting of the previous question. To further test the system, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Give a 95\% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance.
 \end{tcolorbox}
 
+Let $X$ be the random variable describing the
+nightly median waiting times using the old triage system and let $Y$ be the random variable the
+nightly median waiting times using the new triage system. We assume $X \sim \mathcal{N}(\mu_X, \sigma^2)$ and $Y \sim \mathcal{N}(\mu_X, \sigma^2)$, assumptions justified by the Central Limit Theorem. Let $\bar X, \bar Y, S_X, S_Y$ be their means and standard deviations, the pooled variance estimator can be found as
+
+$$
+S_p^2 = \frac{(n_X-1)S_x^2 + (n_Y-1)S_y^2 }{n_X+n_Y-2} = \pi S_X^2 + (1-\pi) S_Y^2 \textnormal{  where } \pi = \frac{n_x-1}{n_x+n_y-2}.
+$$
+
+and is a good (unbiased) estimator for the variance $\sigma^2$. It's a mixture of the group variances, placing greater weight on whichever has a larger sample size. Should the sample sizes be equal, the pooled variance estimate is the average of the group variances. 
+
+We know the sum of two independent Chi-squared random variables is a Chi-squared random variable with its degrees of freedom equal to the sum of the degrees of freedom of the summands, \textit{ie.} 
+
+\begin{dmath*}
+(n_X+n_Y-2)\frac{S_p^2}{\sigma^2} = {n_X-1} \frac{S_X^2}{\sigma^2} +  (n_y-1) \frac{S_Y^2}{\sigma^2} =\chi^2_{n_X-1}+\chi^2_{n_Y-1} = \chi^2_{n_X-n_Y-2}
+\end{dmath*}
+
+The $t$-statistic is 
+
+$$
+\frac{\frac{\bar{Y}-\bar{X} - (\mu_Y-\mu_X) }{\sigma\left(\frac{1}{n_X}+\frac{1}{n_Y}\right)}}{\sqrt{\frac{(n_X+n_Y-2)S_p^2}{n_X+n_Y-2\sigma^2}}} = \frac{\bar{Y}-\bar{X}- (\mu_Y-\mu_X)}{S_p \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)^{1/2}},
+$$
+
+a standard normal (since $\bar{Y}-\bar{X} \sim \mathcal{N}\left(\mu_{Y}-\mu_{X},\sigma^2 \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)\right)$) divided by  the square root of an independent Chi-squared divided by its degrees of freedom. Thus, this statistic follows a Gosset's $t$ distribution with $n_X+n_Y-2$ degrees of freedom.
+
+Therefore a $(1-\alpha)\times 100\%$-confidence interval for $\mu_Y-\mu_X$ can be written as follows
+
+$$
+\bar{Y}-\bar{X}\pm t_{n_{X}+n_{Y}-2,1-\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}.
+$$
+
+In our case we have $\mu_X = 5 hs$, $\sigma^2_X = 0.68 hs^2$, $\mu_Y = 3hs$, $\sigma^2_Y = 0.60hs^2$, $t_{0.975, n_X + n_Y -2} = 2.100922$. Then the CI is $CI = [-2.75,-1.25].$ The previous calculations can be implemented with the following R routine 
+
+\begin{lstlisting}[language=R]
+# Quiz 3 - Week 3 - Exercise 5 
+## Refer to the setting of the previous question. To further test the system, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Give a 95\% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance.
+
+old_mean <- 5 
+old_var <- .68
+old_n <- 10
+
+new_mean <- 3
+new_var <- .60
+new_n <- 10
+
+p <- .95
+
+pooled_variance <- ((new_n-1)*new_var+(old_n-1)*old_var)/(old_n+new_n-2)
+ci <- (new_mean - old_mean) + c(-1,1) * qt(p + (1-p)/2, (old_n+new_n-2)) * sqrt(pooled_variance) * sqrt(1/old_n+1/new_n)
+ci 
+
+In [1] 
+-2.751649 -1.248351
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 6]
 Suppose that you create a 95\% T confidence interval. You then create a 90\% interval using the same data. What can be said about the 90\% interval with respect to the 95\% interval?
 \end{tcolorbox}
 
+The interval will be narrower since $t_{df, 95} > t_{df, 90}$. \\
+
 \begin{tcolorbox}[title=Question 7]
-Let distribution 1 be $N(\mu_1, \sigma_1^2)$N and distribution 2 be $N(\mu_2,\sigma_2^2)$. Let $x_{1,\alpha}$ and $x_{2,\alpha}$x  be the $\alpha^{th}$ quantile from the two distributions, respectively. How are the two mathematically related?
+Let distribution 1 be $\mathcal{N}(\mu_1, \sigma_1^2)$ and distribution 2 be $\mathcal{N}(\mu_2,\sigma_2^2)$. Let $x_{1,\alpha}$ and $x_{2,\alpha}$ be the $\alpha^{\textnormal{th}}$ quantile from the two distributions, respectively. How are the two mathematically related?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 8]
+Consider data points $x_1,\ldots, x_n$. Imagine a probability mass function, so that a random variable X from this distribution has
+$$ 
+P(X = x_i) = p(x_i) = \frac{1}{n}
+$$
+This is the so-called bootstrap distribution. What is the mean of the bootstrap distribution?
+\end{tcolorbox}
 
+\begin{tcolorbox}[title=Question 9]
+Suppose we were to simulate a large number of standard normal random variables and a large number of exponential random variables. What would a plot of the exponential quantiles (horizontal axis) versus the standard normal quantiles (vertical axis) look like? Let $\Phi$ be the standard normal distribution function.
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 10]
-
+Let $F(x)$) be a distribution function. Notice that $G(x) = F(a^2x + b)$ is also a distribution function for $a \neq 0$. If you were to take large samples from $F$ and $G$, what must the QQ plot look like without knowing the specific values of $a$ and $b$?
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 11]
-
+Let your data be the two points $\{1, 3\}$.  What is the bootstrap distribution of the sample mean?
 \end{tcolorbox}
-
 
 \end{document}
