@@ -159,3 +159,58 @@ table(apply(temp, 1, median))
 In [1]: 
 1  3  7 
 7 13  7 
+
+
+------
+
+# Quiz 3 - Week 3 - Exercise 1
+## In a new population, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95\% Student's T confidence interval for the mean brain volume in this new population?
+
+mean <- 1100
+sd <- 30
+n <- 9
+
+p <- .95 + (1-.95)/2
+error <- qt(p, df=n-1)*sd/sqrt(n)
+ci <- mean + c(-1,1)*error
+ci
+
+In [1]: 
+1076.94 1123.06
+
+
+------
+
+# Quiz 3 - Week 3 - Exercise 2
+## A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation have to be for the 95\% T confidence interval to lie entirely below 0?
+
+mu <- -2
+n <- 9
+sigma <- -mu*sqrt(n)/qt(0.975,df=n-1)
+sigma
+
+In [1] 
+2.601903
+
+
+------
+
+# Quiz 3 - Week 3 - Exercise 5 
+## Refer to the setting of the previous question. To further test the system, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Give a 95\% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance.
+
+old_mean <- 5 
+old_var <- .68
+old_n <- 10
+
+new_mean <- 3
+new_var <- .60
+new_n <- 10
+
+p <- .95
+
+pooled_variance <- ((new_n-1)*new_var+(old_n-1)*old_var)/(old_n+new_n-2)
+ci <- (new_mean - old_mean) + c(-1,1) * qt(p + (1-p)/2, (old_n+new_n-2)) * sqrt(pooled_variance) * sqrt(1/old_n+1/new_n)
+ci 
+
+In [1] 
+-2.751649 -1.248351
