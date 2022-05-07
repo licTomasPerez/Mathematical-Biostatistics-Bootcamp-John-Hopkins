@@ -148,7 +148,6 @@ In [2]: The 95th t-quantile for a t-distribution with 14 dof is 2.144787
 In [3]: The 95th interval is [ -0.1447867 4.144787 ]
 [Execution complete with exit code 0]
 
-
 ------
 
 # Homework 3 - Week 3 - Exercise 6
@@ -159,7 +158,6 @@ table(apply(temp, 1, median))
 In [1]: 
 1  3  7 
 7 13  7 
-
 
 ------
 
@@ -178,7 +176,6 @@ ci
 In [1]: 
 1076.94 1123.06
 
-
 ------
 
 # Quiz 3 - Week 3 - Exercise 2
@@ -191,7 +188,6 @@ sigma
 
 In [1] 
 2.601903
-
 
 ------
 
