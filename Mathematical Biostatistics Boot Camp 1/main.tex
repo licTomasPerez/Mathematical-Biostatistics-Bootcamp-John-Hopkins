@@ -1285,13 +1285,13 @@ In [1]
 Refer to the previous question. The interval would up being [-3.5, -0.5] pounds. What can be said about the population mean weight loss at 95\% confidence? 
 \end{tcolorbox}
 
-We can confirm there was an effective weight loss. \\
+Since both the lower and higher bounds lie below zero, there is support at 95\% confidence of mean weight loss.\\
 
 \begin{tcolorbox}[title=Question 4]
 In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock ER under both the new and old triage system. Their waiting times were recorded. Would it be better to use an independent group or paired T confidence interval in this setting?
 \end{tcolorbox}
 
-N/A
+N/A \\
 
 \begin{tcolorbox}[title=Question 5]
 Refer to the setting of the previous question. To further test the system, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Give a 95\% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance.
@@ -1355,7 +1355,7 @@ In [1]
 Suppose that you create a 95\% T confidence interval. You then create a 90\% interval using the same data. What can be said about the 90\% interval with respect to the 95\% interval?
 \end{tcolorbox}
 
-The interval will be narrower since $t_{df, 95} > t_{df, 90}$. \\
+The interval will be narrower since $t_{df, 95} > t_{df, 90}$. (To be confirmed) \\
 
 \begin{tcolorbox}[title=Question 7]
 Let distribution 1 be $\mathcal{N}(\mu_1, \sigma_1^2)$ and distribution 2 be $\mathcal{N}(\mu_2,\sigma_2^2)$. Let $x_{1,\alpha}$ and $x_{2,\alpha}$ be the $\alpha^{\textnormal{th}}$ quantile from the two distributions, respectively. How are the two mathematically related?
@@ -1367,7 +1367,7 @@ $$
 Q_{X}(\alpha) = \min \{x \in \mathds{R} | F_{X}(x) = \alpha\}.
 $$
 
-In particular, let $X$ be a random variable following a normal distribution $X \sim \mathcal{N}(\mu, \sigma^2)$. Then the its CDF is 
+In particular, let $X$ be a random variable following a normal distribution $X \sim \mathcal{N}(\mu, \sigma^2)$. Then its CDF is 
 
 $$
 F_{X}(x) = \Phi\left(\frac{x-\mu}{\sigma}\right) = \frac{1}{2}\left[1+\textnormal{erf}\left(\frac{x-\mu}{\sqrt{2}\sigma}\right)\right]
@@ -1419,16 +1419,43 @@ $$
 This is the so-called bootstrap distribution. What is the mean of the bootstrap distribution?
 \end{tcolorbox}
 
+The bootstrap distribution associated with an iid sample $\{X_{k}\}_{k=1}^{m}$ is defined as 
+
+$$
+\hat{F}_{m}(x) = \frac{1}{m} \sum_{j=1}^{m} \mathds{1}_{X_j \leq x} \textnormal{ such that } X_j \overset{\textnormal{iid}}{\sim} F(x).
+$$
+
+Consequently, the mean of the bootstrap distribution $\hat{F}_{m}(x)$ (conditional on the iid sample $\{X_{k}\}_{k=1}^{m}$) is 
+
+$$
+\mathds{E}_{\hat{F}_{m}(x)}[X] = \frac{1}{m} \sum_{j=1}^{m} X_j = \bar{X}_m.
+$$
+
+In other words, the mean of the bootstrap distribution is precisely the sample mean. In effect, let $\{z_{k}\}_{k=1}^{m} \in \mathds{R}$, then the arithmetic mean of said set of numbers is $\frac{1}{m}(z_{1} + \cdots + z_m)$. Let $\{Z_k\}_{k=1}^{m}$ be random variables, then $\forall \alpha_{j}, \alpha_{j} \in  \{\alpha_{k}\}_{k=1}^{m} \in \mathds{R}$ the expectation value is a linear operator. Now, let $B$ be a sample $(B_1, \cdots, B_k)$ obtained from a dataset $x=(x_{1}, \cdots, x_n)$ by taking $k$ elements uniformly from $x$ with replacement. Then $m(B)$ is the aritmetic mean of B, a random variable, thus 
+
+$$
+\mathds{E}(m(B)) = \mathds{E}\bigg(\frac{1}{k}(B_1 + \cdots + B_k)\bigg) = \frac{1}{k} (\mathds{E}(B_1)+\cdots+\mathds{E}(B_k)) $$
+
+which follows by linearity of expectation. Since all the elements of $B$ are obtained in the same fashion, they all have the same expectation value $b$: $\mathds{E}(B_1) = \cdots = \mathds{E}(B_k) = b$ \textit{ie. } $\mathds{E}(m(B)) = \frac{1}{k}(kb) = \mathds{E}(B_1) = \bar{x}$, the arithmetic mean of the data. 
+
+The previous argument states that if one uses the data mean $\bar x$ to estimate the population eman, then the bootstrap mean (which is the case $k=n$) also equals $\bar x$, and therefore is identical as an estimator of the population mean. 
+
 \begin{tcolorbox}[title=Question 9]
 Suppose we were to simulate a large number of standard normal random variables and a large number of exponential random variables. What would a plot of the exponential quantiles (horizontal axis) versus the standard normal quantiles (vertical axis) look like? Let $\Phi$ be the standard normal distribution function.
 \end{tcolorbox}
+
+It's $\Phi^{-1}(1-e^{-x})$. 
 
 \begin{tcolorbox}[title=Question 10]
 Let $F(x)$) be a distribution function. Notice that $G(x) = F(a^2x + b)$ is also a distribution function for $a \neq 0$. If you were to take large samples from $F$ and $G$, what must the QQ plot look like without knowing the specific values of $a$ and $b$?
 \end{tcolorbox}
 
+A line. 
+
 \begin{tcolorbox}[title=Question 11]
 Let your data be the two points $\{1, 3\}$.  What is the bootstrap distribution of the sample mean?
 \end{tcolorbox}
+
+$\frac{1}{4},\frac{1}{2},\frac{1}{4}$. 
 
 \end{document}
