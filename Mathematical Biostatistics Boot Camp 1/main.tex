@@ -1361,6 +1361,56 @@ The interval will be narrower since $t_{df, 95} > t_{df, 90}$. \\
 Let distribution 1 be $\mathcal{N}(\mu_1, \sigma_1^2)$ and distribution 2 be $\mathcal{N}(\mu_2,\sigma_2^2)$. Let $x_{1,\alpha}$ and $x_{2,\alpha}$ be the $\alpha^{\textnormal{th}}$ quantile from the two distributions, respectively. How are the two mathematically related?
 \end{tcolorbox}
 
+Let $X$ be a random variable with a cumulative distribution function $F_{X}(x) = \int_{-\infty}^{x}dt f_{X}(t)$. Then the function $Q_{X}(\alpha):\mathds{R}_{[0,1]}\rightarrow\mathds{R}$, which is the inverse CDF, is the quantile function (QF) of $X$ \textit{ie.} the QF is the function that, for a given quantile $\alpha \in \mathds{R}_{[0,1]}$ returns the smallest $x$ for which $F_{X}(x)=\alpha$:
+
+$$
+Q_{X}(\alpha) = \min \{x \in \mathds{R} | F_{X}(x) = \alpha\}.
+$$
+
+In particular, let $X$ be a random variable following a normal distribution $X \sim \mathcal{N}(\mu, \sigma^2)$. Then the its CDF is 
+
+$$
+F_{X}(x) = \Phi\left(\frac{x-\mu}{\sigma}\right) = \frac{1}{2}\left[1+\textnormal{erf}\left(\frac{x-\mu}{\sqrt{2}\sigma}\right)\right]
+$$
+
+where $\Phi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x} dt e^{-\frac{t^2}{2}}$ is the CDF of the standard normal distribution $\mathcal{N}(0,1)$ and where $\textnormal{erf}(x) = \frac{2}{\sqrt{\pi}} \int_{0}^{x}dt e^{-t^2}$ is the error function, which gives the probability of a random variable, with normal distribution of mean 0 and variance $\frac{1}{2}$, falling in the range $[-x,x]$. Given that the CDF is strictly monotonically increasing, the QF is equal to the inverse of the CDF:
+
+$$
+Q_{X}(\alpha) = F_{X}^{-1}(x).
+$$
+
+Thus, 
+
+\begin{align*}
+    \alpha =  \frac{1}{2}\left[1+\textnormal{erf}\left(\frac{x-\mu}{\sqrt{2}\sigma}\right)\right] \rightarrow 2\alpha - 1 = \textnormal{erf}\left(\frac{x-\mu}{\sqrt{2}\sigma}\right) \\
+    \textnormal{erf}^{-1}(2\alpha-1) = \frac{x-\mu}{\sqrt{2}\sigma} \rightarrow x = \sqrt{2}\sigma \textnormal{erf}^{-1}(2\alpha-1) + \mu. 
+\end{align*}
+
+Now, let $X_1 \sim \mathcal{N}(\mu_1, \sigma_1^2)$ and $X_2 \sim \mathcal{N}(\mu_2, \sigma_2^2)$ be two iid random variables and let $x_{1,\alpha}$ and $x_{2,\alpha}$ be the $\alpha^{\textnormal{th}}$ quantile from the two distributions, respectively. Then
+
+\begin{align*}
+    x_{1,\alpha} & = \sqrt{2}\sigma_1 \textnormal{erf}^{-1}(2\alpha-1) + \mu_1, &  x_{2,\alpha} & = \sqrt{2}\sigma_2 \textnormal{erf}^{-1}(2\alpha-1) + \mu_2.
+\end{align*}
+
+Consequently
+
+\begin{equation*}
+\begin{gathered}
+    \frac{\sigma_2}{\sigma_1}x_{1,\alpha}  =  \frac{\sigma_2}{\sigma_1} \bigg[ \sqrt{2}\sigma_1 \textnormal{erf}^{-1}(2\alpha-1) + \mu_1 \bigg] \\
+    \mu_2 + \frac{\sigma_2}{\sigma_1}x_{1,\alpha} = \mu_2 + \frac{\sigma_2}{\sigma_1} \bigg[ \sqrt{2}\sigma_1 \textnormal{erf}^{-1}(2\alpha-1) + \mu_1 \bigg] \\
+    \mu_2 - \frac{\sigma_2}{\sigma_1} \mu_1 + \frac{\sigma_2}{\sigma_1}x_{1,\alpha} = \mu_2 - \frac{\sigma_2}{\sigma_1} \mu_1 + \frac{\sigma_2}{\sigma_1} \bigg[ \sqrt{2}\sigma_1 \textnormal{erf}^{-1}(2\alpha-1) + \mu_1 \bigg] \\
+    = \mu_2 + \sqrt{2} \sigma_2 \cancel{ \frac{\sigma_1}{\sigma_1}} \textnormal{erf}^{-1}(2\alpha-1) + \cancel{ \frac{\sigma_2}{\sigma_1} \mu_1 - \frac{\sigma_2}{\sigma_1} \mu_1} = \sqrt{2} \sigma_2 \textnormal{erf}^{-1}(2\alpha-1) + \mu_2 = x_{2,\alpha}. 
+\end{gathered}
+\end{equation*}
+
+The final result being\footnote{Relevant links: \href{https://statproofbook.github.io/D/qf}{Definition: Quantile function
+} and
+\href{https://statproofbook.github.io/P/norm-qf.html}{Proof: Quantile function of the normal distribution}. Retrieved on May 8th, 2022.} that the $\alpha^{\textnormal{th}}$ quantiles of two normal random variables are linearly related 
+
+$$
+x_{2,\alpha} = \mu_{2} - \frac{\sigma_2}{\sigma_1}\mu_1 + \frac{\sigma_2}{\sigma_1}x_{1,\alpha}.  
+$$
+
 \begin{tcolorbox}[title=Question 8]
 Consider data points $x_1,\ldots, x_n$. Imagine a probability mass function, so that a random variable X from this distribution has
 $$ 
