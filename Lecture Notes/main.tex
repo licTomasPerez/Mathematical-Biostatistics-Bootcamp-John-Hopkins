@@ -1,1 +1,45 @@
+\documentclass{homework}
+\author{Tomás Pérez}
+\class{Mathematical Biostatistics Boot Camp 1}
+\date{\today}
+\title{Theory \& Notes}
 
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\section{Part 1}
+\section{Part 2}
+\subsection{Week 1}
+
+Hypothesis testing is concerned with making decisions using data. We label a null hypothesis as $H_0$. The null hypothesis is assumed true and statistical evidence is required to rejected in favor of an alternative hypothesis. 
+
+For example, a respiratory disturbance index of more than 30 events/hour is considered evidence of severe sleep disorder breathing. Suppose that in a sample of 100 overweight subjects with other risk factors for sleep disordered breathing at a sleep clinic, the mean RDI was 32 events/hour with a standard deviation of 10 events/hour.
+
+We might want to test the hypothesis that 
+
+\begin{itemize}
+    \item $H_0 : \mu = 30$ 
+    \item $H_a : \mu > 30$ 
+\end{itemize}
+
+where $\mu$ is the population mean RDI. The alternative hypothesis are typically of the form $<,> or \neq$. Note that there four possible outcome of our statistical decision process
+
+\begin{tabular}{ |p{1cm}||p{5cm}|p{5cm}|  }
+ \hline
+ \multicolumn{3}{|c|}{Statistical decision process} \\
+ \hline
+ Truth& $H_0$ & $H_a$\\
+ \hline
+ $H_0$  & Correctly accept null & Type I error\\
+ $H_a$ &  Type II error & Correctly reject null\\
+ \hline
+\end{tabular}
+
+The type I error is a false positive \textit{ie. } the mistaken rejection of a null hypothesis. Let $\alpha$ denote the type I error rate, the probability of rejecting the null hypothesis when, in fact, then null hypothesis is correct. We'd like to minimise this kind of error.
+The type II error is a false negative \textit{ie. } the mistaken acceptance of the null hypothesis.
+
+Considering our previous example, a reasonable strategy would reject the null hypothesis if $\Bar{X}$ was larger than some constant $C \in \mathds{R}_{+}$. Typically, C is chosen so that the probability of a Type I error $\alpha$ is 0.05. 
+
+
+\end{document}
