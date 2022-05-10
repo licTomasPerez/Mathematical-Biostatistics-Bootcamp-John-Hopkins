@@ -1,14 +1,3 @@
-%% homework.cls  Copyright (C) 2020  Ahmad Tashfeen
-%% This program comes with ABSOLUTELY NO WARRANTY.
-%% This is free software, and you are welcome to
-%% redistribute it under certain conditions; read
-%% file COPYING for more details.
-
-% Put in /usr/local/texlive/texmf-local/tex/latex/local
-% And then re-index, see: tex.stackexchange.com/q/1137/215221
-% Latex documentation: https://en.wikibooks.org/wiki/LaTeX
-% 'em' is the horizontal space unit and 'ex' is the vertical
-
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{homework}[2021/01/01 Homework]
 \DeclareOption{handout}{\PassOptionsToClass{\CurrentOption}{amsart}}
