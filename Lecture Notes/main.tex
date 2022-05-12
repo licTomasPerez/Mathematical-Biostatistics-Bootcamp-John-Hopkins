@@ -12,6 +12,8 @@
 \section{Part 2}
 \subsection{Week 1}
 
+\subsubsection{Hypothesis testing}
+
 Hypothesis testing is concerned with making decisions using data. We label a null hypothesis as $H_0$. The null hypothesis is assumed true and statistical evidence is required to rejected in favor of an alternative hypothesis. 
 
 For example, a respiratory disturbance index of more than 30 events/hour is considered evidence of severe sleep disorder breathing. Suppose that in a sample of 100 overweight subjects with other risk factors for sleep disordered breathing at a sleep clinic, the mean RDI was 32 events/hour with a standard deviation of 10 events/hour.
@@ -34,12 +36,14 @@ where $\mu$ is the population mean RDI. The alternative hypothesis are typically
  $H_0$  & Correctly accept null & Type I error\\
  $H_a$ &  Type II error & Correctly reject null\\
  \hline
-\end{tabular}
+\end{tabular} \\
 
-The type I error is a false positive \textit{ie. } the mistaken rejection of a null hypothesis. Let $\alpha$ denote the type I error rate, the probability of rejecting the null hypothesis when, in fact, then null hypothesis is correct. We'd like to minimise this kind of error.
-The type II error is a false negative \textit{ie. } the mistaken acceptance of the null hypothesis.
+\begin{itemize}
+    \item The type I error rate is a false positive \textit{ie.} the mistaken rejection of a (true) null hypothesis. 
+    \item The type II error rate is a false negative \textit{ie.} the mistaken acceptance of a (false) null hypothesis, we failed to reject a false $H_0$.
+\end{itemize}
 
-Considering our previous example, a reasonable strategy would reject the null hypothesis if $\Bar{X}$ was larger than some constant $C \in \mathds{R}_{+}$. Typically, $C$ is chosen so that the probability of a Type I error $\alpha$ is 0.05
+Let $\alpha$ denote the type I error rate, the probability of rejecting the null hypothesis when, in fact, then null hypothesis is correct. We'd like to minimise this kind of error. Considering our previous example, a reasonable strategy would reject the null hypothesis if $\Bar{X}$ was larger than some constant $C \in \mathds{R}_{+}$. Typically, $C$ is chosen so that the probability of a Type I error $\alpha$ is 0.05
 
 For example, the probability of a Type I error and according to the Central Limit Theorem we have  
 
@@ -94,6 +98,8 @@ where the test statistic $TS = \frac{\Bar{X}-\mu_0}{S/\sqrt{a}}$ (expressing the
     \item $H_3: TS \geq Z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
 \end{itemize}
 
+The region of TS values for which the null hypothesis is rejected is the rejection region. In the case of $H_1$, the upper normal quantile and above is the rejection region, for $H_2$ it's the negative quantile and below or the upper quantile and above and finally, in the case of $H_3$, the normal quantile and below is the rejection region.
+
 We can graphically represent the second case, the case of a two-sided tail test, with the following R routine
 
 \begin{lstlisting}[language=R]
@@ -116,8 +122,56 @@ text(0, dnorm(0)/5, "95%",cex=2)
 \begin{figure}
     \centering
     \includegraphics[scale = 0.5]{figs/two sided tail test.png}
-    \caption{Two sided tail test}
+    \caption{Two sided tail test presenting a standard normal $\mathcal{N}(0,1)$ distribution. We're going to reject $H_0$ if our test statistic is above $1.96$ -which has a 2.5\% chance under the null hypothesis- and we're going to reject $H_0$ if our test statistic is below $-1.96$ -which also has a 2.5\% chance under the null hypothesis-. Thus the union of those two events has a 5\% chance under the null hypothesis. }
     \label{fig:my_label}
 \end{figure}
 
+In hypothesis testing, we fix the $\alpha$ (type I error value) to be low. So if we reject the null hypothesis, either our model is wrong or there is a low probability that we made and error. We haven't fixed the probability of a type II error $\beta$, therefore we tend to say "fail to reject $H_0$" rather than accepting $H_0$. In general, less is known about the type II error. Statistical significance is not the same as scientific significance. 
+
+\subsubsection{Two sided tests}
+
+The Z-test requires the assumption of the Central Limit theorem and for $n$ to be large enough for the CLT to apply. If $n$ is mall, then a Gossett's $T$ test is performed exactly in the same way with the normal quantiles being replaced by the appropriate Student's $T$ quantiles and $n-1$ degrees of freedom. 
+
+The probability of rejecting a false null hypothesis is called \textbf{power}. The statistical power of a dichotomic (binary) hypothesis test is the probability that the test correctly rejects the null hypothesis $H_0$ when a specific alternative hypothesis $H_1$ is true\footnote{Remember that the probability of rejecting a true null hypothesis is the type I error rate and is set to be small whilst the probability of failing to reject (this is the mistaken acceptance) a false null hypothesis is called a type II error rate. The power is $1-\beta$.}. A high value of power is good thing, we want to reject a false null hypothesis but it's not an easy to manipulate quantity in an experiment. One way to combat this issue is, prior to conducting the study, to do a power calculation of the sample size to obtain a certain level of power using guesses for the standard deviation and the hypothesised significant effect.
+
+For example, suppose that $n=16$ (rather than 100) in our previous example. Instead of using a Z-test, we use a Student's T-test. Then 
+
+$$
+.05 = \mathds{P}\bigg(\frac{\Bar{X}-30}{s/\sqrt{16}} \geq t_{1-\alpha, 15} \bigg| \mu = 30\bigg)
+$$
+
+where $s/\sqrt{16}$ is the estimated standard error, where $t_{1-\alpha, 15}$ is t-quantile. Then our test statistic is now $\sqrt{16}\frac{32-30}{10} = .8$, while the critical value is $t_{1-\alpha, 15} = 1.75$. Thus, we fail to reject the null hypothesis. Remember that T has a heavier tail distribution than the normal distribution.
+
+We are now interested in a two sided test. We are interested in studying if our hypothesised mean is significantly larger than $30$ or significantly smaller than $30$. That is, we want to test he alternative hypothesis $H_a: \mu \neq 30$. Then
+
+$$
+\alpha = \mathds{P}\bigg(\bigg|\frac{\Bar{X}-30}{s/\sqrt{16}}\bigg| > t_{1-\alpha/2, 15}\bigg| \mu = 30\bigg),
+$$
+
+that is: we'll reject $H_0$ is the test statistic (0.8
+) is either too large or two small with the critical value being calculated using $\alpha/2$. In our example, this critical value is $2.13$ so we fail to reject it\footnote{We note that, if the data are iid Gaussians, then $\frac{X-\mu}{s/\sqrt{n}} \sim t_{n-1}$} The previous calculation can be understood with the following R routine 
+
+\begin{lstlisting}[language=R]
+xval <-  seq(-4, 4, length=1000)
+yval <- dt(xval, 15)
+plot(xval, yval, type = "l", axes=TRUE, frame=FALSE, lwd = 3, xlab="", ylab= "")
+x <- seq(qt(.975, 15), 4, length=100)
+polygon(c(x, rev(x)), c(dt(x,15), rep(0,length(x))), col="salmon")
+text(mean(x), mean(dt(xval, 16-1))+0.2, "2.5%", cex=2)
+text(qt(.975,15), .01, "2.13",cex=2)
+x <- seq(-3.2, qt(.025,16), length=100)
+polygon(c(x, rev(x)), c(dt(x,15), rep(0,length(x))), col="salmon")
+text(mean(x), mean(dt(xval, 16-1))+0.2, "2.5%", cex=2)
+text(qt(.025,15), .01, "2.13",cex=2)
+text(0, dt(0,15)/5, "95%", cex=2)
+\end{lstlisting}
+
+which outputs the following plot 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figs/two sided T test.png}
+    \caption{We calculate our normalised test statistic $\frac{\Bar{X}-\mu}{s/\sqrt{n}}$ and the probability that the absolute value of said statistic is bigger than $2.13$ \textit{ie.} the probability that the statistic is too large positive than $2.13$ is 2.5\% or too small negative than $-2.13$ is 2.5\%. In our case, the probability that the test statistic lies in the rejection region is 5\%. For the $T$ distributionwith 15 degrees of freedom, the 97.5th quantile is 2.13 and the 2.5th quantile is $-2.13$. }
+    \label{fig: two sided Student's T test}
+\end{figure}
 \end{document}
