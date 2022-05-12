@@ -64,8 +64,8 @@ which outputs the following graph
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.5]{figs/95th quantile of a gaussian.png}
-    \caption{R-generated plot of the standard normal distribution $\mathcal{N}(0,1)$,  in the [-3.2, 3.2] range. The shaded polygon represents the 95th quantile (which is given by $x=1.645$) of a standard normal distribution. }
+    \includegraphics[scale=0.5]{figs/95th percentile of a gaussian.png} 
+    \caption{R-generated plot of the standard normal distribution $\mathcal{N}(0,1)$,  in the [-3.2, 3.2] range. The shaded polygon represents the 95th percentile (which is given by $x=1.645$) of a standard normal distribution. }
     \label{fig:my_label}
 \end{figure}
 
@@ -75,13 +75,49 @@ $$
 \frac{32-30}{10/\sqrt{100}} = 2 > 1.645.
 $$
 
-We can codify these rules for a normal Z test as follows:
+Our mean is two standard error units away from the hypothesised mean 
+
+We can codify these rules for a normal Z test, assuming the data is gaussian or that the Central Limit Theorem is a good enough approximation to apply, as follows:
 
 Let $H_0 : \mu = \mu_0$ be the null hypothesis, then let 
 \begin{itemize}
     \item $H_1: \mu < \mu_0$
     \item $H_2: \mu \neq \mu_0$
-    \item $H_1: \mu > \mu_0$
+    \item $H_3: \mu > \mu_0$
 \end{itemize}
+
+where the test statistic $TS = \frac{\Bar{X}-\mu_0}{S/\sqrt{a}}$ (expressing the mean in standard error units), where $S/\sqrt{a}$ is the standard error. Thus, we reject the null hypothesis when 
+
+\begin{itemize}
+\item $H_1: TS \leq -Z_{1-\alpha}$ \textit{ie.} we reject $H_0$ in favour of $H_1$ if our sample mean is enough below $\mu_0$,
+    \item $H_2: |TS| \geq  Z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is }, 
+    \item $H_3: TS \geq Z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
+\end{itemize}
+
+We can graphically represent the second case, the case of a two-sided tail test, with the following R routine
+
+\begin{lstlisting}[language=R]
+xval <-  seq(-3.2, 3.2, length=1000)
+yval <- dnorm(xval)
+
+plot(xval, yval, type = "l", axes=TRUE, frame=FALSE, lwd = 3, xlab="", ylab= "")
+x <- seq(qnorm(.975), 3.2, length = 100)
+polygon(c(x, rev(x)), c(dnorm(x), rep(0,length(x))), col="salmon")
+text(mean(x), mean(dnorm(x))+0.2, "2.5%", cex=2)
+text(qnorm(.975), .01, "1.96",cex=2)
+
+x <- seq(-3.2, qnorm(0.025), length=100)
+polygon(c(x, rev(x)), c(dnorm(x), rep(0,length(x))), col="salmon")
+text(mean(x), mean(dnorm(x))+0.2, "2.5%", cex=2)
+text(qnorm(.025), .01, "1.96",cex=2)
+text(0, dnorm(0)/5, "95%",cex=2)
+\end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.5]{figs/two sided tail test.png}
+    \caption{Two sided tail test}
+    \label{fig:my_label}
+\end{figure}
 
 \end{document}
