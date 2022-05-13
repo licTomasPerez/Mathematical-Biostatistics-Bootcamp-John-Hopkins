@@ -50,3 +50,16 @@ text(qt(.025,15), .01, "2.13",cex=2)
 text(0, dt(0,15)/5, "95%", cex=2)
 
 
+--------------
+#Calculating a P-value for a Student's T statistic
+
+pt(0.8, 15, lower.tail=FALSE)
+xval <-  seq(-4, 4, length=1000)
+yval <- dt(xval, 15)
+plot(xval, yval, type = "l", axes=TRUE, frame=FALSE, lwd = 3, xlab="", ylab= "")
+x <-  seq(.8, 4, length=100)
+polygon(c(x, rev(x)), c(dt(x,15), rep(0,length(x))), col="salmon")
+text(mean(x), mean(dt(xval, 16-1))+0.2, "22%", cex=2)
+text(.8, .01, "0.8",cex=2)
+
+
