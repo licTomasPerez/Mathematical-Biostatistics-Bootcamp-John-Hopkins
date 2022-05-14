@@ -9,7 +9,7 @@ text(qnorm(.95), .01, "1.645",cex=2)
 
 
 ----------
-
+# Two sided tail test for a Z-statistic (under the null hypothesis)
 
 xval <-  seq(-3.2, 3.2, length=1000)
 yval <- dnorm(xval)
