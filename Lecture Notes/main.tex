@@ -261,7 +261,9 @@ $$
 \mathds{P}\bigg(\frac{\bar{X}-30}{s/\sqrt{n}} > t_{1-\alpha, n-1} \bigg | \mu = \mu_a\bigg).
 $$
 
-The power of the test is the probability that the $T$ statistic lies in the rejection region. If this normalised mean was greater than the $t_{1-\alpha, n-1}$ quantile, then we reject the null hypothesis. Note that this quantity is calculated not under the assumption of the null hypothesis but rather calculated under the assumption of the alternative hypothesis. Note that this function depends on the specific value of $\mu_a$ and we notice that, as $\mu \rightarrow 30$, power approaches $\alpha$. \\
+The power of the test is the probability that the $T$ statistic lies in the rejection region. If this normalised mean was greater than the $t_{1-\alpha, n-1}$ quantile, then we reject the null hypothesis. Note that this quantity is calculated not under the assumption of the null hypothesis but rather calculated under the assumption of the alternative hypothesis. Note that this function depends on the specific value of $\mu_a$ and we notice that, as $\mu \rightarrow 30$, power approaches $\alpha$. 
+
+\clearpage
 
 \subsubsection{Calculating Power}
 
@@ -296,12 +298,65 @@ Suppose we have a power we want to achieve for a particular value of the alterna
 We want to compute the following expression and solve for $n$
 
 $$
-.8 = \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
+0.8 = \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
 $$
 
-where the $Z$-statistic is in fact normalised under the alternative hypothesis. We set $z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}}  = z_{0.20}$, the 20th quantile of the standard normal distribution and solve for $n$. This guarantees a 80\% or higher power, so $\mu_a$ is typically the smallest effect which can be reasonably detected. 
+where the $Z$-statistic is in fact normalised under the alternative hypothesis. We set $z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}}  = z_{0.20}$, the 20th quantile of the standard normal distribution and solve for $n$. This guarantees a 80\% or higher power, so $\mu_a$ is typically the smallest effect which can be reasonably detected. The calculation for $H_a: \mu < \mu_0$ is similar. 
 \end{tcolorbox}
 
+In general, for $H_a : \mu \neq \mu_0$ we calculate the one sided power using $\alpha/2$ (this is only approximately right since it excludes the probability of getting a large TS in the opposite direction of the truth).
+
+In conclusion
+
+\begin{itemize}
+    \item Power goes up as $\alpha$ gets larger, \item Power of a one sided test is greater than the power of the associated two sided test,
+    \item Power goes up as $\mu_1$ gets further away from $\mu_0$ and power goes up as $n$ goes up.
+\end{itemize}
+
+Regarding the first item, if we're requiring less evidence to reject the null hypothesis, we're bound to detect more alternative hypotheses. 
+
+\clearpage
+
 \subsubsection{T Tests and Monte Carlo}
+
+\paragraph{\textbf{Power for the T test}}: Consider calculating power for a Gossett's $T$ test for our example. The power is 
+\begin{align*}
+\mathds{P}\bigg(\frac{\bar{X}-30}{S/\sqrt{n}}>t_{1-\alpha, n-1}\bigg|\mu = \mu_a\bigg)  = \mathds{P}\bigg(\sqrt{n}(\bar{X}-30)>t_{1-\alpha, n-1}S\bigg| \mu = \mu_a \bigg) \\
+= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-30)}{{\sigma}}>t_{1-\alpha, n-1}\frac{S}{\sigma}\bigg| \mu = \mu_a \bigg) \\
+= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-\mu_{a})}{{\sigma}}+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}}\times \sqrt{\frac{(n-1)S^2}{\sigma^2}}\bigg| \mu = \mu_a \bigg) \\
+= \mathds{P}\bigg(Z+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}} \sqrt{\chi^2_{n-1}}\bigg| \mu = \mu_a \bigg),
+\end{align*}
+
+where $Z \sim \mathcal{N}(0,1)$ is the independent standard normal and where $\chi^2_{n-1}$ is the chi-squared random variable with $n-1$ degrees of freedom. In regards to the first expression, the power is the probability that our test statistic lies in the rejection region and it's performed under the alternative hypothesis and, in regards to the second-to-last expression, if the data are iid Gaussian $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ and can be computed with the Monte-Carlo method, by simulating pairs of $Z$ random variables and $\chi^2$ random variables and evaluating this inequality for every pair. Note that, in general, $\mu_a$ per sé needs not to be specified, what we need to know is how different is $\mu_a$ from $\mu_0$ in standard deviation units. This quantity, $\frac{\mu_a-\mu_0}{\sigma}$, is called an effect size is a unit free quantity. For example, a Monte Carlo simulation 
+can be performed to calculate the last expression for the RDI example with the following R code
+
+\begin{lstlisting}[language=R]
+no_sim <- 100000 # number of simulation to perform 
+n_dof <- 16 # number of degrees of freedom
+sigma <- 4 # variance 
+mu0 <- 30 # RDI mean under the null hypothesis
+mua <- 32 # RDI mean under the alternative hypothesis
+z <- rnorm(no_sim) # rnorm is the R function that simulates random variables having a specified normal distribution
+chisq <- rchisq(no_sim, df = n_dof - 1) # chi squared distribution
+t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
+mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
+    t_qt/sqrt(n_dof-1)*sqrt(chisq))
+
+In[1]: [1] 0.60517
+In[2]: function (x, ...) 
+In[3]: UseMethod("mean")
+In[4]: <bytecode: 0x56366e096b50>
+In[5]: <environment: namespace:base>
+\end{lstlisting}
+
+In the previous code snippet, we have a 100000 pairs of normal and chi squared random variables, generated with the \texttt{rnorm} and \texttt{rchisq} R-functions. The \texttt{mean(...)} function returns a vector of ones every time the LHS is bigger than the RHS and zeros every time the LHS is smaller than the RHS and computes the mean of said vector entries. The accuracy of this computation is upto $\mathcal{O}\bigg(\frac{1}{n^2}\bigg)$. 
+
+\subsubsection{Two Sample Tests - Matched Data I}
+
+\subsubsection{Two Sample Tests - Matched Data II}
+
+\subsubsection{Two Sample Tests - Regression to the Mean}
+
+\subsubsection{Two Sample Tests - Two Independent Groups}
 
 \end{document}
