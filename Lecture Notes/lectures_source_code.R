@@ -63,3 +63,17 @@ text(mean(x), mean(dt(xval, 16-1))+0.2, "22%", cex=2)
 text(.8, .01, "0.8",cex=2)
 
 
+---------------
+# Monte Carlo calculation for a Gossett's T power test for an RDI experiment
+
+no_sim <- 100000 # number of simulation to perform 
+n_dof <- 16 # number of degrees of freedom
+sigma <- 4 # variance 
+mu0 <- 30 # RDI mean under the null hypothesis
+mua <- 32 # RDI mean under the alternative hypothesis
+z <- rnorm(no_sim) # rnorm is the R function that simulates random variates having a specified normal distribution
+chisq <- rchisq(no_sim, df = n_dof - 1) # chi squared distribution
+t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
+mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
+    t_qt/sqrt(n_dof-1)*sqrt(chisq))
+mean 
