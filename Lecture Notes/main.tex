@@ -94,7 +94,7 @@ where the test statistic $TS = \frac{\Bar{X}-\mu_0}{S/\sqrt{a}}$ (expressing the
 
 \begin{itemize}
 \item $H_1: TS \leq -Z_{1-\alpha}$ \textit{ie.} we reject $H_0$ in favour of $H_1$ if our sample mean is enough below $\mu_0$,
-    \item $H_2: |TS| \geq  Z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is }, 
+    \item $H_2: |TS| \geq  Z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is too small. }, 
     \item $H_3: TS \geq Z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
 \end{itemize}
 
@@ -165,7 +165,7 @@ text(qt(.025,15), .01, "2.13",cex=2)
 text(0, dt(0,15)/5, "95%", cex=2)
 \end{lstlisting}
 
-which outputs figure \ref{fig: two sided Student's T test}.
+which outputs figure \ref{fig: two sided Student's T test}. \\
 
 \begin{figure}
     \centering
@@ -231,7 +231,7 @@ text(mean(x), mean(dt(xval, 16-1))+0.2, "22%", cex=2)
 text(.8, .01, "0.8",cex=2)
 \end{lstlisting}
 
-which outputs figure \ref{fig: P-value T statistic}
+which outputs figure \ref{fig: P-value T statistic}.
 
 \begin{figure}
     \centering
@@ -261,14 +261,47 @@ $$
 \mathds{P}\bigg(\frac{\bar{X}-30}{s/\sqrt{n}} > t_{1-\alpha, n-1} \bigg | \mu = \mu_a\bigg).
 $$
 
-The power of the test is the probability that the $T$ statistic lies in the rejection region. If this normalised mean was greater than the $t_{1-\alpha, n-1}$ quantile, then we reject the null hypothesis. Note that this quantity is calculated not under the assumption of the null hypothesis but rather calculated under the assumption of the alternative hypothesis. Note that this function depends on the specific value of $\mu_a$ and we notice that, as $\mu \rightarrow 30$, power approaches $\alpha$.
+The power of the test is the probability that the $T$ statistic lies in the rejection region. If this normalised mean was greater than the $t_{1-\alpha, n-1}$ quantile, then we reject the null hypothesis. Note that this quantity is calculated not under the assumption of the null hypothesis but rather calculated under the assumption of the alternative hypothesis. Note that this function depends on the specific value of $\mu_a$ and we notice that, as $\mu \rightarrow 30$, power approaches $\alpha$. \\
 
 \subsubsection{Calculating Power}
 
-Assume that $n$ is large and we know $\sigma$, then
+Assume that $n$ is large, thus the central limit theorem holds - allowing us to use standard normal calculations rather than $T$ calculations-, and we know $\sigma$, then
 
 \begin{align*}
-    1- \beta = 
+    1- \beta = \mathds{P}\bigg(\frac{\bar{X}-30}{\sigma/\sqrt{n}} > z_{1-\alpha}\bigg|\mu = \mu_a\bigg) \\
+    = \mathds{P}\bigg(\frac{\bar{X}-\mu_a+\mu_a-30}{\sigma/\sqrt{n}}\bigg| \mu = \mu_a\bigg) \\
+    = \mathds{P}\bigg(\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}}> z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}\bigg|\mu = \mu_a\bigg) \\
+    = \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
 \end{align*}
+
+In the first line we have our test statistic, $(\frac{\bar{X}-30}{\sigma/\sqrt{n}}$, which under the null hypothesis $H_0 : \mu = 30$ is a $Z$-statistic, but we are going to calculate it under the alternative hypothesis. Hence, our rejection region will be for the normalised mean values larger than a standard normal quantile. Then $1-\beta$ is the probability we reject a false null hypothesis, it's the probability that the statistic is larger than the quantile (the cutoff value), given that $\mu$ is in fact $\mu_a$. 
+Since we are considering the alternative hypothesis and not the null hypothesis, this quantity -$(\frac{\bar{X}-30}{\sigma/\sqrt{n}}$- is no longer a $Z$-statistic but it's normal should the data be iid Gaussian. 
+
+In line 2, we convert it into a $Z$-statistic by adding and subtracting $\mu_a$. In line 3 we take the correctly normalised mean $\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}} \sim \mathcal{N}(0, 1)$ which is in fact a $Z$-statistic (under the alternative hypothesis), and we calculate the probability that said quantity is larger than $z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}$. 
+In line 4, we calculate the probability of $Z$ being larger than $z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}$, which can be easily computed provided $\sigma$ is known and a $\mu_a$ value has been selected. \\
+
+\begin{tcolorbox}[title=Example]
+
+\textbf{Statement}: Suppose we wanted to detect an increase in mean RDI of at least 2 events/hours above 30. Assume normality and setting a type I error rate of 5\% and that the sample in question will have a standard deviation of 4, what would be the power if we took a sample size of 16?
+
+Now, $Z_{1-\alpha} = 1.645$ and $\frac{\mu_a-30}{\sigma/\sqrt{n}} = 2$. Then $\mathds{P}(Z > 1.645 - 2)  = \mathds{P}(Z > -0.355) = 64\%$
+
+So under these settings, the probability of detecting an alternative of two events above the hypothesised value per hour is 64\%. Note that this is only a bound for all values above 32\%, the power gets larger as the alternative goes away from 30 events per hour.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Example of a Sample Size Calculation]
+Suppose we have a power we want to achieve for a particular value of the alternative, what sample size would we need to achieve it? What $n$ would be required to get a power of 80\%?
+
+We want to compute the following expression and solve for $n$
+
+$$
+.8 = \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
+$$
+
+where the $Z$-statistic is in fact normalised under the alternative hypothesis. We set $z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}}  = z_{0.20}$, the 20th quantile of the standard normal distribution and solve for $n$. This guarantees a 80\% or higher power, so $\mu_a$ is typically the smallest effect which can be reasonably detected. 
+\end{tcolorbox}
+
+\subsubsection{T Tests and Monte Carlo}
 
 \end{document}
