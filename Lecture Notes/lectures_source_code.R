@@ -72,7 +72,7 @@ sigma <- 4 # variance
 mu0 <- 30 # RDI mean under the null hypothesis
 mua <- 32 # RDI mean under the alternative hypothesis
 z <- rnorm(no_sim) # rnorm is the R function that simulates random variates having a specified normal distribution
-chisq <- rchisq(no_sim, df = n_dof - 1) # chi squared distribution
+chisq <- rchisq(no_sim, df = n_dof - 1) # rchisq is the R function that simulates random variates having a specified chi squared distribution
 t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
 mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
     t_qt/sqrt(n_dof-1)*sqrt(chisq))
