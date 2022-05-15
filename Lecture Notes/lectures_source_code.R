@@ -77,3 +77,19 @@ t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
 mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
     t_qt/sqrt(n_dof-1)*sqrt(chisq))
 mean 
+
+
+-----------------
+# Calculating a paired T test
+diff <- test2 - test1  #pair difference
+n <- sum(!is.na(diff)) #number of subjects: 49
+mean(diff) #mean of the pair difference: 2.88
+sd(diff) #standard deviation of the pair difference: 7.61
+testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff) #test Statistic: 2.65
+
+#we get the p-value by multiplying the probability of getting a test statistic 
+# as large or larger than 2.65 for a Gossett's T distribution with n-1 dof by two, since it's a two sided test
+2 * pt(abs(testStat), n-1, lower.tail = FALSE) # Since we're working with 48 dof, there's little diference from calculating a pnorm or a pt
+
+## or using the R function
+t.test(diff)
