@@ -49,8 +49,8 @@ For example, the probability of a Type I error and according to the Central Limi
 
 \begin{align}
         .05 = \mathds{P}\bigg(\Bar{X}\geq C \bigg| \mu = 30 \bigg) \\
-        = \mathds{P}\bigg(\frac{\Bar{X}-30}{10/\sqrt{100}}\geq \frac{C-30}{10/\sqrt{100}} \bigg| \mu = 30 \bigg) \\
-        =  \mathds{P}\bigg(Z\geq \frac{C-30}{10/\sqrt{100}}\bigg)
+        &= \mathds{P}\bigg(\frac{\Bar{X}-30}{10/\sqrt{100}}\geq \frac{C-30}{10/\sqrt{100}} \bigg| \mu = 30 \bigg) \\
+        &=  \mathds{P}\bigg(Z\geq \frac{C-30}{10/\sqrt{100}}\bigg)
 \end{align}
 
 Hence $\frac{C-30}{1}=1.645$ implying $C=31.645$. Now, since our mean is $32$ we reject the null hypothesis. We can plot a the 95th percentile of the standard normal distribution with the following R routine:
@@ -271,9 +271,9 @@ Assume that $n$ is large, thus the central limit theorem holds - allowing us to 
 
 \begin{align*}
     1- \beta = \mathds{P}\bigg(\frac{\bar{X}-30}{\sigma/\sqrt{n}} > z_{1-\alpha}\bigg|\mu = \mu_a\bigg) \\
-    = \mathds{P}\bigg(\frac{\bar{X}-\mu_a+\mu_a-30}{\sigma/\sqrt{n}}\bigg| \mu = \mu_a\bigg) \\
-    = \mathds{P}\bigg(\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}}> z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}\bigg|\mu = \mu_a\bigg) \\
-    = \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
+    &= \mathds{P}\bigg(\frac{\bar{X}-\mu_a+\mu_a-30}{\sigma/\sqrt{n}}\bigg| \mu = \mu_a\bigg) \\
+    &= \mathds{P}\bigg(\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}}> z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}\bigg|\mu = \mu_a\bigg) \\
+    &= \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
 \end{align*}
 
 In the first line we have our test statistic, $(\frac{\bar{X}-30}{\sigma/\sqrt{n}}$, which under the null hypothesis $H_0 : \mu = 30$ is a $Z$-statistic, but we are going to calculate it under the alternative hypothesis. Hence, our rejection region will be for the normalised mean values larger than a standard normal quantile. Then $1-\beta$ is the probability we reject a false null hypothesis, it's the probability that the statistic is larger than the quantile (the cutoff value), given that $\mu$ is in fact $\mu_a$. 
@@ -322,9 +322,9 @@ Regarding the first item, if we're requiring less evidence to reject the null hy
 \paragraph{\textbf{Power for the T test}}: Consider calculating power for a Gossett's $T$ test for our example. The power is 
 \begin{align*}
 \mathds{P}\bigg(\frac{\bar{X}-30}{S/\sqrt{n}}>t_{1-\alpha, n-1}\bigg|\mu = \mu_a\bigg)  = \mathds{P}\bigg(\sqrt{n}(\bar{X}-30)>t_{1-\alpha, n-1}S\bigg| \mu = \mu_a \bigg) \\
-= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-30)}{{\sigma}}>t_{1-\alpha, n-1}\frac{S}{\sigma}\bigg| \mu = \mu_a \bigg) \\
-= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-\mu_{a})}{{\sigma}}+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}}\times \sqrt{\frac{(n-1)S^2}{\sigma^2}}\bigg| \mu = \mu_a \bigg) \\
-= \mathds{P}\bigg(Z+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}} \sqrt{\chi^2_{n-1}}\bigg| \mu = \mu_a \bigg),
+&= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-30)}{{\sigma}}>t_{1-\alpha, n-1}\frac{S}{\sigma}\bigg| \mu = \mu_a \bigg) \\
+&= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-\mu_{a})}{{\sigma}}+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}}\times \sqrt{\frac{(n-1)S^2}{\sigma^2}}\bigg| \mu = \mu_a \bigg) \\
+&= \mathds{P}\bigg(Z+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}} \sqrt{\chi^2_{n-1}}\bigg| \mu = \mu_a \bigg),
 \end{align*}
 
 where $Z \sim \mathcal{N}(0,1)$ is the independent standard normal and where $\chi^2_{n-1}$ is the chi-squared random variable with $n-1$ degrees of freedom. In regards to the first expression, the power is the probability that our test statistic lies in the rejection region and it's performed under the alternative hypothesis and, in regards to the second-to-last expression, if the data are iid Gaussian $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ and can be computed with the Monte-Carlo method, by simulating pairs of $Z$ random variables and $\chi^2$ random variables and evaluating this inequality for every pair. Note that, in general, $\mu_a$ per sé needs not to be specified, what we need to know is how different is $\mu_a$ from $\mu_0$ in standard deviation units. This quantity, $\frac{\mu_a-\mu_0}{\sigma}$, is called an effect size is a unit free quantity. For example, a Monte Carlo simulation 
@@ -353,10 +353,146 @@ In the previous code snippet, we have a 100000 pairs of normal and chi squared r
 
 \subsubsection{Two Sample Tests - Matched Data I}
 
+When comparing two groups, first and foremost we want to determine whether observations are paired or not\footnote{For example, consider a medical trial of some medication. In one case we randomize that treatment to one group of test subjects and randomize a placebo to the other group of test subjects. This is not paired as the groups are distinct. An instance where the data are paired is, for example, administering the medication and the placebo in some random order for every test subject. Now the data is paired since some test subjects received both the treatment and the control.}. When dealing with a single set of paired data, one strategy is to take the difference between the paired observation and do a single one-sample $t$ test of $H_0 : \mu_d = 0$ versus $H_0 : \mu_d \neq 0$ (or one of the other two alternatives). The desired test statistic
+
+$$
+\frac{\bar{X}_d - \mu_{d0}}{S_d/\sqrt{n}}
+$$
+
+where $\mu_{d0}$ is the value under the null hypothesis (typically 0), where $n$ is the number of pairs of observations (and not the total number of observations themselves). This is called the \textbf{ordinary paired two-group t-test}. 
+
 \subsubsection{Two Sample Tests - Matched Data II}
+
+Let's consider an example of a paired $T$-test.
+
+\begin{tcolorbox}[title=Example]
+Consider Exam 1 and Exam 2 grades from a previous class. Is there any evidence that the second exam was easier or harder than the first? \\
+
+Clearly, the data are paired since it's the same students measured twice. This question can be answered by examining if the mean of exam one is different from the mean of exam two. 
+\end{tcolorbox}
+
+In general, giver our data, we can compute this with the following R code 
+
+\begin{lstlisting}[language=R]
+diff <- test2 - test1  #pair difference
+n <- sum(!is.na(diff)) #number of subjects: 49
+mean(diff) #mean of the pair difference: 2.88
+sd(diff) #standard deviation of the pair difference: 7.61
+testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff) #test Statistic: 2.65
+
+#we get the p-value by multiplying the probability of getting a test statistic 
+# as large or larger than 2.65 for a Gossett's T distribution with n-1 dof by two, since it's a two sided test
+2 * pt(abs(testStat), n-1, lower.tail = FALSE) # Since we're working with 48 dof, there's little diference from calculating a pnorm or a pt
+
+------
+
+## or using the R function
+t.test(diff)
+\end{lstlisting}
+
+In our case we get that there appears to be a difference between the means of exam 1 and exam 2. \footnote{Graphically this can be represented with a so called "Mean difference plot", first presented by Tukey and by J. Martin Bland \& Douglas G. Altman.}. \\
 
 \subsubsection{Two Sample Tests - Regression to the Mean}
 
+Francis Galton was the first to recognise that for matched data, high initial observations tended to be associated with lower second observations and low initial observations observations tended to be associated with higher second observations. For example, sons of very tall fathers tend to be a little shorter and fathers of very tall sons tend to be shorter. Another example would be that second exams for those who scored very high on a first exam tend to be a little lower. 
+
+In order to explain this phenomena, consider plot \ref{fig: Matched data plot}. Imagine if the tests were completely random and the students were iid draws from said distribution, so the higher observations of the exam were random observations. So the probability of a second observation being that high is quite low, since it's more likely to be in the center of the distribution. Conversely, a very low test (something that had a very low probability of occurring given that it's already low), the probability of a second test being that low is small. And so if the pairs of observations are exactly noise, then you'll have a lot of regression in the mean. This is one extreme of complete variation and, for a given student, there's no trend between exam 1' score and exam 2' score.
+
+Consider the other extreme, let's imagine that the test was a perfect adjudicator of student's abilities, that it is a perfectly calibrated instrument and that there is no noise. Then the student should ideally get exactly the same score on both exams. At which point, there'd be no variation around an identity line of Exam 2 v. Exam 1. This is an extreme of no variation where there is a 100\% correlation. Every other practical case lies somewhere in between those two extremes. 
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.4]{figs/Matched data plot.png}
+    \caption{A matched data plot for the Exam 1 results v. Exam 2 results.}
+    \label{fig: Matched data plot}
+\end{figure}<
+
+For example, of the eight people who got below 80 en the test, all did better on Test 2 and of the five people who got above a 95 test, three did worse on the second test. 
+
+To investigate more, we normalise both scales (so that their empirical means are both 0 and their empirical standard deviations are 1). When asking questions about the paired data, we're asking questions about shifts in the means, information which we've gotten rid off. If there was no regression to the mean, the data would scatter about an identity line. The best fitting line goes through the average and has slope 
+
+$$
+\textnormal{Cor}(Test1, Test2) \frac{SD(Test2)}{SD(Test1)}
+$$
+
+and passes through the point 
+
+$$
+(\textnormal{mean}(Test1), \textnormal{mean}(Test2))
+$$
+
+Since we normalised the data, the best fitting line passes through (0,0) and has a slope of $\textnormal{Cor}(Test1, Test2) < 1$, since renormalizations don't affect the correlation. This will be shrunk toward a horizontal line, telling us our expected normalised test score for Test 2 is $\textnormal{Cor}(Test1, Test2)$ times the normalised Test 1 score. This line appropriately adjusts for regression to the mean for Test 2 conditioning on Test 1. We could similarly do the same for Test 1 conditioning on Test 2(in this case the best fitting line will have slope  
+$\textnormal{Cor}(Test1, Test2)^{-1}$ if we plot with Test 1 on the Test 1 on the horizontal axis). The latter line will be shrunk toward a vertical line, the identity line will fall between the two. This can be better understood in plot \ref{fig: NTest2 v. NTest1}. In said plot we have the normalised Test 2 in the $y$-axis, the normalised Test 1 in the $x$-axis and the slope of the best regression line of Test 1 on Test 2 is the correlation between the two (0.21). In the middle we plot the identity line whilst the best regression line of Test 2 on Test 1 the slope is the inverse of the previous slope $1/0.2$. Note that all three lines pass through the (0,0).
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{figs/Normalised Test 2 v. Normalised Test 1 (adjusted).png}
+    \caption{Normalised Test 2 scores v. Normalised Test 1 scores and the best fitting lines.  In this plot we have the normalised Test 2 in the $y$-axis, the normalised Test 1 in the $x$-axis and the slope of the best regression line of Test 1 on Test 2 is the correlation between the two (0.21). In the middle we plot the identity line whilst the best regression line of Test 2 on Test 1 the slope is the inverse of the previous slope $1/0.2$. Note that all three lines pass through the (0,0).}
+    \label{fig: NTest2 v. NTest1}
+\end{figure}
+
+The line to be used when predicting test 2 scores from test 1 scores is a very flat (suggesting there's little correlation between the two tests, and this amount of noise also suggests there's a fair amount of regression to the mean) line whilst the line used to predict test 1 scores from test 2 scores is a very vertical line (because our correlation was quite low, suggesting a high amount of noise). Should the points collapse around an identity line, this suggests there's very little regression. 
+
+In conclusion:
+
+\begin{itemize}
+    \item An ideal examiner would have little difference between the identity line and the fitted regression line.
+    \item The more unrelated the two exam scores are the more pronounced the regression to the mean is.
+\end{itemize} 
+
 \subsubsection{Two Sample Tests - Two Independent Groups}
+
+The extension to two independent groups is straightforward. Let $H_0 : \mu_1 = \mu_2$ versus $H_a: \mu_1 \neq \mu_2$ (or one of the other two alternatives). Assuming a common error variance we have that the following statistic
+
+$$
+\frac{\bar{X}-\bar{Y}}{S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \sim t_{n_X+n_Y-2},
+$$
+
+under the null hypothesis $\bar{X}-\bar{Y}$ has a hypothesised mean of $0$ and if the data are iid Gaussian. In the limit of a large sample size, the previous statistic follows a normal distribution. If the assumption of a common error variance is questionable then 
+
+$$
+\frac{\bar{X}-\bar{Y}}{S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \sim \mathcal{N}(0,1) \textnormal{ if } n_x, n_y \rightarrow \infty.
+$$
+
+where $S_p$ is the pooled variance. Furthermore, this statistic follows an approximate (only approximately, since the variances are not the same) Student's $T$ distribution if $X_i \sim \mathcal{N}(\mu_1,\sigma^2_1)$ and $Y_i \sim \mathcal{N}(\mu_2,\sigma^2_2)$. The approximate degrees of freedom are 
+
+$$
+\frac{(S_x^2/n_x+S_y^2/n_y)^2}{(S_x^2/n_x)^2/(n_x-1)+(S_y^2/n_y)^2/(n_y-1}
+$$
+
+where $S_x$ and $S_y$ are the variances within group 1 and group 2 respectively. 
+
+Note that the connection between hypothesis testing and confidence intervals still holds: for example, if zero is in our independent group $T$ interval, we will fail to reject the independent group $T$ test for equal means and viceversa, if we construct a confidence interval by finding all of the hypothesised values for differences of means for which we fail to reject the null hypothesis we wind up with the appropriate $t$ confidence interval. 
+
+If we want to test equality of means, in general it's incorrect constructing separate confidence intervals, one CI for group I and another CI for group II, and seeing if those CIs overlap. This procedure only works if the CIs don't overlap and we reject, this is an accurate statement. But the confidence intervals can overlap and the correctly constructed test statistic would still reject, seemingly leading to a contradiction.  This procedure has lower power than the correctly implemented test.
+
+\begin{tcolorbox}[title=Exam]
+
+Suppose that instead of having repeated data on two consecutive exams, students were randomised to two teaching modules and took the same exam. We treat the data as independent group data. We might obtain data like the following 
+
+Group || N || Mean Exam || SD
+Exam
+Module 1 || 50 || 86.9 || 6.07
+Module 2 || 50 || 89.8 || 6.06
+
+The pooled standard deviation is 6.065 and the test statistic is 
+
+$$
+\frac{89.8-86.9}{6.065\sqrt{\frac{1}{50}+\frac{1}{50}}}
+$$
+\end{tcolorbox}
+
+Suppose you have equal numbers of observations for two groups, $X$ and $Y$. If the data are truly matched, then the standard error of the difference is estimating 
+
+$$
+\sqrt{\frac{\sigma_x^2}{n}+\frac{\sigma_y^2}{n}-2\frac{\textnormal{Cov}(X,Y)}{n}}.
+$$
+
+If we ignore the matching by setting $\textnormal{Cov}(X,Y) = 0$, the standard error of the difference is estimating is estimating
+
+$$
+\sqrt{\frac{\sigma_x^2}{n}+\frac{\sigma_y^2}{n}}{n}.
+$$
+
+Since, generally, matched data is positively correlated, by ignoring the matching, we are unnecessarily augmenting the standard error. 
 
 \end{document}
