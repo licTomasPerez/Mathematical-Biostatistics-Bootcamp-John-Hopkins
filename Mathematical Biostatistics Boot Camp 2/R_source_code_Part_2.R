@@ -165,3 +165,64 @@ Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
 
 CI <- (mu_treated-mu_placebo) + c(-1,1)*(qt(.975, 9+9-2) * Sp * sqrt(2/n))
 CI
+
+-------------
+
+#### Homework 1 - Exercise 7
+## Suppose that systolic blood pressures were taken on 16 oral contraceptive users and 16 controls at baseline and again then two years later. 
+## The average difference from follow-up SBP to the baseline (followup - baseline) was 11 mmHg for oral contraceptive users and 4 mmHg for controls. 
+## The corresponding standard deviations of the differences was 20 mmHg for OC users and 28 mmHg for controls.
+## Assuming that blood pressure are normally distributed and an equal variance, give a P-value for a two sided hypothesis test that the change in BP 
+## differs for OC users compared to controls.
+
+
+n1 <- n2 <- 16
+dif1 <- 11
+dif2 <- 4
+sd_dif1 <- 20
+sd_dif2 <- 28
+
+sp <- sqrt((sd_dif1^2+sd_dif2^2)/2)
+test_stat <- (dif2 - dif1)/(sp * sqrt(1/n1 + 1/n2))
+p_value <- 2 * pt(test_stat, df = (n1+n2-2))
+p_value
+
+In [1]: 0.4222096
+
+-------------
+
+#### Homework 1 - Exercise 8
+## Researchers would like to conduct a study of 100 healthy adults to detect a four year mean brain volume loss of $.01~mm^3$. 
+## Assume that the standard deviation of four year volume loss in this population is $.04~mm^3$. What would be the power of the study for a 
+## 5\% one sided test versus a null hypothesis of no volume loss?
+
+no_sim <- 100000 # number of simulation to perform 
+n_dof <- 100 # number of degrees of freedom
+sigma <- 0.04 # variance 
+alpha <- .05 
+
+mu0 <- .01 # RDI mean under the null hypothesis
+mua <- 0 # RDI mean under the alternative hypothesis
+z <- rnorm(no_sim) # rnorm is the R function that simulates random variables having a specified normal distribution
+chisq <- rchisq(no_sim, df = n_dof - 1) # chi squared distribution
+t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
+mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
+    t_qt/sqrt(n_dof-1)*sqrt(chisq))
+    
+In [1]: 0
+
+-------------
+
+#### Homework 1 - Exercise 9
+## The Daily Planet ran a recent story about Kryptonite poisoning in the water supply after a recent event in Metropolis.
+## Their usual field reporter, Clark Kent, called in sick and so Lois Lane reported the stories. Researchers sampled 288 individuals and 
+## found mean blood Kryptonite levels of 44, both measured in Lex Luthors per milliliter (LL/ml). They compared this to 288 sampled individuals 
+## from Gotham city who had an average level of 42.04. Report the Pvalue for a two sided Z test of the relevant hypothesis. 
+## Assume that the standard deviation is 12 for both groups.
+
+P_value <- pnorm(-1.96, mean = 2, sd = 1) + pnorm(1.96, mean = 2, sd = 1)
+P_value 
+
+In [1]: 0.484084
+
+-------------
