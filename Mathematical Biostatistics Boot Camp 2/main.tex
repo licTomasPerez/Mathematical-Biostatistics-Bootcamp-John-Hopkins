@@ -142,7 +142,9 @@ CI
 In [1]: 1075.541 1124.459
 \end{lstlisting}
 
-Thus, we find the answer is $[1076cc, 1124 cc]$. \\
+Thus, we find the answer is $[1076cc, 1124 cc]$. 
+
+\clearpage
 
 \begin{tcolorbox}[title=Question 4]
 To further test a hospital triage system, administrators selected 200 nights and randomly assigned a new triage system to be used on 100 nights and a standard system on the remaining 100 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 4 hours with a standard deviation of .5 hours while the average MWT for the old system was 6 hours with a standard deviation of 2 hours. Test the hypothesis of a decrease in the mean MWT associated with the new treatment using a two sided 5\% Z test. Does it appear to be effective?
@@ -173,64 +175,166 @@ Since this interval doesn't contain zero, we reject the null hypothesis and conc
 Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was -3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI over the two year period appear to differ between the treated and placebo groups?  Assuming normality of the underlying data and a common population variance, give the relevant 95\% t confidence interval.
 \end{tcolorbox}
 
+Let $H_0: \mu_{\textnormal{diff, treated}} < \mu_{\textnormal{diff, placebo}}$ be the null hypothesis. We perform an ordinary two-sided paired $T$ test on the two data groups. Our statistic of interest is 
+
+$$
+\frac{\bar{X}_d - \mu_{d0}}{S_d/\sqrt{n}}.
+$$
+
+We can determine whether to reject or fail to reject the null hypothesis with the following R routine:
+
 \begin{lstlisting}[language=R]
-n <- 9
-mu_treated <- -3
-sd_treated <- 1.5
+n1 <- n2 <- 9
+x_t <- -3
+sd_t <-1.5
+x_p <- 1
+sd_p <- 1.8
+alpha <- 0.05
+t_qt <- qt(1-alpha/2, n1+n2-2)
 
-mu_placebo <- 1
-sd_placebo <- 1.8
+sp <- sqrt(((n1-1)*sd_t^2+(n2-1)*sd_p^2)/(n1+n2-2))
+test_stat <- (x_t-x_p)/(sp*sqrt(1/n1+1/n2))
 
-Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
+reject <- test_stat < -t_qt
+reject
 
-(mu_treated - mu_placebo)/(Sp*sqrt(1/n + 1/n))
+In [1]: TRUE
 \end{lstlisting}
+
+Thus, we reject at the 5\% level. \\
 
 \begin{tcolorbox}[title=Question 6]
 Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was -3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI over the two year period appear to differ between the treated and placebo groups?  Assuming normality of the underlying data and a common population variance, give the relevant 95\% t confidence interval.
 \end{tcolorbox}
 
+We need to construct the 95\%th $T$ confidence interval for the difference of two random variables. A $(1-\alpha)\times 100\%$-confidence interval for $\mu_Y-\mu_X$ can be written as follows
+
+$$
+\bar{Y}-\bar{X}\pm t_{n_{X}+n_{Y}-2,1-\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}},
+$$
+
+where $S_p^2 = \frac{(n_X-1)S_x^2 + (n_Y-1)S_y^2 }{n_X+n_Y-2}$ is the pooled variance (an unbiased estimator for the variance $\sigma^2$). We can found this CI with the following R routine
+
 \begin{lstlisting}[language=R]
-n <- 9
-mu_treated <- -3
-sd_treated <- 1.5
+n1 <- n2 <- 9
+x_t <- -3
+sd_t <-1.5
+x_p <- 1
+sd_p <- 1.8
+alpha <- 0.05
+t_qt <- qt(1-alpha/2, n1+n2-2)
 
-mu_placebo <- 1
-sd_placebo <- 1.8
+sp <- sqrt(((n1-1)*sd_t^2+(n2-1)*sd_p^2)/(n1+n2-2))
 
-Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
-
-CI <- (mu_treated-mu_placebo) + c(-1,1)*(qt(.975, 9+9-2) * Sp * sqrt(2/n))
+CI <- (x_t - x_p) + c(-1,1) * t_qt * sp * sqrt(1/n1+1/n2)
 CI
+
+In [1]: -5.655699 -2.344301
 \end{lstlisting}
+
+Then the 95th confidence interval is $[-5.656, -2.344]$. \\
 
 \begin{tcolorbox}[title=Question 7]
 Suppose that systolic blood pressures were taken on 16 oral contraceptive users and 16 controls at baseline and again then two years later. The average difference from follow-up SBP to the baseline (followup - baseline) was 11 mmHg for oral contraceptive users and 4 mmHg for controls. The corresponding standard deviations of the differences was 20 mmHg for OC users and 28 mmHg for controls. Assuming that blood pressure are normally distributed and an equal variance, give a P-value for a two sided hypothesis test that the change in BP differs for OC users compared to controls.
 \end{tcolorbox}
 
+We need to find the P-value for a two sided hypothesis test with the following R routine: 
+
+\begin{lstlisting}[language=R]
+n1 <- n2 <- 16
+dif1 <- 11
+dif2 <- 4
+sd_dif1 <- 20
+sd_dif2 <- 28
+
+sp <- sqrt((sd_dif1^2+sd_dif2^2)/2)
+test_stat <- (dif2 - dif1)/(sp * sqrt(1/n1 + 1/n2))
+p_value <- 2 * pt(test_stat, df = (n1+n2-2))
+p_value
+
+In [1]: 0.4222096
+\end{lstlisting}
+
 \begin{tcolorbox}[title=Question 8]
 Researchers would like to conduct a study of 100 healthy adults to detect a four year mean brain volume loss of $.01~mm^3$. Assume that the standard deviation of four year volume loss in this population is $.04~mm^3$. What would be the power of the study for a 5\% one sided test versus a null hypothesis of no volume loss?
 \end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+no_sim <- 100000 # number of simulation to perform 
+n_dof <- 100 # number of degrees of freedom
+sigma <- 0.04 # variance 
+alpha <- .05 
+
+mu0 <- .01 # RDI mean under the null hypothesis
+mua <- 0 # RDI mean under the alternative hypothesis
+z <- rnorm(no_sim) # rnorm is the R function that simulates random variables having a specified normal distribution
+chisq <- rchisq(no_sim, df = n_dof - 1) # chi squared distribution
+t_qt <- qt(.95, n_dof-1) # 95th quantile for the Gossett's T distribution
+mean(z + sqrt(n_dof)*(mua-mu0)/sigma > 
+    t_qt/sqrt(n_dof-1)*sqrt(chisq))
+    
+In [1]: 0
+\end{lstlisting}
 
 \begin{tcolorbox}[title=Question 9]
 The Daily Planet ran a recent story about Kryptonite poisoning in the water supply after a recent event in Metropolis. Their usual field reporter, Clark Kent, called in sick and so Lois Lane reported the stories. Researchers sampled 288 individuals and found mean blood Kryptonite levels of 44, both measured in Lex Luthors per milliliter (LL/ml). They compared this to 288 sampled individuals from Gotham city who had an average level of 42.04. Report the Pvalue for a two sided Z test of the relevant hypothesis. Assume that the standard deviation is 12 for both groups.T
 \end{tcolorbox}
 
+Let $H_0 : \mu_{\textnormal{Metropolis}} = \mu_{\textnormal{Gotham}}$ be the null hypothesis versus the alternative hypothesis $H_a : \mu_{\textnormal{Metropolis}} \neq \mu_{\textnormal{Gotham}}$. We need to report the P-value for a two sided $Z$ test. Let our test statistic be
+
+$$
+TS = \frac{\bar{X}_{\textnormal{Metropolis}} - \bar{X}_{\textnormal{Gotham}} }{\sigma\sqrt{\frac{1}{n_{\textnormal{Metropolis}}} + \frac{1}{n_{\textnormal{Gotham}}}}},
+$$
+
+we'll reject this hypothesis if $|TS| \geq Z_{1-\alpha}$, where $Z_{1-\alpha} = 1.96$ is the 95th quantile for the standard normal distribution. Thus we want
+
+\begin{align*}
+\mathds{P}\bigg(|TS| \geq 1.96 \bigg| \mu_{\textnormal{Metropolis}} \neq \mu_{\textnormal{Gotham}} \bigg) &= \mathds{P}\bigg(\bigg|\frac{\bar{X}_{\textnormal{Metropolis}} - \bar{X}_{\textnormal{Gotham}} }{\sigma\sqrt{\frac{1}{n_{\textnormal{Metropolis}}} + \frac{1}{n_{\textnormal{Gotham}}}}}\bigg| \geq 1.96 \bigg| \mu_{\textnormal{Metropolis}} \neq \mu_{\textnormal{Gotham}}\bigg) \\
+&= \mathds{P}\bigg(\bigg|\bar{X}_{\textnormal{M.}} - \bar{X}_{\textnormal{G.}}\bigg| \geq 1.96 \times \sigma\sqrt{\frac{1}{n_{\textnormal{M.}}} + \frac{1}{n_{\textnormal{G.}}}} \bigg| \mu_{\textnormal{M.}} \neq \mu_{\textnormal{G.}}\bigg)
+\end{align*}
+
+where this probability is calculated under the alternative hypothesis. Note that, under the null hypothesis, $\bar{X}_{\textnormal{M.}} - \bar{X}_{\textnormal{G.}} \sim \mathcal{N}(2,1)$. This P-value can be computed with the following R routine
+
+\begin{lstlisting}[language=R]
+P_value <- pnorm(-1.96, mean = 2, sd = 1) + pnorm(1.96, mean = 2, sd = 1)
+P_value 
+
+In [1]: 0.484084
+\end{lstlisting}
+
+Thus, the P-value is about $0.05$, as usual. \\
+
 \begin{tcolorbox}[title=Question 10]
 As your variance goes up, what happens to power?
 \end{tcolorbox}
+
+Higher variability implies more dispersion of the results. Less variability means more power; more variability means less power. \\
 
 \begin{tcolorbox}[title=Question 11]
 Suppose that you have three independent samples from a $N(\mu_1, \sigma^2)$, $N(\mu_2, \sigma^2)N$ and $N(\mu_3, \sigma^2)$ respectively of size $n_1$, $n_2$ and $n_3$. Let $S_1^2$, $S_2^2$ and $S_3^2$ be the associated sample variances. Would $\frac{1}{3}S_1^2 + \frac{1}{3} S_2^2 + \frac{1}{3} S_3^2$ be unbiased?
 \end{tcolorbox}
 
+Since the expectation value $\mathds{E}[\cdot]$ is a linear operator, the sum is always unbiased regardless of normality. \\
+
 \begin{tcolorbox}[title=Question 12]
 Consider any of the hypothesis tests we've covered in class. If you know you reject at a specific level of $\alpha$, then you know what else?
 \end{tcolorbox}
 
+All of the tests we've covered in class have the property that, if you reject for a given type one error rate, you will reject for any larger type one error rate. In fact, it would be strange for a test to not have this property. \\
+
 \begin{tcolorbox}[title=Question 13]
 Consider a one sided $\alpha$ level single group Z test of $H_0 : \mu = \mu_0$ versus the alternative $H_a : \mu < \mu_0$ with the data $\bar X$ for the sample mean and s for the sample standard deviation with n measurements. What are the collection of points for which you would fail to reject the hypothesis?
 \end{tcolorbox}
+
+For a one sided single group $Z$-test for a null hypothesis $H_0 : \mu = \mu_0$ versus the alternative $H_a : \mu < \mu_0$ has a fail-to-reject region if 
+
+\begin{align*}
+    Z \geq z_{\alpha} &\rightarrow \frac{\bar{X}-\mu_0}{s/\sqrt{n}} \geq z_{\alpha} \\
+    &\rightarrow \bar{X} - z_{\alpha}\frac{s}{\sqrt{n}} \geq \mu_0 \\
+    &\rightarrow  \bar{X} + z_{\alpha}\frac{s}{\sqrt{n}} \geq \mu_0
+\end{align*}
+
+which is the same as $(-\infty,\bar{X} + z_{\alpha}\frac{s}{\sqrt{n}})$. \\
 
 \clearpage
 
