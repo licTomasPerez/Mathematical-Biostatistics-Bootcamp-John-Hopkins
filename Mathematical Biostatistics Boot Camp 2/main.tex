@@ -1,0 +1,168 @@
+\documentclass{homework}
+\author{Tomás Pérez}
+\class{Mathematical Biostatistics Boot Camp 1}
+\date{\today}
+\title{Homework Assignments and Quizzes}
+
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\section{Homework 1 - Week 1}
+
+\begin{tcolorbox}[title=Question 1]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n <- 100
+mu <- 12
+mu0 <- 10 
+sd <- 4
+alpha <- .05
+
+testStat <- (mu - mu0)/(sd/sqrt(n))
+qtile <- qnorm(alpha, lower.tail = FALSE)
+
+not_reject <- testStat > qtile 
+not_reject
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 2]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+test1 = c(140,138,150,148,135)
+test2 = c(132,135,151,146,130)
+diff <- test2-test1
+n <- sum(!is.na(diff))
+mu <- mean(diff)
+standard_deviation <- sd(diff)
+testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff)
+
+2 * pt(abs(testStat), n-1, lower.tail = FALSE) 
+
+t.test(diff)
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 3]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n <- 9
+mu0 <- 1100
+sd <- 30
+
+reject <- (c(-1,1) * qt(0.975,9) * sd/sqrt(n-1)+mu0)
+reject
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 4]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n_old <- 100
+mu_old <- 6
+sd_old <- 2 
+n_new <- 100
+mu_new <- 4
+sd_new <- .5
+
+mu_diff <- 2 
+sd_diff <- sd_old*sd_old/n_old + sd_new*sd_new/n_new
+
+n_pairs <- 100
+
+testStat <- sqrt(n_pairs) * (mu_diff - 0)/sd_diff
+
+2 * pt(abs(testStat), n_pairs-1, lower.tail = FALSE) 
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 5]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n <- 9
+mu_treated <- -3
+sd_treated <- 1.5
+
+mu_placebo <- 1
+sd_placebo <- 1.8
+
+Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
+
+(mu_treated - mu_placebo)/(Sp*sqrt(1/n + 1/n))
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 6]
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n <- 9
+mu_treated <- -3
+sd_treated <- 1.5
+
+mu_placebo <- 1
+sd_placebo <- 1.8
+
+Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
+
+CI <- (mu_treated-mu_placebo) + c(-1,1)*(qt(.975, 9+9-2) * Sp * sqrt(2/n))
+CI
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 7]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 9]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 10]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 11]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 12]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 13]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 14]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 15]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 16]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 17]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 18]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 19]
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 20]
+\end{tcolorbox}
+
+\clearpage
+
+\section{Quiz 1 - Week 1}
+
+\begin{tcolorbox}[title=Question 1]
+\end{tcolorbox}
+
+\clearpage
+
+\section{Homework 2 - Week 2}
+
+\begin{tcolorbox}[title=Question 1]
+\end{tcolorbox}
+
+\clearpage
+
+\end{document}
