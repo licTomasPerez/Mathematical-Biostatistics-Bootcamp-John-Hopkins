@@ -48,9 +48,9 @@ Let $\alpha$ denote the type I error rate, the probability of rejecting the null
 For example, the probability of a Type I error and according to the Central Limit Theorem we have  
 
 \begin{align}
-        .05 = \mathds{P}\bigg(\Bar{X}\geq C \bigg| \mu = 30 \bigg) \\
-        &= \mathds{P}\bigg(\frac{\Bar{X}-30}{10/\sqrt{100}}\geq \frac{C-30}{10/\sqrt{100}} \bigg| \mu = 30 \bigg) \\
-        &=  \mathds{P}\bigg(Z\geq \frac{C-30}{10/\sqrt{100}}\bigg)
+        .05 &= \mathds{P}\bigg(\Bar{X}\geq C \bigg| \mu = 30 \bigg) \\
+        &=\mathds{P}\bigg(\frac{\Bar{X}-30}{10/\sqrt{100}}\geq \frac{C-30}{10/\sqrt{100}} \bigg| \mu = 30 \bigg) \\
+        &= \mathds{P}\bigg(Z\geq \frac{C-30}{10/\sqrt{100}}\bigg)
 \end{align}
 
 Hence $\frac{C-30}{1}=1.645$ implying $C=31.645$. Now, since our mean is $32$ we reject the null hypothesis. We can plot a the 95th percentile of the standard normal distribution with the following R routine:
@@ -61,16 +61,16 @@ plot(xval, yval, type="l", axes=TRUE, frame=FALSE, lwd=3, xlab="", ylab="")
 x <- seq(qnorm(.95), 3.2, length=1000)
 polygon(c(x,rev(x)), c(dnorm(x), rep(0, length(x))), col="salmon")
 text(mean(x), mean(dnorm(x))+0.2, "5%", cex=2)
-text(qnorm(.95), .01, "1.645",cex=2)
-\end{lstlisting}. 
+text(qnorm(.95), .01, "1.645",cex=2),
+\end{lstlisting} 
 
-which outputs the following graph
+which outputs plot \ref{fig: normal Z test}.
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{figs/95th percentile of a gaussian.png} 
     \caption{R-generated plot of the standard normal distribution $\mathcal{N}(0,1)$,  in the [-3.2, 3.2] range. The shaded polygon represents the 95th percentile (which is given by $x=1.645$) of a standard normal distribution. }
-    \label{fig:my_label}
+    \label{fig: normal Z test}
 \end{figure}
 
 In general, we don't convert $C$ back to its original scale. We would just reject it because the Z-score, how many standard error units the sample mean is above the hypothesised mean, is greater than $1.645$ \textit{ie. }
@@ -79,9 +79,9 @@ $$
 \frac{32-30}{10/\sqrt{100}} = 2 > 1.645.
 $$
 
-Our mean is two standard error units away from the hypothesised mean 
+Our mean is two standard error units away from the hypothesised mean. We can codify these rules for a normal Z test, assuming the data is gaussian or that the Central Limit Theorem is a good enough approximation to apply, as follows:
 
-We can codify these rules for a normal Z test, assuming the data is gaussian or that the Central Limit Theorem is a good enough approximation to apply, as follows:
+\begin{tcolorbox}[title=Rules for a normal Z- test]
 
 Let $H_0 : \mu = \mu_0$ be the null hypothesis, then let 
 \begin{itemize}
@@ -97,6 +97,7 @@ where the test statistic $TS = \frac{\Bar{X}-\mu_0}{S/\sqrt{a}}$ (expressing the
     \item $H_2: |TS| \geq  Z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is too small. }, 
     \item $H_3: TS \geq Z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
 \end{itemize}
+\end{tcolorbox}
 
 The region of TS values for which the null hypothesis is rejected is the rejection region. In the case of $H_1$, the upper normal quantile and above is the rejection region, for $H_2$ it's the negative quantile and below or the upper quantile and above and finally, in the case of $H_3$, the normal quantile and below is the rejection region.
 
@@ -218,6 +219,8 @@ where \texttt{pt} stands for $T$ probability, \texttt{lower.tail = FALSE} indica
     \item If the P-value is smaller than $\alpha$, we reject $H_0$
 \end{itemize}
 
+\clearpage
+
 This can be understood via the following R routine 
 
 \begin{lstlisting}[language=R]
@@ -251,6 +254,8 @@ Criticisms of the P value:
     \item Absolute measures of the rareness of an event are not good measures of the evidence for or against a hypothesis.
 \end{itemize}
 
+\clearpage
+
 \subsubsection{Power}
 
 Power is the probability of rejecting the null hypothesis when it's false. And, as the name suggests, it's a desirable quality, the more power, the more reliable the test is. A type II error is failing to reject the null hypothesis when it's false. Thus, by their definitions, power + type II error rate ($\beta$) sum to one. Thus we define $\textnormal{Power} = 1- \beta$.
@@ -263,21 +268,19 @@ $$
 
 The power of the test is the probability that the $T$ statistic lies in the rejection region. If this normalised mean was greater than the $t_{1-\alpha, n-1}$ quantile, then we reject the null hypothesis. Note that this quantity is calculated not under the assumption of the null hypothesis but rather calculated under the assumption of the alternative hypothesis. Note that this function depends on the specific value of $\mu_a$ and we notice that, as $\mu \rightarrow 30$, power approaches $\alpha$. 
 
-\clearpage
-
 \subsubsection{Calculating Power}
 
 Assume that $n$ is large, thus the central limit theorem holds - allowing us to use standard normal calculations rather than $T$ calculations-, and we know $\sigma$, then
 
 \begin{align*}
-    1- \beta = \mathds{P}\bigg(\frac{\bar{X}-30}{\sigma/\sqrt{n}} > z_{1-\alpha}\bigg|\mu = \mu_a\bigg) \\
+        1- \beta &= \mathds{P}\bigg(\frac{\bar{X}-30}{\sigma/\sqrt{n}} > z_{1-\alpha}\bigg|\mu = \mu_a\bigg) \\
     &= \mathds{P}\bigg(\frac{\bar{X}-\mu_a+\mu_a-30}{\sigma/\sqrt{n}}\bigg| \mu = \mu_a\bigg) \\
     &= \mathds{P}\bigg(\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}}> z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}\bigg|\mu = \mu_a\bigg) \\
     &= \mathds{P}\bigg(Z > z_{1-\alpha} -\frac{\mu_a-30}{\sigma/\sqrt{n}} \bigg|\mu = \mu_a\bigg)
 \end{align*}
 
-In the first line we have our test statistic, $(\frac{\bar{X}-30}{\sigma/\sqrt{n}}$, which under the null hypothesis $H_0 : \mu = 30$ is a $Z$-statistic, but we are going to calculate it under the alternative hypothesis. Hence, our rejection region will be for the normalised mean values larger than a standard normal quantile. Then $1-\beta$ is the probability we reject a false null hypothesis, it's the probability that the statistic is larger than the quantile (the cutoff value), given that $\mu$ is in fact $\mu_a$. 
-Since we are considering the alternative hypothesis and not the null hypothesis, this quantity -$(\frac{\bar{X}-30}{\sigma/\sqrt{n}}$- is no longer a $Z$-statistic but it's normal should the data be iid Gaussian. 
+In the first line we have our test statistic $\frac{\bar{X}-30}{\sigma/\sqrt{n}}$, which under the null hypothesis $H_0 : \mu = 30$ is a $Z$-statistic, but we are going to calculate it under the alternative hypothesis. Hence, our rejection region will be for the normalised mean values larger than a standard normal quantile. Then $1-\beta$ is the probability we reject a false null hypothesis, it's the probability that the statistic is larger than the quantile (the cutoff value), given that $\mu$ is in fact $\mu_a$. 
+Since we are considering the alternative hypothesis and not the null hypothesis, this quantity -$\frac{\bar{X}-30}{\sigma/\sqrt{n}}$- is no longer a $Z$-statistic but it's normal should the data be iid Gaussian. 
 
 In line 2, we convert it into a $Z$-statistic by adding and subtracting $\mu_a$. In line 3 we take the correctly normalised mean $\frac{\bar{X}-\mu_a}{\sigma/\sqrt{n}} \sim \mathcal{N}(0, 1)$ which is in fact a $Z$-statistic (under the alternative hypothesis), and we calculate the probability that said quantity is larger than $z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}$. 
 In line 4, we calculate the probability of $Z$ being larger than $z_{1-\alpha}-\frac{\mu_a-30}{\sigma/\sqrt{n}}$, which can be easily computed provided $\sigma$ is known and a $\mu_a$ value has been selected. \\
@@ -313,15 +316,14 @@ In conclusion
     \item Power goes up as $\mu_1$ gets further away from $\mu_0$ and power goes up as $n$ goes up.
 \end{itemize}
 
-Regarding the first item, if we're requiring less evidence to reject the null hypothesis, we're bound to detect more alternative hypotheses. 
+Regarding the first item, if we're requiring less evidence to reject the null hypothesis, we're bound to detect more alternative hypotheses. \\
 
-\clearpage
 
 \subsubsection{T Tests and Monte Carlo}
 
 \paragraph{\textbf{Power for the T test}}: Consider calculating power for a Gossett's $T$ test for our example. The power is 
 \begin{align*}
-\mathds{P}\bigg(\frac{\bar{X}-30}{S/\sqrt{n}}>t_{1-\alpha, n-1}\bigg|\mu = \mu_a\bigg)  = \mathds{P}\bigg(\sqrt{n}(\bar{X}-30)>t_{1-\alpha, n-1}S\bigg| \mu = \mu_a \bigg) \\
+\mathds{P}\bigg(\frac{\bar{X}-30}{S/\sqrt{n}}>t_{1-\alpha, n-1}\bigg|\mu = \mu_a\bigg)  &= \mathds{P}\bigg(\sqrt{n}(\bar{X}-30)>t_{1-\alpha, n-1}S\bigg| \mu = \mu_a \bigg) \\
 &= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-30)}{{\sigma}}>t_{1-\alpha, n-1}\frac{S}{\sigma}\bigg| \mu = \mu_a \bigg) \\
 &= \mathds{P}\bigg(\frac{\sqrt{n}(\bar{X}-\mu_{a})}{{\sigma}}+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}}\times \sqrt{\frac{(n-1)S^2}{\sigma^2}}\bigg| \mu = \mu_a \bigg) \\
 &= \mathds{P}\bigg(Z+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}} \sqrt{\chi^2_{n-1}}\bigg| \mu = \mu_a \bigg),
@@ -349,7 +351,7 @@ In[4]: <bytecode: 0x56366e096b50>
 In[5]: <environment: namespace:base>
 \end{lstlisting}
 
-In the previous code snippet, we have a 100000 pairs of normal and chi squared random variables, generated with the \texttt{rnorm} and \texttt{rchisq} R-functions. The \texttt{mean(...)} function returns a vector of ones every time the LHS is bigger than the RHS and zeros every time the LHS is smaller than the RHS and computes the mean of said vector entries. The accuracy of this computation is upto $\mathcal{O}\bigg(\frac{1}{n^2}\bigg)$. 
+In the previous code snippet, we have a 100000 pairs of normal and chi squared random variables, generated with the \texttt{rnorm} and \texttt{rchisq} R-functions. The \texttt{mean(...)} function returns a vector of ones every time the LHS is bigger than the RHS and zeros every time the LHS is smaller than the RHS and computes the mean of said vector entries. The accuracy of this computation is upto $\mathcal{O}\bigg(\frac{1}{n^2}\bigg)$. \\
 
 \subsubsection{Two Sample Tests - Matched Data I}
 
@@ -359,7 +361,7 @@ $$
 \frac{\bar{X}_d - \mu_{d0}}{S_d/\sqrt{n}}
 $$
 
-where $\mu_{d0}$ is the value under the null hypothesis (typically 0), where $n$ is the number of pairs of observations (and not the total number of observations themselves). This is called the \textbf{ordinary paired two-group t-test}. 
+where $\mu_{d0}$ is the value under the null hypothesis (typically 0), where $n$ is the number of pairs of observations (and not the total number of observations themselves). This is called the \textbf{ordinary paired two-group t-test}. \\
 
 \subsubsection{Two Sample Tests - Matched Data II}
 
@@ -439,6 +441,8 @@ In conclusion:
     \item The more unrelated the two exam scores are the more pronounced the regression to the mean is.
 \end{itemize} 
 
+\clearpage
+
 \subsubsection{Two Sample Tests - Two Independent Groups}
 
 The extension to two independent groups is straightforward. Let $H_0 : \mu_1 = \mu_2$ versus $H_a: \mu_1 \neq \mu_2$ (or one of the other two alternatives). Assuming a common error variance we have that the following statistic
@@ -469,10 +473,9 @@ If we want to test equality of means, in general it's incorrect constructing sep
 
 Suppose that instead of having repeated data on two consecutive exams, students were randomised to two teaching modules and took the same exam. We treat the data as independent group data. We might obtain data like the following 
 
-Group || N || Mean Exam || SD
-Exam
-Module 1 || 50 || 86.9 || 6.07
-Module 2 || 50 || 89.8 || 6.06
+Group || N || Mean Exam || SD Exam \\
+Module 1 || 50 || 86.9 || 6.07 \\
+Module 2 || 50 || 89.8 || 6.06 \\
 
 The pooled standard deviation is 6.065 and the test statistic is 
 
@@ -490,7 +493,7 @@ $$
 If we ignore the matching by setting $\textnormal{Cov}(X,Y) = 0$, the standard error of the difference is estimating is estimating
 
 $$
-\sqrt{\frac{\sigma_x^2}{n}+\frac{\sigma_y^2}{n}}{n}.
+\sqrt{\frac{\sigma_x^2}{n}+\frac{\sigma_y^2}{n}}.
 $$
 
 Since, generally, matched data is positively correlated, by ignoring the matching, we are unnecessarily augmenting the standard error. 
