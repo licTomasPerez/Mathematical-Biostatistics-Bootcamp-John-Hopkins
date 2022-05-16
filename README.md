@@ -5,4 +5,4 @@ howework and quizzes assignements, written in Tex and compiled using Overleaf on
 
 ## Numerical Calculations
 
-Many exercises include both an analytical and numerical solution, said routines written in R and Python, installed via the Conda extension. In particular, the Python routines were written using the Numpy, Math and SymPy libraries with Jupyter Notebook platform.
+Many exercises include both an analytical and numerical solution, said routines written in R and Python, installed via the Conda extension. In particular, the Python routines were written using the Numpy, Math and SymPy libraries within the Jupyter Notebook and RStudio platforms.
