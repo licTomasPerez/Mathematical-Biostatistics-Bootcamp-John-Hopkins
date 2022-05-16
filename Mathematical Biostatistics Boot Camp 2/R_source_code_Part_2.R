@@ -20,7 +20,6 @@ In [1]: TRUE
 -------------
 
 #### Homework 1 - Exercise 2
-
 ## A pharmaceutical company is interested in testing a potential blood pressure lowering medication. 
 ## Their first examination considers only subjects that received the medication at baseline then two weeks later. The data are as follows (SBP in mmHg)
 
@@ -166,4 +165,3 @@ Sp <- sqrt((n-1)/(n+n-2)*sd_treated + (1-(n-1)/(n+n-2))*sd_placebo)
 
 CI <- (mu_treated-mu_placebo) + c(-1,1)*(qt(.975, 9+9-2) * Sp * sqrt(2/n))
 CI
-
