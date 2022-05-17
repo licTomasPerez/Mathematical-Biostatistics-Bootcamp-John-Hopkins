@@ -81,7 +81,7 @@ $$
 
 Our mean is two standard error units away from the hypothesised mean. We can codify these rules for a normal Z test, assuming the data is gaussian or that the Central Limit Theorem is a good enough approximation to apply, as follows:
 
-\begin{tcolorbox}[title=Rules for a normal Z- test]
+\begin{tcolorbox}[title=Rules for a normal Z-test]
 
 Let $H_0 : \mu = \mu_0$ be the null hypothesis, then let 
 \begin{itemize}
@@ -498,4 +498,179 @@ $$
 
 Since, generally, matched data is positively correlated, by ignoring the matching, we are unnecessarily augmenting the standard error. 
 
+\clearpage
+
+\subsection{Week 2}
+
+The score statistic is a specific two sample binomial test that will serve as motivation for creating a confidence interval
+
+\subsubsection{Two sample Binomial Tests - Score Statistic}
+
+Consider the following example
+
+\begin{tcolorbox}[title=Example]
+
+Consider a randomized trial where 40 subjects were randomized (20 each) to two drugs with the same active ingredient but different expedients. Consider counting the number of subjects with side effects for each drug. The gathered data is\\ 
+    || Side Effects || None || Total \\
+Drug A || 11 || 9 || 20 \\
+Drug B || 16 || 15 || 20 \\
+Total || 16 || 14 || 40 \\
+\end{tcolorbox}
+
+At first sight, there appears to be a higher propensity for side effects from Drug A than from Drug B. We'd like to do a test of whether or not the propensity of side effects is the same within the two drugs. 
+
+Let's start with score tests. Consider testing the null hypothesis $H_0 : p = p_0$ for a binomial proportion. The \textbf{score test statistic} is constructed in the same way as a $Z$-test. Consider a single binomial proportion, only looking at drug A and considering if drug A has a specific population proportion of side effects
+
+$$
+\frac{\hat{p}-p_0}{\sqrt{p_0(1-p_0)/n}} \underset{n \rightarrow \infty}{\sim} \mathcal{N}(0,1).
+$$
+
+Note that $\sqrt{p_0(1-p_0)/n}$ is the standard error of the binomial distribution and we're using the null hypothesis\footnote{Should we use $\hat{p}$, we'd be constructing the estimated standard error, akin to the calculations of a confidence interval.}. This test performs better than the Wald test
+
+$$
+\frac{\hat{p}-p_0}{\sqrt{\hat{p}(1-\hat{p})/n}}.
+$$
+
+Both of the previous statistics are compared to the quantiles of the standard normal distribution, the upper $\frac{\alpha}{2}$th quantile for a two-sided test or the upper $\alpha$th quantile for an upper single-sided test where the alternative is $H_a : p > p_0$ and the $\alpha$th quantile for an upper single-sided test where the alternative is $H_a : p < p_0$. 
+
+Inverting the Wald test yields the Wald interval, namely those values of $p_0$ for which we'd fail to reject the null hypothesis:
+
+$$
+\hat{p} \pm z_{1-\frac{\alpha}{2}}\sqrt{\hat{p}(1-\hat{p})/n}.
+$$
+
+Inverting the Score test yields the Score interval
+
+\begin{equation*}
+\hat{p}\bigg(\frac{n}{n+z^2_{1-\frac{\alpha}{2}}}\bigg) + \frac{1}{2}\bigg(\frac{z^2_{1-\frac{\alpha}{2}}}{n+z^2_{1-\frac{\alpha}{2}}}\bigg) \\
+\pm z_{1-\frac{\alpha}{2}} \sqrt{\frac{1}{n+z^2_{1-\frac{\alpha}{2}}} \bigg[\hat{p}(1-\hat{p})\frac{n}{n+z^2_{1-\frac{\alpha}{2}{2}}}+\frac{1}{4}\frac{z^2_{1-\frac{\alpha}{2}}}{n+z^2_{1-\frac{\alpha}{2}}}\bigg] }
+\end{equation*}
+
+Note that $\frac{n}{n+z^2_{1-\frac{\alpha}{2}}}$ and $\frac{z^2_{1-\frac{\alpha}{2}}}{n+z^2_{1-\frac{\alpha}{2}}}$ add up to one, it's a point in the two-dimensional simplex. If $n \rightarrow \infty$ the first term dominates and $\hat{p}$ dominates, conversely if $n$ is small the second term dominates. 
+Plugging $z_{1-\frac{\alpha}{2}} = 2$ yields the Agresti-Coull interval. As $n \rightarrow \infty$ this interval gets progressively similar to the Wald interval. This test takes $\hat{p}$ and shrinks it down to $\frac{1}{2}$ which is desired since for $p > \frac{1}{2}$, the binomial distribution gets progressively asymmetric. 
+
+\begin{tcolorbox}[title= Example continued]
+
+In our previous example consider testing whether or not Drug A's percentage of subjects with side effects is greater than 10\%. Then we'd like to test $H_0 : p_A = .1$ versus $H_a: p_A > .1$. Let $\hat{p} = 11/20 = .55$. Then our test statistic is 
+
+$$
+\frac{.55 - .1}{\sqrt{.1 \times .9/20}} = 6.7
+$$
+
+If we are performing a two-sided  95th $Z$-test, the quantile of interest is $1.645$ and if we're performing a one sided 95th $Z$-test the quantie of interest is $1.96$. In any case, $6.7 > z_{\textnormal{95th}}$, so we reject Our P-value, the probability of getting a $z$ bigger than $6.7$ is nearly around 0 (we're about six standard deviations from zero for a standard normal carries a very low probability since three standard deviations already covers the majority of the distribution).  For a two-sided test, we'd double this P-value.
+\end{tcolorbox}
+
+We're postulating the number of side effects out of 20 is a binomial trial. Implicit in this idea is the postulate of iid data, every person is an independent and identically distribution, drawn from a population. We use these ideas to construct a super population that has a prevalence of side effects of $p_A$. So our iid model is giving us an idea of a population proportion and we're testing relative to that proportion. 
+
+\subsubsection{Two sample Binomial Tests - Exact Tests}
+
+The previous method relies on the central limit theorem and having a large-enough sample size. It's possible to perform and exact binomial test. Consider calculating an exact P-value. What's the probability, under the null hypothesis, of getting evidence as extreme or more extreme than the one we obtained (ie. the probability of getting more than 11 people with side effects)?
+
+$$
+P(X_A\geq 11) = \sum_{x=11}^{20} {{20}\choose{x}} (.1)^x (.9)^{20-x} \approx 0.
+$$
+
+This calculation, the probability of getting more than 11 people with side effects out of 20, is done under the null hypothesis $H_0 : p_0 = 10\%$. This is the probability of getting evidence as or more extreme - in favour of the alternative - with the probability being calculated under the null hypothesis. In conclusion, the probability of getting more than 11 people of 20 under the null hypothesis of $p=.1$ is approximately 0.
+
+This can be computed with the following R-routine 
+
+\begin{lstlisting}[language=R]
+pbinom(10, 20, .1, lower.tail = FALSE)
+
+In [1]: 7.088606e-07
+---------------
+
+binom.test(11, 20, .1, alternative="greater")
+
+In [1]: Exact binomial test
+In [2]: data:  11 and 20
+In [3]: number of successes = 11, number of trials = 20, p-value = 7.089e-07
+In [4]: alternative hypothesis: true probability of success is greater than 0.1
+In [5]: 95 percent confidence interval:
+In [6]:  0.3469314 1.0000000
+In [7]: sample estimates:
+In [8]: probability of success 
+In [9]:                   0.55 
+\end{lstlisting}
+
+Note that in R, \texttt{lower.tail = FALSE} calculates the probability of strictly greater than 10 (starts at 11 and ends at 20) and, \texttt{lower.tail = TRUE} calculates the probability of strictly less or equal than 10. 
+
+This test, unlike the asymptotic ones, guarantees the Type I error rate is less than the desired level (usually this desired level is 5\%), sometimes it's much less. Inverting the exact binomial test yields an exact binomial interval for the true proportion. This interval, called the Clopper-Pearson interval, has coverage greater than 95\%, though can be very conservative. For two sided tests, calculate the two one-sided P-values and double the smaller.  
+
+\subsubsection{Two sample Binomial Tests - Comparing 2 Binomial Proportions}
+
+Now we want to compare two proportions. Consider now testing whether the proportion of side effects is the same in the two groups or different. Let $X \sim \textnormal{Binomial}(n_1,p_1)$, let $\hat{p}_1=\frac{X}{n_1}$, let $Y \sim \textnormal{Binomial}(n_2,p_2)$ and let $\hat{p}_2=\frac{Y}{n_2}$. We also standardise notation as follows
+
+\begin{align*}
+    n_{11} & = X, & n_{12} &= n_1 - X & n_{1}, = n_{1+}, \\
+    n_{21} & = Y, & n_{22} &= n_2 - Y & n_{2}, = n_{2+}, \\
+    n_{+1}, & n_{+2}. 
+\end{align*}
+
+Consider testing $H_0 : p_1 = p_2$ versus one of the three usual alternatives. The score test statistic for this null hypothesis is 
+
+$$
+TS = \frac{\hat{p}_1-\hat{p}_2 - 0}{\sqrt{\hat{p}(1-\hat{p})\bigg(\frac{1}{n_1}+\frac{1}{n_2}\bigg)}},
+$$
+
+where $\hat{p}_1$ and $\hat{p}_2$ are the sample proportions for each binomial distribution, where the variance of the difference of the random variables is $\hat{p}(1-\hat{p})$ for $\hat{p} = \frac{X+Y}{n_1+n_2}$, the estimate of the common proportion under the null hypothesis. We need an estimated version of this variance, so as to compare it to a normal quantile. That is, we need a P-value to plug in. We can plug $\hat{p}$ if under the null hypothesis the sample proportions are identical, the group A is made up of iid draws from Bernoulli 1 and the group B is made up of iid draws from Bernoulli 2, but since they are common we have $n_1+n_2$ Bernoulli draws and our proportion would simply be the total number of events. This statistic is normally distributed for large $n_1$, $n_2$. 
+
+The interval doesn't have a closed form inverse for creating a confidence interval and must be numerically calculated. Al alternate interval inverts the Wald test:
+
+$$
+TS = \frac{\hat{p}_1-\hat{p}_2 - 0}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}+\frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}.
+$$
+
+This Wald test doesn't use the fact that, under the null hypothesis, the proportions are equal, having separate $\hat{p}_1$ and $\hat{p}_2$. 
+
+The resulting confidence interval is 
+
+$$
+\hat{p}_1 - \hat{p}_2 \pm z_{1-\frac{\alpha}{2}} {\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}+\frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}.
+$$
+
+As in the one sample case, the Wald interval and Wald test perform very poorly, relative to the score interval and score test. For testing, we always use the score test whilst for interval, inverting the score test is hard and not offered in standard software. 
+
+A simple fix is the Agresti-Caffo interval, where we add one failure and one success to each group, which is obtained by calculating $\Tilde{p}_1 = \frac{X+1}{n_1+2}$,  $\Tilde{n}_1 = n_1 +2$, $\Tilde{p}_2 = \frac{Y+1}{n_2+2}$,  $\Tilde{n}_2 = n_2 +2$. Using these we can simply construct the Wald interval. This interval does not approximate the score interval but does perform better than the Wald interval.
+
+\begin{tcolorbox}[title=Example]
+Test whether or not the proportion of side effects is the same for the two drugs: $\hat{p}_A = .55$, $\hat{p}_B = 5/20 = .25$, $\hat{p} = 16/40 = .4$. The test statistic is 
+
+$$
+\frac{.55-.25}{\sqrt{.4 \times .6 \times(1/20+1/20}}=1.61.
+$$
+
+We fail to reject $H_0$ at $.05$ level by comparing to $1.96$. The P-value is $P(|Z| \geq 1.61)=.11$
+\end{tcolorbox}
+
+\textbf{\paragraph{Bayesian and Likelihood inference for two binomial proportions}}
+
+Likelihood analysis requires the use of so-called profile likelihoods or some other technique to reduce dimensions. Consider putting independent $\textnormal{Beta}(\alpha_1, \beta_1)$ and $\textnormal{Beta}(\alpha_2, \beta_2)$ with priors on $p_1$ and $p_2$, respectively. Then the posterior is likelihood times prior equals posterior. In our case the likelihood function for a Beta distribution is 
+
+$$
+L(\theta) = \frac{\Gamma(1+\theta)}{\Gamma(1)\Gamma(\theta)}\prod_{i=1}^n(1-Y_i)^{\theta-1},
+$$
+
+which simplifies to 
+
+$$
+L(\theta) = \theta(1-Y_i)^{n(\theta-1)}.
+$$
+
+Thus, the posterior is 
+
+$$
+\pi(p_1, p_2) \propto p_{1}^{x+\alpha_1-1}(1-p_{1})^{n_1+\beta_1-1} \times p_{2}^{y+\alpha_2-1}(1-p_{2})^{n_2+\beta_2-1}.
+$$
+
+Hence under this, potentially naive prior, the posterior for $p_1$ and $p_2$ are independent $\textnormal{Beta}$'s. The easiest way to explore this posterior is via Monte Carlo simulation. 
+\subsubsection{Relative Risks and Odds Ratios - Relative Measures}
+
+\subsubsection{Relative Risks and Odds Ratios - The Relative Risk}
+
+\subsubsection{Relative Risks and Odds Ratios - The Odds Ratio}
+
+\subsubsection{Delta Method}
+
+\subsubsection{Delta Method and Derivation}
 \end{document}
