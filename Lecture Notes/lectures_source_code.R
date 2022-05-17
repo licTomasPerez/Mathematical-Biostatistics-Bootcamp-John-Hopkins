@@ -93,3 +93,24 @@ testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff) #test Statistic: 2.65
 
 ## or using the R function
 t.test(diff)
+
+-----------------
+# P-value for an exact single Binomial Test 
+
+pbinom(10, 20, .1, lower.tail = FALSE)
+
+In [1]: 7.088606e-07
+
+#### 
+
+binom.test(11, 20, .1, alternative="greater")
+
+In [1]: Exact binomial test
+In [2]: data:  11 and 20
+In [3]: number of successes = 11, number of trials = 20, p-value = 7.089e-07
+In [4]: alternative hypothesis: true probability of success is greater than 0.1
+In [5]: 95 percent confidence interval:
+In [6]:  0.3469314 1.0000000
+In [7]: sample estimates:
+In [8]: probability of success 
+In [9]:                   0.55 
