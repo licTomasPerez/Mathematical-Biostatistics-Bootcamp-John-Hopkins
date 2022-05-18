@@ -460,7 +460,7 @@ $$
 where $S_p$ is the pooled variance. Furthermore, this statistic follows an approximate (only approximately, since the variances are not the same) Student's $T$ distribution if $X_i \sim \mathcal{N}(\mu_1,\sigma^2_1)$ and $Y_i \sim \mathcal{N}(\mu_2,\sigma^2_2)$. The approximate degrees of freedom are 
 
 $$
-\frac{(S_x^2/n_x+S_y^2/n_y)^2}{(S_x^2/n_x)^2/(n_x-1)+(S_y^2/n_y)^2/(n_y-1}
+\frac{(S_x^2/n_x+S_y^2/n_y)^2}{(S_x^2/n_x)^2/(n_x-1)+(S_y^2/n_y)^2/(n_y-1)}
 $$
 
 where $S_x$ and $S_y$ are the variances within group 1 and group 2 respectively. 
@@ -549,7 +549,7 @@ Inverting the Score test yields the Score interval
 Note that $\frac{n}{n+z^2_{1-\frac{\alpha}{2}}}$ and $\frac{z^2_{1-\frac{\alpha}{2}}}{n+z^2_{1-\frac{\alpha}{2}}}$ add up to one, it's a point in the two-dimensional simplex. If $n \rightarrow \infty$ the first term dominates and $\hat{p}$ dominates, conversely if $n$ is small the second term dominates. 
 Plugging $z_{1-\frac{\alpha}{2}} = 2$ yields the Agresti-Coull interval. As $n \rightarrow \infty$ this interval gets progressively similar to the Wald interval. This test takes $\hat{p}$ and shrinks it down to $\frac{1}{2}$ which is desired since for $p > \frac{1}{2}$, the binomial distribution gets progressively asymmetric. 
 
-\begin{tcolorbox}[title= Example continued]
+\begin{tcolorbox}[title=Example continued]
 
 In our previous example consider testing whether or not Drug A's percentage of subjects with side effects is greater than 10\%. Then we'd like to test $H_0 : p_A = .1$ versus $H_a: p_A > .1$. Let $\hat{p} = 11/20 = .55$. Then our test statistic is 
 
@@ -663,7 +663,7 @@ $$
 \pi(p_1, p_2) \propto p_{1}^{x+\alpha_1-1}(1-p_{1})^{n_1+\beta_1-1} \times p_{2}^{y+\alpha_2-1}(1-p_{2})^{n_2+\beta_2-1}.
 $$
 
-Hence under this, potentially naive prior, the posterior for $p_1$ and $p_2$ are independent $\textnormal{Beta}$'s. The easiest way to explore this posterior is via Monte Carlo simulation. 
+Hence under this, potentially naive prior, the posterior for $p_1$ and $p_2$ are independent $\textnormal{Beta}$'s. The easiest way to explore this posterior is via Monte Carlo simulation.
 
 \subsubsection{Relative Risks and Odds Ratios - Relative Measures}
 
@@ -726,9 +726,13 @@ $$
 \textnormal{Estimate} \pm z_{1-\frac{\alpha}{2}} SE_{\textnormal{Estimate}},
 $$
 
-and, as usual, exponentiating yields an interval for the OR and RR in the natural scale. Though logging helps, these intervals still don't perform altogether that well because of the asymptotics of these statistics being ruled by the central limit theorem (if we plug in a 95th quantile, we don't necessarily get a 95th confidence interval). \\
+and, as usual, exponentiating yields an interval for the OR and RR in the natural scale. Though logging helps, these intervals still don't perform altogether that well because of the asymptotics of these statistics being ruled by the central limit theorem (if we plug in a 95th quantile, we don't necessarily get a 95th confidence interval). 
+
+\clearpage
 
 \subsubsection{Relative Risks and Odds Ratios - The Odds Ratio}
+
+Let's consider the previous example
 
 \begin{tcolorbox}[title=Exampled continued]
 
@@ -743,5 +747,80 @@ $\hat{SE}_{\hat{RD}_{A-B}} = \sqrt{\frac{.55 \times .45}{20}+\frac{.25 \times .7
 
 \subsubsection{Delta Method}
 
+We're interested in obtaining the standard error and test statistics for these methods using the Delta method. 
+
+Recall $X \sim \textnormal{Binomial}(n_1, p_1)$, $Y \sim \textnormal{Binomial}(n_2, p_2)$ where we have 
+
+\begin{itemize}
+    \item $\hat{RD} = \hat{p}_1 + \hat{p}_2$, $\hat{SE}_{\hat{RD}} = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}+\frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$,
+    \item $\hat{RR} = \frac{\hat{p}_1}{\hat{p}_2}$, $\hat{SE}_{\log \hat{RR}} = \sqrt{\frac{1-\hat{p}_1}{\hat{p}_1n_1}+\frac{1-\hat{p}_2}{\hat{p}_2n_2}}$,
+    \item $\hat{OR} = \frac{\hat{p}_1/(1-\hat{p}_1)}{\hat{p}_2/(1-\hat{p}_2)} = \frac{n_{11}n_{22}}{n_{12}n_{21}}$, $\hat{SE}_{\log \hat{OR}} = \sqrt{\frac{1}{n_{11}}+\frac{1}{n_{12}}+\frac{1}{n_{21}}+\frac{1}{n_{22}}}$
+\end{itemize}
+
+with the confidence interval being $CI = \textnormal{Estimate} \pm z_{1-\frac{\alpha}{2}} SE_{\textnormal{Estimate}}$.
+
+The delta method can be used to obtain large sample standard errors for instances where we're not longer dealing with differences of averages but, for example, with the logs of some desired quantities. Let $\hat{\theta}$ be an estimator for the quantity ${\theta}$ with the estimator given by 
+
+$$
+\frac{\hat{\theta}-\theta}{\hat{SE}_{\theta}} \rightarrow \mathcal{N}(0,1).
+$$
+
+Formally, the delta method states that for a sufficiently smooth function $f: Dom(f) \subset \mathds{R} \rightarrow Im(f) \subset \mathds{R}$ then 
+
+$$
+\frac{f(\hat{\theta})-f(\theta)}{f'(\hat{\theta})\hat{SE}_{\theta}} \rightarrow \mathcal{N}(0,1),
+$$
+
+ie. the asymptotic mean of $f(\hat{\theta}$ is $f({\theta}$. 
+
 \subsubsection{Delta Method and Derivation}
-\end{document}
+
+Let $\theta = p_1$ and the estimator $\hat{ \theta} = \hat{p}_1 = \frac{X}{n_1}$, the estimated standard error is $\hat{SE}_{\hat{\theta}} = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}}$. Let $f(x) = \log(x)$, then by the central limit theorem 
+
+$$
+\frac{\hat{\theta}-\theta}{\hat{SE}_{\hat{ \theta}}} \rightarrow \mathcal{N}(0,1),
+$$
+
+since $\hat{ \theta}$ is a simple average and dividing it by it's standard error. Then
+
+\begin{align*}
+\hat{SE}_{\log \hat{p}_1} &= f'(\hat{\theta}) \hat{SE}_{\hat{\theta}} \\
+& = \frac{1}{\hat{p}_1} \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}} = \sqrt{\frac{1-\hat{p}_1}{\hat{p}_1 n_1}},
+\end{align*}
+
+and 
+
+$$
+\frac{\log \hat{p}_1 - \log {p}_1}{\sqrt{\frac{1-\hat{p}_1}{\hat{p}_1 n_1}}} \rightarrow \mathcal{N}(0,1).
+$$
+
+If we want a confidence interval for $\log {p}_1$, we can add and subtract to a standard normal quantile (say 1.96 for a 95\% interval) times this standard error. 
+
+The asymptotic standard error for the log relative risk is 
+
+\begin{align}
+\textnormal{Var}(\log \hat{RR}) &= \textnormal{Var}\bigg(\log(\frac{\hat{p}_1}{\hat{p}_1}\bigg), \\
+&= \textnormal{Var}(\log \hat{p}_1) + \textnormal{Var}(\log \hat{p}_2) \\
+&\approx \frac{1-\hat{p}_1}{\hat{p}_1 n_1}+\frac{1-\hat{p}_2}{\hat{p}_2n_2},
+\hat{SE}_{\log \hat{RR}} = \sqrt{\frac{1-\hat{p}_1}{\hat{p}_1 n_1}+\frac{1-\hat{p}_2}{\hat{p}_2n_2}}
+\end{align}
+
+where the last line follows from the multivariate delta method. This approximation requires large sample sizes. Thus the delta method gives both a standard error as well as a variance calculation and an asymptotic normality, giving a way to create confidence intervals. 
+
+Heuristically, let's assume we have a large enough sample size. If $\hat{\theta}$ is close to $\theta$ then
+
+$$
+\frac{f(\hat{\theta})-f(\theta)}{\hat{\theta}-\theta} \approx f'(\hat{\theta}),
+$$
+
+so 
+
+$$
+\frac{f(\hat{\theta})-f(\theta)}{f'(\hat{\theta})} \approx {\hat{\theta}-\theta},
+$$
+
+therefore 
+
+$$
+\frac{f(\hat{\theta})-f(\theta)}{f'(\hat{\theta})\hat{SE}_{\hat{\theta}}} \approx \frac{\hat{\theta}-\theta}{\hat{SE}_{\hat{\theta}}} \rightarrow \mathcal{N}(0,1),
+$$
