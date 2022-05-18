@@ -664,11 +664,82 @@ $$
 $$
 
 Hence under this, potentially naive prior, the posterior for $p_1$ and $p_2$ are independent $\textnormal{Beta}$'s. The easiest way to explore this posterior is via Monte Carlo simulation. 
+
 \subsubsection{Relative Risks and Odds Ratios - Relative Measures}
+
+There are many instances in which we prefer to talk about an odds ratio or a relative measure instead of an absolute measure. For example, for an event that's rare, some environmental effect which causes a fairly rare disease, where we're comparing a small proportion of people who contracted the disease (among the unexposed group) and a small proportion of people who contracted the disease among the exposed group. The absolute difference in rates is very small, the relative difference might be very large. \\
+
+\begin{tcolorbox}[title=Motivation]
+
+Consider a randomized trial where 40 subjects were randomized (20 each) to two drugs with the same active ingredient but different expedients. Consider counting the number of subjects with side effects for each drug:
+
+|| Side effects || None || Total \\
+Drug A || 11 || 9 || 20 \\
+Drug B || 5 || 15 || 20 \\
+Total || 16 || 14 || 40 \\
+ 
+ We are interested in whether drug A has a statistically higher percentage of side effects than drug B, accounting for what would be expected by chance. 
+ 
+\end{tcolorbox}
+
+Let $X \sim \textnormal{Binomial}(n_1, p_1)$, $Y \sim \textnormal{Binomial}(n_2, p_2)$, let $\hat{p}_1 = \frac{X}{n_1}$ and let $\hat{p}_2 = \frac{Y}{n_2}$ are the estimators for the proportions of each binomial distribution. \\
 
 \subsubsection{Relative Risks and Odds Ratios - The Relative Risk}
 
+Now we are interested in relative changes, particularly useful when both proportions are small. The \textbf{relative risk} is defined as $p_1/p_2$. The natural estimator for the relative risk is 
+
+$$
+\hat{RR} = \frac{\hat{p}_1}{\hat{p}_2} = \frac{X/n_1}{Y/n_2},
+$$
+
+Naturally, this relative risk has an issue if $Y$ has zero counts. The standard error for $\log \hat{RR}$, much more useful for constructing confidence intervals, is
+
+$$
+\hat{SE}_{\log \hat{RR}} = \sqrt{\frac{1-p_1}{p_1n_1}+\frac{1-p_2}{p_2n_2}}.
+$$
+
+One can construct a confidence interval for the log of the relative risk by adding and subtracting a standard normal quantile and then we multiply said standard normal quantile by the standard error of the log relative risk. By exponentiating the resulting interval we  get an interval for the RR. 
+
+Alternatively we can take the ratio of odds instead of the ratio of probabilities. So the population odds ration is 
+
+$$
+\frac{\textnormal{Odds of SE Drug A}}{\textnormal{Odds of SE Drug B}} = \frac{p_1/(1-p_1)}{p_2/(1-p_2)} = \frac{p_1(1-p_2)}{p_22(1-p_1)}.
+$$
+
+and we'll compare this number against 1. If it's bigger than one, it's going to suggest a greater propensity of side A and if it's less than 1, it's going to suggest a smaller propensity for side effects of drug A. The sample odds ratio simply plugs in the estimates for $p_1$ and $p_2$, working out to be 
+
+$$
+\hat{OR} = \frac{\hat{p}_1/(1-\hat{p}_1)}{\hat{p}_2/(1-\hat{p}_2)} = \frac{n_{11}n_{22}}{n_{12}n_{21}},
+$$
+
+the so-called cross product ratio. The log of the estimated odds ratio has better asymptotic Gaussian behaviour, then the standard error for $\log \hat{OR}$ is 
+
+$$
+\hat{SE}_{\log \hat{OR}}=\sqrt{\frac{1}{n_{11}}+\frac{1}{n_{12}}+\frac{1}{n_{21}}+\frac{1}{n_{22}}}.
+$$
+
+Thus, in order to construct a confidence interval, we calculate the odds ratio, we log it and calculate the standard error of the log odds ratio, we add or subtract a standard normal quantile (say 1.96 for a 95\% confidence interval); thus obtaining a confidence interval for the log odds ratio. By exponentiating the end point, we obtain an interval for the OR. Thre are some problems of course if $n_1 = 0$ or $n_2 = 0$. 
+
+Notice that the sample and true odds ratios do not change if we transpose the rows and the columns. For both the OR and RR, taking the logs helps with adherence to the error rate. Of course the interval for the $\log RR$ or $\log OR$ is obtained by taking
+
+$$
+\textnormal{Estimate} \pm z_{1-\frac{\alpha}{2}} SE_{\textnormal{Estimate}},
+$$
+
+and, as usual, exponentiating yields an interval for the OR and RR in the natural scale. Though logging helps, these intervals still don't perform altogether that well because of the asymptotics of these statistics being ruled by the central limit theorem (if we plug in a 95th quantile, we don't necessarily get a 95th confidence interval). \\
+
 \subsubsection{Relative Risks and Odds Ratios - The Odds Ratio}
+
+\begin{tcolorbox}[title=Exampled continued]
+
+For the relative risk, $\hat{p}_A = 11/20 = .55$ and $\hat{p}_B = 5/20 = .25$. The estimated relative risk is $\hat{RR}_{A/B} = .55/.55 = 2.2$ and the estimated standard error for the logs is $\hat{SE}_{\log \hat{RR}_{A/B}} = \sqrt{\frac{1-.55}{.55 \times 20}+\frac{1-.25}{.25 \times 20}} = .44$. Then the interval for the log RR is $\log(2.2) \pm 1.96 \times .44 = [-.07, 1.65]$ and the interval for the RR is $[.93, 5.21]$.
+
+For the odds ratio we have that the estimated odds ratio is $\hat{OR}_{A/B} = \frac{11\times15}{9 \times 5} = 3.67$. Also $\hat{SE}_{\log \hat{OR}_{A/B}} = \sqrt{\frac{1}{11}+\frac{1}{9}+\frac{1}{5}+\frac{1}{15}} = .68$, with the interval for the $\log OR$ being $\log(3.67) \pm 1.96\times .68 = [-.04, 2.64]$ and the interval for the OR being $[.96, 14.01]$.
+
+For the estimated risk difference $\hat{RD}_{A-B} = \hat{p}_A - \hat{p}_B = .55 - .25 = .30$, with an estimated standard error of 
+$\hat{SE}_{\hat{RD}_{A-B}} = \sqrt{\frac{.55 \times .45}{20}+\frac{.25 \times .75}{20}} = .15$ and the confidence interval being $.30\pm 1.96 \times .15 = [.15, .45]$.
+
+\end{tcolorbox}
 
 \subsubsection{Delta Method}
 
