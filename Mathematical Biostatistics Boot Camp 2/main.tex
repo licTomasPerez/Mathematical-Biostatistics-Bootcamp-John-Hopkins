@@ -277,7 +277,7 @@ In [1]: 0
 \end{lstlisting}
 
 \begin{tcolorbox}[title=Question 9]
-The Daily Planet ran a recent story about Kryptonite poisoning in the water supply after a recent event in Metropolis. Their usual field reporter, Clark Kent, called in sick and so Lois Lane reported the stories. Researchers sampled 288 individuals and found mean blood Kryptonite levels of 44, both measured in Lex Luthors per milliliter (LL/ml). They compared this to 288 sampled individuals from Gotham city who had an average level of 42.04. Report the Pvalue for a two sided Z test of the relevant hypothesis. Assume that the standard deviation is 12 for both groups. 
+The Daily Planet ran a recent story about Kryptonite poisoning in the water supply after a recent event in Metropolis. Their usual field reporter, Clark Kent, called in sick and so Lois Lane reported the stories. Researchers sampled 288 individuals and found mean blood Kryptonite levels of 44, both measured in Lex Luthors per milliliter (LL/ml). They compared this to 288 sampled individuals from Gotham city who had an average level of 42.04. Report the Pvalue for a two sided Z test of the relevant hypothesis. Assume that the standard deviation is 12 for both groups.
 \end{tcolorbox}
 
 Let $H_0 : \mu_{\textnormal{Metropolis}} = \mu_{\textnormal{Gotham}}$ be the null hypothesis versus the alternative hypothesis $H_a : \mu_{\textnormal{Metropolis}} \neq \mu_{\textnormal{Gotham}}$. We need to report the P-value for a two sided $Z$ test. Let our test statistic be
@@ -370,9 +370,7 @@ Refer to the previous question. Give a 95\% T confidence interval for the ratio 
 In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock (simulated) ER under the new and old triage system. Their waiting times in natural log of hours were:
 \end{tcolorbox}
 
-\begin{tcolorbox}[title
-=Question 6]
-Question 6
+\begin{tcolorbox}[title=Question 6]
 Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was -3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI over the two year period appear to differ between the treated and placebo groups?  Assuming normality of the underlying data and a common population variance, give a pvalue for a two sided t test.
 \end{tcolorbox}
 
@@ -421,8 +419,113 @@ Consider a one sample Z test of $H_0 : \mu = \mu_0$ versus $H_a : \mu > \mu_0$. 
 \section{Homework 2 - Week 2}
 
 \begin{tcolorbox}[title=Question 1]
+Researchers are interested in estimating the natural log of the proportion of people in the population with hypertension. In a random sample of $n$ subjects, let ${X}$ be the number with hypertension. 
+
+Create a confidence interval for the natural log of the proportion of people with hypertension. Assume that $n$ is very large.
 \end{tcolorbox}
 
+\begin{tcolorbox}[title=Question 2]
+If the odds are 4 to 1 (i.e., just 4) of the NFL Ravens losing, what is the implied probability that they win? 
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 3]
+In a randomly sampled survey of self-reported stress levels from two occupations, the following data were obtained where there were 100 in each group 
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 4]
+Consider the following data recording case status relative to an environmental exposure
+
+
+What would be the estimated asymptotic standard error for the log odds ratio for this data?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 5]
+If $x \sim \textnormal{Binomial}(n, p)$ and a Beta(2, 2) prior is placed on $p$, what is the posterior mean for $p$?
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 6]
+Researchers conducted a blind taste test of Coke versus Pepsi. Each of four people was asked which of two blinded drinks given in random order they preferred. The data was such that 3 of the 4 people chose Coke. Assuming that this sample is representative, report a P-value for a test of the hypothesis that Coke is preferred to Pepsi using a one-sided exact test.
+\end{tcolorbox}
 \clearpage
 
+\section{Quiz 2 - Week 2}
+
+\begin{tcolorbox}[title=Question 1]
+What is the delta method asymptotic standard error of $\sqrt{\hat p}$ where $\hat p$ is $X/n$ where $X \sim \textnormal{Binomial}(n, p)$
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Question 1]
+You are a bookie taking \$1 bets on the NFL Ravens game. The odds you give betters determines their payout. If you give 4 to 1 odds against the Ravens winning, then if a person bets on the Ravens winning and they win, you owe them their original dollar, plus an additional \$4 (a total of \$5). If a person bets on the Ravens losing and they lose, then you owe them their original dollar back, plus \$0.25 (a total of \$1.25).
+
+Suppose you collect a > 0 one dollar bets on the Ravens winning and b > 0 one dollar bets on the Ravens losing. What should you set the odds so that, regardless of the outcome of the game, you neither win nor lose money? Note, in this case, the betters place their bets and learn the odds later. Note also, the odds are something that you set in this case, not a direct measure of probability or randomness.
+\end{tcolorbox}
+
+$b/a$
+
+\begin{tcolorbox}[title=Question 3]
+In a randomly sampled survey of self-reported stress levels from two occupations, the following data were obtained
+
+
+What is the P-value for a Z score test of equality of the proportions of high stress? (Note the notation 1e-5, for example, is $1\times 10^{-5}$)
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+X <- 70
+n1 <- 100
+Y <- 15
+n2 <- 100
+
+p1 <- X / n1
+p2 <- Y / n2
+
+p.hat <- (X+Y)/(n1+n2)
+test.statistics.null <- (p1-p2)/ ( sqrt( p.hat * ( 1 - p.hat ) * ( 1 / n1 + 1 / n2  )  )   )
+
+# Two sided test
+2 * pnorm(test.statistics.null, lower.tail = FALSE)
+
+In [1]: 3.627132e-15
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 4]
+Consider the following data recording case status relative to an environmental exposure
+
+
+What would be the estimated asymptotic standard error for the log relative risk for this data? Consider case status as the outcome. That is, we're interested in evaluating the ratio of the proportion of cases comparing exposed to unexposed groups. 
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+n1 <- 45+21
+p1 <- 45/n1
+
+n2 <- 15+52
+p2 <- 15/n2
+
+RR <- p1 / p2
+
+RR.log <- log(RR) 
+
+Standard.Error.Log.RR <- sqrt( ((1-p1)/(p1*n1)) + ((1-p2)/(p2*n2))   )
+# 0.2425119
+
+Standard.Error.RR <- exp(Standard.Error.Log.RR) 
+Standard.Error.RR
+\end{lstlisting}
+
+\begin{tcolorbox}[title=Question 5]
+Question 5
+If $x_1 \sim \textnormal{Binomial}(n_1, p_1)$ and $x_2 \sim Binomial(n_2, p_2)$ and independent Beta(2, 2) priors are placed on $p_1$ and $p_2$, what is the posterior mean for $p_1 - p_2$?
+\end{tcolorbox}
+
+la resta 
+
+\begin{tcolorbox}[title=Question 6]
+Researchers conducted a blind taste test of Coke versus Pepsi. Each of four people was asked which of two blinded drinks given in random order that they preferred. The data was such that 3 of the 4 people chose Coke. Assuming that this sample is representative, report a P-value for a test of the hypothesis that Coke is preferred to Pepsi using a **two sided** exact test.
+\end{tcolorbox}
+
+\begin{lstlisting}[language=R]
+binom.test(x=3, n = 4, p = 0.5, alternative = c("two.sided") )
+\end{lstlisting}
+
+\clearpage
 \end{document}
