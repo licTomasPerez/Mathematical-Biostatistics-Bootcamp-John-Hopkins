@@ -536,7 +536,7 @@ Both of the previous statistics are compared to the quantiles of the standard no
 Inverting the Wald test yields the Wald interval, namely those values of $p_0$ for which we'd fail to reject the null hypothesis:
 
 $$
-\hat{p} \pm z_{1-\frac{\alpha}{2}}\sqrt{\hat{p}(1-\hat{p})/n}.
+\hat{p} \pm z_{1-\frac{\alpha}{2}}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.
 $$
 
 Inverting the Score test yields the Score interval
@@ -604,18 +604,17 @@ Now we want to compare two proportions. Consider now testing whether the proport
 \begin{align*}
     n_{11} & = X, & n_{12} &= n_1 - X & n_{1}, = n_{1+}, \\
     n_{21} & = Y, & n_{22} &= n_2 - Y & n_{2}, = n_{2+}, \\
-    n_{+1}, & n_{+2}. 
+    n_{+1} &, n_{+2} & \textnormal{ 1}
 \end{align*}
 
 Consider testing $H_0 : p_1 = p_2$ versus one of the three usual alternatives. The score test statistic for this null hypothesis is 
-
 $$
 TS = \frac{\hat{p}_1-\hat{p}_2 - 0}{\sqrt{\hat{p}(1-\hat{p})\bigg(\frac{1}{n_1}+\frac{1}{n_2}\bigg)}},
 $$
 
 where $\hat{p}_1$ and $\hat{p}_2$ are the sample proportions for each binomial distribution, where the variance of the difference of the random variables is $\hat{p}(1-\hat{p})$ for $\hat{p} = \frac{X+Y}{n_1+n_2}$, the estimate of the common proportion under the null hypothesis. We need an estimated version of this variance, so as to compare it to a normal quantile. That is, we need a P-value to plug in. We can plug $\hat{p}$ if under the null hypothesis the sample proportions are identical, the group A is made up of iid draws from Bernoulli 1 and the group B is made up of iid draws from Bernoulli 2, but since they are common we have $n_1+n_2$ Bernoulli draws and our proportion would simply be the total number of events. This statistic is normally distributed for large $n_1$, $n_2$. 
 
-The interval doesn't have a closed form inverse for creating a confidence interval and must be numerically calculated. Al alternate interval inverts the Wald test:
+The interval doesn't have a closed form inverse for creating a confidence interval and must be numerically calculated. An alternate interval inverts the Wald test:
 
 $$
 TS = \frac{\hat{p}_1-\hat{p}_2 - 0}{\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}+\frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}.
@@ -799,7 +798,7 @@ If we want a confidence interval for $\log {p}_1$, we can add and subtract to a 
 The asymptotic standard error for the log relative risk is 
 
 \begin{align}
-\textnormal{Var}(\log \hat{RR}) &= \textnormal{Var}\bigg(\log(\frac{\hat{p}_1}{\hat{p}_1}\bigg), \\
+\textnormal{Var}(\log \hat{RR}) &= \textnormal{Var}\bigg(\log\frac{\hat{p}_1}{\hat{p}_1}\bigg), \\
 &= \textnormal{Var}(\log \hat{p}_1) + \textnormal{Var}(\log \hat{p}_2) \\
 &\approx \frac{1-\hat{p}_1}{\hat{p}_1 n_1}+\frac{1-\hat{p}_2}{\hat{p}_2n_2},
 \hat{SE}_{\log \hat{RR}} = \sqrt{\frac{1-\hat{p}_1}{\hat{p}_1 n_1}+\frac{1-\hat{p}_2}{\hat{p}_2n_2}}
@@ -822,7 +821,92 @@ $$
 therefore 
 
 $$
-\frac{f(\hat{\theta})-f(\theta)}{f'(\hat{\theta})\hat{SE}_{\hat{\theta}}} \approx \frac{\hat{\theta}-\theta}{\hat{SE}_{\hat{\theta}}} \rightarrow \mathcal{N}(0,1),
+\frac{f(\hat{\theta})-f(\theta)}{f'(\hat{\theta})\hat{SE}_{\hat{\theta}}} \approx \frac{\hat{\theta}-\theta}{\hat{SE}_{\hat{\theta}}} \rightarrow \mathcal{N}(0,1).
 $$
+
+\clearpage
+
+\subsection{Week 3}
+
+\subsubsection{Fisher's Exact Test}
+
+Fisher's exact test is exact because it guarantees the $\alpha$ rate, regardless of the sample size. When performing an asymptotic test, using a nominal type I error rate of say 5\%, and we calculate a 95\% confidence interval for the risk difference and declare the differences in the proportions as being significant, if the confidence interval for the difference doesn't include zero, that's a nice useful valid testing procedure. However this doesn't guarantee a 5\% error rate, only asymptotically as the sample size goes to infinity. Fisher's exact test, in contrast, guarantees a 5\% limited provided the iid assumptions are met for each of the two groups. 
+
+\begin{tcolorbox}[title=Example]
+
+Let's consider a chemical toxicant and 10 mice, and we treat five with the toxicant and five with the control, as follows
+
+|| Tumor || None || Total \\
+Treated || 4 || 1 || 5 \\
+Control || 2 || 3 || 5 \\
+Total || 6 || 4
+
+where the last line corresponds to the number of tumors for the treated versus control. Let's assume we have two binomials and we wish to test equality of the proportions by fixing the margins, $5$ treated and $5$ controlled for each group. We're modelling the probability that a random mouse from this population of treated mice has a tumour as being  $p_1$ and similarly the probability $p_2$ that a random mouse from this population of controlled mice having a tumour. 
+
+\end{tcolorbox}
+
+Let the null hypothesis be $H_0 : p_1 = p_2 = p$, where $p$ is the common proportion. We're not able to use the $Z$-test nor the $\chi^2$-test since the sample size is small and since we don't have a specific value for $p$, necessary for both tests. Under the null hypothesis every permutation is equally likely. Imagine the treatment and control status were randomised. Then, if the null hypothesis is true, it would be exchangeable for any mouse - whether or not it got a tumor or was from the treated group or the control group -, Let the observed data be, for example,
+
+\begin{itemize}
+    \item Treatment: T(reated) T T T T C C C C C, \\
+    \item Tumor: T(umor) T T T T N(o tumor) T T N N N 
+\end{itemize}
+
+then the permuted data could be 
+
+\begin{itemize}
+    \item Treatment: T C C T C T T C T C, \\
+    \item Tumor: T T T T N T T N N N.
+\end{itemize}
+
+Note that the total number of treated and the total number of controlled remained fixed whilst the total number of tumor and the total number of non tumors also remained fixed. This seems like a reasonable null distribution to investigate, this is that the treatment and control statistics are exchangeable relative to tumor status, so we'll look at some test statistic relative to this distribution. The consequence of this is, every time we permute treatment and control labels, if we were to reform the two by two table it would have the same margins (five on the row margins and six and four on the column margins).
+Fisher's exact test uses this null distribution to test the hypothesis that $p_1 = p_2$, by explicitly using the idea of randomisation. 
+
+\subsubsection{Hyper-Geometric Distribution}
+
+In the previous section we were basing our analysis on conditions over the data (fixed margins and fixed number of tumors and non-tumors) as well as the randomisation process, under the hypothesis the randomisation is irrelevant (whether any given mouse received treatment or control is irrelevant as long as the margins remain fixed). Let $X$ be the number of tumors for the treated group and $Y$ is the number of tumors for the control group. Let $H_0 : p_1 = p_2 = p$ be the null hypothesis. Under the null hypothesis we have
+
+\begin{align*}
+    X &\sim \textnormal{Binom}(n_1, p), & Y &\sim \textnormal{Binom}(n_2, p), & X+Y &\sim \textnormal{Binom}(n_1+n_2, p),
+\end{align*}
+
+where the last identity follows precisely because, under the null hypothesis, $X$ and $Y$ are a number of iid Bernoulli draws. These assumptions being  made regardless of sample size. We're desiring to construct a probability distribution which doesn't depend with the unknown parameter, $p$. Then
+
+$$
+\mathds{P}\bigg(X = x \bigg| X+Y=z\bigg)= \frac{{{n_1}\choose{x}}{{n_2}\choose{z-x}}}{{{n_1+n_2}\choose{z}}},
+$$
+
+which is the hypergeometric probability mass function, which doesn't depend on $p$ (the so-called conditioning on a sufficient statistic). In effect, we can prove the previous result: 
+
+\begin{align*}
+    \mathds{P}\bigg(X=x\bigg) = {{n_1}\choose{x}} p^x (1-p)^{n_1-x} \\
+    \mathds{P}\bigg(Y=z-x\bigg) =  {{n_2}\choose{z-x}} p^{z-x} (1-p)^{n_2-z+x} \\
+    \mathds{P}\bigg(X+Y=z\bigg) =  {{n_1+n_2}\choose{z}} p^{z} (1-p)^{n_1n_2+x} 
+\end{align*}
+
+The first line is simply the probability of a binomial random variable $X \sim \textnormal{Binom}(n_1,p)$ taking the value $x$. The second line is the probability of $Y$ and $z-x$, where $z-x\in \mathds{Z}_{[0, n_2]}$, and the last line is the probability of $X+Y$ equal to $z$. Then
+
+\begin{align*}
+    \mathds{P}\bigg(X = x \bigg| X+Y=z\bigg) &= \frac{\mathds{P}\bigg(X = x, X+Y=z\bigg)}{\mathds{P}\bigg( X+Y=z\bigg)} \\
+    &= \frac{\mathds{P}\bigg(X = x, Y=z-x\bigg)}{\mathds{P}\bigg( X+Y=z\bigg)} \\
+    &= \frac{\mathds{P}(X=x)\mathds{P}(Y = z-x)}{\mathds{P}(X+Y=z)}
+\end{align*}
+
+where it readily follows that 
+
+$$
+\mathds{P}\bigg(X = x \bigg| X+Y=z\bigg)= \frac{{{n_1}\choose{x}}{{n_2}\choose{z-x}}}{{{n_1+n_2}\choose{z}}}.
+$$
+
+
+\subsubsection{Fisher's Exact Test in Practice and Monte Carlo}
+
+\subsubsection{Chi Squared Testing}
+
+\subsubsection{Testing Independence}
+
+\subsubsection{Generalization}
+
+\subsubsection{Goodness of Fit Testing}
 
 \end{document}
