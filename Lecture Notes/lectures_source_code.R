@@ -116,7 +116,6 @@ In [8]: probability of success
 In [9]:                   0.55 
 
 ------------------
-
 # Performing an Exact Fisher's test
 dat <- matrix(c(4,1,2,3), 2)
 fisher.test(dat, alternative="greater")
@@ -130,3 +129,27 @@ In [6]:  0.3152217       Inf
 In [7]: sample estimates:
 In [8]: odds ratio 
 In [9]:   4.918388 
+
+
+-------------------
+# Chi-squared value 
+
+pchisq(8.96, 1, lower.tail = FALSE) 
+
+In [1]: 0.002
+
+# Performing a chi-squared test 
+dat <- matrix(c(44, 77, 56, 43), 2)
+chisq.test(dat)
+chisq.test(dat, correct = FALSE)
+
+In [1]: Pearsons Chi-squared test with Yates continuity correction
+
+In [2]: data:  dat
+In [3]: X-squared = 8.1667, df = 1, p-value = 0.004267
+
+
+In [4]:	Pearsons Chi-squared test
+
+In [5]: data:  dat
+In [6]: X-squared = 8.963, df = 1, p-value = 0.002755
