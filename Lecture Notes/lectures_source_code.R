@@ -114,3 +114,19 @@ In [6]:  0.3469314 1.0000000
 In [7]: sample estimates:
 In [8]: probability of success 
 In [9]:                   0.55 
+
+------------------
+
+# Performing an Exact Fisher's test
+dat <- matrix(c(4,1,2,3), 2)
+fisher.test(dat, alternative="greater")
+
+In [1]: Fishers Exact Test for Count Data
+In [2]: data:  dat
+In [3]: p-value = 0.2619
+In [4]: alternative  hypothesis: true odds ratio is greater than 1
+In [5]: 95 percent confidence interval:
+In [6]:  0.3152217       Inf
+In [7]: sample estimates:
+In [8]: odds ratio 
+In [9]:   4.918388 
