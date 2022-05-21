@@ -898,8 +898,95 @@ $$
 \mathds{P}\bigg(X = x \bigg| X+Y=z\bigg)= \frac{{{n_1}\choose{x}}{{n_2}\choose{z-x}}}{{{n_1+n_2}\choose{z}}}.
 $$
 
-
 \subsubsection{Fisher's Exact Test in Practice and Monte Carlo}
+
+Let's consider an experiment where we have more tumors for the treated group than for the control group and we wish to calculate an exact P-value using the conditional distribution. The conditional distribution fixes both the row and the column totals. The calculations are permutation-invariant, yielding the same results independently if the rows or columns are fixed. The hypergeometric distribution, derived as a conditional distribution, is identical to the permutation distribution, which randomly permutes treatment and control labels by stringing the data out as the full data set and not as just a two-by-two table. 
+
+All one-sided versions of Fisher's exact test yield the same inference. For two-sided tests, not all test statistics are equal. \\
+
+Consider the alternative hypothesis $H_a: p_1 > p_2$. The P-value requires tables as extreme or more extreme, under the alternative hypothesis, than the one observed. Note we are fixing both the row and the column totals. Let the observed table be
+
+\begin{center}
+Table 1 = 
+\begin{tabular}{ |c|c|c|c| } 
+5 & 4 & 1 \\ 
+5 & 2 & 3 \\  
+10 total & 6 & 4
+\end{tabular}
+\end{center}
+
+The only more extreme table in favour of the alternative is
+
+\begin{center}
+Table 1 = 
+\begin{tabular}{ |c|c|c|c| } 
+5 & 5 & 0 \\ 
+5 & 1 & 4 \\  
+10 total & 6 & 4
+\end{tabular}
+\end{center}
+
+where instead of only four mice from the treated group getting the tumor, all five of them got the tumor and the rest of the cells are fixed since the margins are fixed. 
+
+Then the probabilities are computed using the hypergeometric distribution
+
+\begin{align*}
+    \mathds{P}(\textnormal{Table 1}) &= \mathds{P}(X=4 | X+Y=6) = \frac{{{5}\choose{4}}{{5}\choose{2}}}{{{10}\choose{6}}} = 0.238 \\
+    \mathds{P}(\textnormal{Table 2}) &= \mathds{P}(X=5 | X+Y=6) = \frac{{{5}\choose{5}}{{5}\choose{1}}}{{{10}\choose{6}}} = 0.024 
+\end{align*}
+
+Thus the P-value is is the sum $0.238 + 0.024 = 0.262$. Thus the only way to construct a 5\% confidence interval would be with the last dataset, the most extreme table. This is a consequence of the exact testing. These test guarantee at most a 5\% error rate, not exactly 5\% since the data is discreet and there are only so many probabilities availeable to the P-value. In this example, the only way to reject would be by getting the most extreme table. This calculation can be computed with the following R-routine
+
+\begin{lstlisting}[language=R]
+dat <- matrix(c(4,1,2,3), 2)
+fisher.test(dat, alternative="greater")
+
+#### output 
+
+In [1]: Fishers Exact Test for Count Data
+In [2]: data:  dat
+In [3]: p-value = 0.2619
+In [4]: alternative  hypothesis: true odds ratio is greater than 1
+In [5]: 95 percent confidence interval:
+In [6]:  0.3152217       Inf
+In [7]: sample estimates:
+In [8]: odds ratio 
+In [9]:   4.918388 
+\end{lstlisting}
+
+The simplest way to obtain a two-sided P-value can be is by doubling the smaller of the two one-sided P-value (so as to not obtain a larger than one P-value). The other way for creating a two-sided test statistic, a test statistic that measures whether a table is as or more extreme than the observed table. One example is using the chi-squared test statistic, then calculating the hypergeometric probability for every two by two table satisfying the margins, adding up the probabilities associated with those tables, with the chi-squared statistic, that are bigger (ie. more in favour of the alternative) than the observed table. In this setting, the problem is there's no uniformly most powerful statistic, thus 
+every election for a test statistic results in a power trade-off. \footnote{Fisher's  statistic were the hypergeometric probabilities themselves. In his test, we'd calculate the probabilities for all tables that satisfied the margins and for every table with a hyper geometric probability smaller than the observed hypergeometric probability, would had it's probability summed up to the observed hypergeometric probability, thus obtaining the P-value. The logic for performing this kind of test is that if something arose out of not the null distribution but rather from an alternative distribution, then those tables would have a low probability under the null hypothesis, thus the hypergeometric probabilities are a useful test statistic.}
+
+The discreteness of the problem usually dictates a large P-value for small sample sizes. In the previous example, the second-most extreme table we could possibly obtain had a low probability, winding up with a 26\% P-value. Note that this exact method doesn't distinguish between rows or columns. 
+
+The common value for $P$ under the null hypothesis is called a nuisance parameter. Condition on the total number of successes for both data groups, $X+Y$, eliminates this nuisance parameter $p$. Also, Fisher's exact test guarantees the type I error rate as a bound and not exactly. 
+
+Another form of obtaining a P-value is with the alternative exact unconditional test can be found as 
+
+$$
+\sup_{P} \mathds{P}\bigg(\frac{X}{n_1} > \frac{Y}{n_2}; p\bigg).
+$$
+
+\begin{tcolorbox}[title=Fisher's exact test with Monte Carlo]
+
+Let the observed table have $X=4$ and be 
+
+\begin{itemize}
+    \item T T T T T C C C C C \\
+    \item T T T T N T T N N N 
+\end{itemize}
+
+One thing we could do is to permute the first row:
+
+\begin{itemize}
+    \item T C T T C C C T T T \\
+    \item T T T T N T T N N N 
+\end{itemize}
+
+A Monte-Carlo simulation can be perform and output a hypergeometric P-value. 
+For example, a simulated table has $X=3$ and we would repeat this calculation a great many number of times and calculate the proportion of tables for which the simulated $X \geq 4$ (ie. evidence as or more extreme, in favour of the alternative, than the one observed). This proportion is a Monte Carlo estimate for Fisher's exact P-value 
+
+\end{tcolorbox}
 
 \subsubsection{Chi Squared Testing}
 
