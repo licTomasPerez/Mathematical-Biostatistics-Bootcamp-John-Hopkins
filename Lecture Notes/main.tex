@@ -862,6 +862,8 @@ then the permuted data could be
 Note that the total number of treated and the total number of controlled remained fixed whilst the total number of tumor and the total number of non tumors also remained fixed. This seems like a reasonable null distribution to investigate, this is that the treatment and control statistics are exchangeable relative to tumor status, so we'll look at some test statistic relative to this distribution. The consequence of this is, every time we permute treatment and control labels, if we were to reform the two by two table it would have the same margins (five on the row margins and six and four on the column margins).
 Fisher's exact test uses this null distribution to test the hypothesis that $p_1 = p_2$, by explicitly using the idea of randomisation. 
 
+\clearpage
+
 \subsubsection{Hyper-Geometric Distribution}
 
 In the previous section we were basing our analysis on conditions over the data (fixed margins and fixed number of tumors and non-tumors) as well as the randomisation process, under the hypothesis the randomisation is irrelevant (whether any given mouse received treatment or control is irrelevant as long as the margins remain fixed). Let $X$ be the number of tumors for the treated group and $Y$ is the number of tumors for the control group. Let $H_0 : p_1 = p_2 = p$ be the null hypothesis. Under the null hypothesis we have
@@ -959,7 +961,7 @@ every election for a test statistic results in a power trade-off. \footnote{Fish
 
 The discreteness of the problem usually dictates a large P-value for small sample sizes. In the previous example, the second-most extreme table we could possibly obtain had a low probability, winding up with a 26\% P-value. Note that this exact method doesn't distinguish between rows or columns. 
 
-The common value for $P$ under the null hypothesis is called a nuisance parameter. Condition on the total number of successes for both data groups, $X+Y$, eliminates this nuisance parameter $p$. Also, Fisher's exact test guarantees the type I error rate as a bound and not exactly. 
+The common value for $P$ under the null hypothesis is called a nuisance parameter. Condition on the total number of successes for both data groups, $X+Y$, eliminates this nuisance parameter $p$. Also, Fisher's exact test guarantees the type I error rate as a bound and not exactly. \\
 
 Another form of obtaining a P-value is with the alternative exact unconditional test can be found as 
 
@@ -989,6 +991,121 @@ For example, a simulated table has $X=3$ and we would repeat this calculation a 
 \end{tcolorbox}
 
 \subsubsection{Chi Squared Testing}
+
+We're interested in chi-squared testing for contingency tables and the most classic contingency table test is testing independence. We'll relate that to testing independence of several proportions, generalisations to higher order contingency tables, and Monte-Carlo variations to get the exact tested independence as well as analysing a special kind of independence test, a fit-test which is used to test if the data arrive from a particular distribution. \\
+
+An alternative approach to testing equality of proportions uses the chi-squared statistic
+
+$$
+\sum \frac{(\textnormal{Observed}-\textnormal{Expect})^2}{\textnormal{Expected}} \sim \chi^2_{1},
+$$
+
+where "Observed" are the observed counts, "Expected" are the expected counts under the null hypothesis and the sum is performed for all four cells. The Chi-squared statistic is exactly the square of the difference in proportions Score statistic. It's a weighted distance between observed values and expected theoretical values. Note this test is impervious to directionality. 
+
+\begin{tcolorbox}[title=Example Chi-squared testing]
+
+Let's consider a medical trial where $X$ and $Y$ are two equally effective treatments and we desire to know if one adds more side effects than the other. 
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ Trt & Side Effects & None & Total \\ 
+ X & 44 & 56 & 100 \\ 
+ Y & 77 & 43 & 120 \\
+ & 121 & 99 & 220
+\end{tabular}
+\end{center}
+
+Here we assigned $100$ test subjects to $X$ and $120$ test subjects to $Y$, and our model consists in treating the number of people with side effects out of the total as if they were binomial random variables. Let $p_1$ and $p_2$ be the rates of side-effects for $X$ and $Y$, respectively. The null hypothesis is $H_0: p_1 = p_2$.
+
+The $\chi^2$-statistic is $\sum \frac{(O-E)^2}{E}$ where
+
+\begin{itemize}
+    \item $O_{11}=44$, $E_{11} =\frac{121}{220}\times 100 = 55$, \\
+    \item $O_{21}=77$, $E_{21} =\frac{121}{220}\times 120 = 66$, \\
+    \item $O_{12}=56$, $E_{12} =\frac{99}{220}\times 100 = 45$, \\
+    \item $O_{22}=43$, $E_{22} =\frac{199}{220}\times 100 = 54$,
+\end{itemize}
+
+Note that if the rate of side effects was the same for the two groups, for the two treatments, then our estimate for the common proportion would have to be 
+
+$$
+\frac{\textnormal{Total side effects for X}+\textnormal{Total side effects for Y}}{\textnormal{Total number of test subjects}}= (44+77)/220,
+$$
+
+and we'd use this value as our best estimate for the overall proportion of side effects, regardless of treatment since under the null hypothesis the proportions are assumed equal. Then the number of people we'd expect to see with side effects, for the first group, is $\frac{121}{220}\times 100 = 55$ and $\frac{121}{220}\times 120 = 66$ for the second group. Then for the first group we'd expect to see 1-(total side effects)/(total of test subjects) $= (1-(44+77)/220) \times 100 = 45$ test subjects without side-effects and 1-(total side effects)/(total of test subjects) $= (1-(44+77)/220) \times 120 = 54$ for the second group. Note that these calculations are performed under the null hypothesis using our best estimate for the null hypothesis, $\frac{\textnormal{Total side effects for X}+\textnormal{Total side effects for Y}}{\textnormal{Total number of test subjects}}$, where the margins $100$ and $120$ are fixed by design. Should these expected counts differ substantially from the observed count, then this would be evidence against the null hypothesis. 
+
+$$
+\chi^2 = \frac{(44-55)^2}{55} + \frac{(77-66)^2}{66} + \frac{(56-45)^2}{45} + \frac{(43-54)^2}{54} = 8.96.
+$$
+
+Then we'd compare it to a $\chi^2$ with one degree of freedom to reject for larger values (we favor the alternative hypothesis of the further away from the expected value counts). So the bigger the test statistic is, we're going to favour the alternative, rejecting for large values. This result suggests there's a difference in the rate of side effects between the treatments, but we don't know about the directionality (ie. which one is larger).
+\end{tcolorbox}
+
+The $\chi^2$-value for a one degree of freedom can be computed using the following R-routine
+
+\begin{lstlisting}
+pchisq(8.96, 1, lower.tail = FALSE) 
+In [1]: 0.002
+\end{lstlisting}
+
+We can readily perform a Chi-squared testing with the following R-routine
+
+\begin{lstlisting}[language=R]
+dat <- matrix(c(44, 77, 56, 43), 2)
+chisq.test(dat)
+chisq.test(dat, correct = FALSE)
+
+In [1]: Pearsons Chi-squared test with Yates continuity correction
+
+In [2]: data:  dat
+In [3]: X-squared = 8.1667, df = 1, p-value = 0.004267
+
+
+In [4]:	Pearsons Chi-squared test
+
+In [5]: data:  dat
+In [6]: X-squared = 8.963, df = 1, p-value = 0.002755
+\end{lstlisting}
+
+We don't get exactly the same test-statistic than the one calculated previously since the chi-squared approximation is an asymptotic approximation. But since the counts are discrete, it's possible to improve the chi-squared approximation by the means of continuity correction.\\
+
+In conclusion, we reject if the statistic is too large. The alternative is always two sided, since we're testing if the proportions are equal or not and we do not divide the type I error rate by two, even though we're performing a two-sided test. A small $\chi^2$ implies little difference between the observed values and those expected under $H_0$. The $\chi^2$ statistic and approach generalises to other kinds of tests and larger contingency tables. 
+
+An alternative computational form for the $\chi^2$ statistic is 
+
+$$
+\chi^2= \frac{n(n_{11}n_{22}-n_{12}n_{21})^2}{n_{+1}n_{+2}n_{1+}n_{2+}}.
+$$
+
+where 
+
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ $n_{11} = X$ & $n_{12} = n_{1} - X$ & $n_1 = n_{1+}$ \\ 
+ $n_{21} = Y$ & $n_{22} = n_{2} - Y$ & $n_1 = n_{2+}$ \\ 
+ $n_{+1}$ & $n_{+2}$ & $n$ \\ 
+ \hline
+\end{tabular}
+\end{center}
+
+Notice that the statistic 
+
+$$
+\chi^2= \frac{n(n_{11}n_{22}-n_{12}n_{21})^2}{n_{+1}n_{+2}n_{1+}n_{2+}}.
+$$
+
+doesn't change if you transpose the rows and the columns of the table. Surprisingly, the $\chi^2$ statistic can be used in the following situations:
+
+\begin{itemize}
+    \item the rows are fixed (binomial),
+    \item the columns are fixed (binomial),
+    \item the total sample size if fixed (multinomial),
+    \item none are fixed (Poisson).
+\end{itemize}
+
+For a given set of data, any of these assumptions results in the same value for the statistic. 
 
 \subsubsection{Testing Independence}
 
