@@ -1374,4 +1374,76 @@ If the Wife's rating and the Husband's rating were independent, then the matchin
 
 \subsubsection{Goodness of Fit Testing}
 
+Let's now talk about goodness of fit testing. We're interested in testing R's uniform random number generator. Let the data obtained from a thousand simulations be
+
+\begin{tcolorbox}[title=Example 1 of Goodness of Fit Testing]
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ & [0,.25) & [.25,.5) & [.5,.75) & [.75,1) & Total \\
+ Count & 254 & 235 & 267 & 244 & 1000\\ 
+ TP & .25 & .25 & .25 & .25 & 1 \\ 
+\end{tabular}
+\end{center}
+
+The question to answer is how many uniforms are expected to see between zero and .25, .25 and .5, .5 and .75 and between .75 and 1.0? Therefore our the null hypothesis is $H_0: p_1=p_2=p_3=p_4=.25$ and the alternative hypothesis is $H_a:$ any $p_i \neq p_i^0$, where $p_i^0$ is the $i$th hypothesised value. 
+
+We can calculate the expected counts using the assumed probability density function. Then
+
+\begin{itemize}
+    \item $O_1 = 254$, $E_1 = 1000\times .25  = 250$,
+    \item $O_2 = 235$, $E_2 = 1000\times .25  = 250$,
+    \item $O_3 = 267$, $E_3 = 1000\times .25  = 250$,
+    \item $O_4 = 244$, $E_1 = 1000\times .25  = 250$,
+\end{itemize}
+
+and 
+
+$$
+\sum \frac{(O-E)^2}{E} = 2.264,
+$$
+
+with $df = \textnormal{Cells} - 1 = 3$, which in turn gives a P-value of .52. Note this test only test the uniformness of the random number generator only. 
+\end{tcolorbox}
+
+Let's now consider another example. 
+
+\begin{tcolorbox}[title=Example 1 of Goodness of Fit Testing]
+
+In Mendel's P plant experiment, we are give the following data for phenotype. 
+
+\begin{center}
+\begin{tabular}{ c|c|c|c| } 
+ \hline
+ & Yellow & Green & Total  \\
+ Observed & 6022 & 2001 & 8023 \\ 
+ TP & .75 & .25 & 1 \\
+ Expected 6017.25 & 2005.75 & 8023
+\end{tabular}
+\end{center}
+
+where our null hypothesis is $H_0: p_1 = .75, p_2 = .25$ with our test statistic being 
+
+$$
+\sum \frac{(O-E)^2}{E} = \frac{(6022-6017.25)^2}{6017.25} + \frac{(2001-2005.75)^2}{2005.75} =.015.
+$$
+
+He have a P-value of $.90$ for a single degree of freedom. Now note that Fisher originally combined several of Mendel's tables such that 
+
+$$
+\sum \chi^2_{\nu_i} \sim \chi^2_{\sum \nu_i}
+$$
+
+The statistic was $42$ with 84 degrees of freedom for a total P-value of $.99996$, founding that the data fit Mendel's model too well. 
+\end{tcolorbox}
+
+Let's summarise: For a goodness of fit testing, we are testing whether or not the observed counts correspond to equal theoretical value by using the chi-squared test statistic:
+
+$$
+\sum \frac{(O-E)^2}{E}.
+$$
+
+This is an asymptotic test, since this test statistic follows a $\chi^2$ distribution for large $n$ with the degrees of freedom being the number of cells minus 1. There are others test, such as the Kolmogorov-Smirnov test, which do not require discretization. 
+
 \end{document}
