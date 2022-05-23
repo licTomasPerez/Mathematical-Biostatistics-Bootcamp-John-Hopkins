@@ -860,6 +860,7 @@ then the permuted data could be
 \end{itemize}
 
 Note that the total number of treated and the total number of controlled remained fixed whilst the total number of tumor and the total number of non tumors also remained fixed. This seems like a reasonable null distribution to investigate, this is that the treatment and control statistics are exchangeable relative to tumor status, so we'll look at some test statistic relative to this distribution. The consequence of this is, every time we permute treatment and control labels, if we were to reform the two by two table it would have the same margins (five on the row margins and six and four on the column margins).
+
 Fisher's exact test uses this null distribution to test the hypothesis that $p_1 = p_2$, by explicitly using the idea of randomisation. 
 
 \clearpage
@@ -1049,6 +1050,8 @@ pchisq(8.96, 1, lower.tail = FALSE)
 In [1]: 0.002
 \end{lstlisting}
 
+\clearpage
+
 We can readily perform a Chi-squared testing with the following R-routine
 
 \begin{lstlisting}[language=R]
@@ -1107,9 +1110,267 @@ doesn't change if you transpose the rows and the columns of the table. Surprisin
 
 For a given set of data, any of these assumptions results in the same value for the statistic. 
 
+\clearpage
+
 \subsubsection{Testing Independence}
 
-\subsubsection{Generalization}
+Now we'll use the $\chi^2$ test to analyse independence. Consider the following example
+
+\begin{tcolorbox}[title=Example 1 of Independence Testing]
+
+We're interested in studying Maternal age vs. birthweight. The experiment's sample size is of 400 test subjects but the margins are not fixed ie. the cross-sectional sample is such that only the total sample size is fixed.
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ & & Birthweight \\
+ Mat. Age & $<2500g$ &  $\geq 2500g$ & Total \\ 
+ $<20y$ & 20 & 80 & 100 \\ 
+ $\geq 20y$ & 30 & 270 & 300 \\
+ Total & 50 & 350 & 400
+\end{tabular}
+\end{center}
+
+We'll treat the cell counts as if they were four dimensional multinomial counts with $N=400$. We would like to know is if the variable birth weight is independent of maternal age. Let the null hypothesis be $H_0: \textnormal{MA is independent of BW}$ and let the alternative hypothesis be $H_a: \textnormal{MA is not independent of BW}$. 
+
+Our estimate for the young maternal age can be obtained as
+
+$$
+\mathds{P}(\textnormal{MA} < 20) = \frac{100}{400} = .25,
+$$
+
+the estimated marginal probability of low birth weight is 
+
+$$
+\mathds{P}(\textnormal{BW} < 2500) = \frac{50}{400} = .125.
+$$
+
+Thus, under the null hypothesis, the estimated cell probabilities are readily found to be
+
+\begin{itemize}
+    \item younger and low birth: $\mathds{P}(\textnormal{MA} < 20 \textnormal{ and } \textnormal{BW} < 2500) = \frac{100}{400} \times \frac{50}{400}$,
+    \item younger and high weight: $\mathds{P}(\textnormal{MA} < 20 \textnormal{ and } \textnormal{BW} \geq 2500) =  \frac{100}{400}\times \frac{300}{400}$,
+    \item older and low birth: $\mathds{P}(\textnormal{MA} \geq 20 \textnormal{ and } \textnormal{BW} < 2500) =  \frac{300}{400} \times \frac{50}{400}$,
+    \item older and high birth: $\mathds{P}(\textnormal{MA} \geq 20 \textnormal{ and } \textnormal{BW} \geq 2500) =  \frac{300}{400} \times \frac{350}{400}$.
+\end{itemize}
+
+Note that this calculation is performed under the null hypothesis since the events are independent. Therefore the expected counts are 
+
+\begin{itemize}
+    \item $E_{11} = \frac{100}{400}\times\frac{50}{400} \times 400 = 12.5$, 
+    \item $E_{12} = \frac{100}{400}\times\frac{350}{400} \times 400 = 87.5$,
+    \item $E_{21} = \frac{300}{400}\times\frac{50}{400} \times 400 = 37.5$,
+    \item $E_{22} = \frac{300}{400}\times\frac{350}{400} \times 400 = 262.5$. 
+\end{itemize}
+
+Then the $\chi^2$ is 
+$$
+\chi^2 = \frac{(20-12.5)^2}{12.5} + \frac{(80-87.5)^2}{87.5} + \frac{(30-37.5)^2}{37.5} + \frac{(270-262.5)^2}{262.5} =6.86.
+$$
+
+We can compare with the critical value \texttt{qchisq(.95,1) = 3.84} and calculate a P-value (the probability of getting a test statistic as large as 6.86 or larger) \texttt{pchisq(6.86,1, lower.tail = FALSE) = 0.009}.
+
+The answer obtained in this test is the same as the one obtained in the test proportions, obtaining the same test statistic and P-value, but with a different interpretation (ie. if there was randomisation of the rows). 
+
+\end{tcolorbox}
+
+\clearpage
+
+Let's consider another example:
+
+\begin{tcolorbox}[title=Example 2 of Independence Testing]
+
+We're interested in cross-classifying profession bi alcohol use by studying 300 clergymen, 250 educators, 300 Executives and 350 retailers for a total of 1200 test subjects. Does alcohol use differ by occupation?
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ Group & High Al. Use & Low Al. Use & Total \\
+ Clergy & 32 &  268 & 300 \\ 
+ Educator & 51 & 199& 250 \\ 
+ Executives & 67 & 233 & 300 \\
+ Retailers & 83 &267 & 350 \\
+ Total & 233 & 967 & 1200
+\end{tabular}
+\end{center}
+
+Our interest lies in testing whether or not the proportion of high alcohol use is the same in the four occupations: 
+
+$H_0 : p_1=p_2=p_3=p_4=p$,
+
+and the alternative hypothesis is 
+
+$$
+H_a : \textnormal{at least two of the} p_j \textnormal{are unequal}
+$$
+
+Then, under the null hypothesis (all proffesions have the same rate of high alcohol use), our obvious estimate for the common proportion of high alcohol use is 
+
+$$
+p = \frac{\sum_{i=1}^4\textnormal{Test Subjects with High Al. Use}}{4} =\frac{233}{1200}.
+$$
+
+Then the observed counts and expected values are 
+
+\begin{itemize}
+    \item $O_{11} = 32$, $E_{11} = 300 \times \frac{233}{1200}$, \\
+    \item $O_{12} = 268$, $E_{12} = 300 \times \frac{967}{1200}$,
+    \item $\cdots$
+\end{itemize}
+
+Note that since the margins are fixed, the expected and observed counts must add up to the margins. Then the chi-squared statistic is 
+
+$$
+\sum \frac{(O-E)^2}{E} = 20.59
+$$
+
+with the number of degrees of freedom given by
+
+$$
+df = (\textnormal{Rows} - 1) \times (\textnormal{Columns} - 1) = 3.
+$$
+
+The P-value can be found with the following R-routine: \texttt{pchisq(20.59, 3, lower.tail = FALSE)} $\approx 0$.
+
+This means that some of them are indeed different. 
+\end{tcolorbox}
+
+\subsubsection{Generalisation}
+
+Let's now analyse a generalisation to the chi-squared test for word distributions in the following example: 
+
+\begin{tcolorbox}[title= Example 1 of Generalised Chi-squared Independence Testing]
+
+We're interested in whether the word distributions of these words is equivalent across the three books and we've sampled so many words from each of the books. Let the data be:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+ Wood & Book 1 & Book 2 & Book 3 & Total \\
+ a & 147 & 186 & 101 & 434\\ 
+ an & 25 & 26 & 11 & 62 \\ 
+ this & 32 & 39 & 15 & 86 \\
+ that & 94 & 105 & 37 & 236 \\
+ with & 59 & 74 & 28 & 161 \\
+ without & 18 & 10 & 10 & 38 \\
+ Total & 375 & 440 & 202 & 1017
+\end{tabular}
+\end{center}
+
+Our null hypothesis is the $H_0 : \textnormal{the probabilities of each word are the same for every book}$, and our alternative hypothesis is $H_a : \textnormal{At least two are different}$. We have a multinomial distribution for every column and we desire to test the proportions of these multinomial distributions. 
+
+Then under our null hypothesis, the proportions for a particular word across the three books are equal, so our estimated proportion for "a" would be 
+
+$$
+p_a = \frac{\sum_{i=1}^4\textnormal{"a"-counts for each book}}{4} =\frac{434}{1017}.
+$$
+
+
+The observed counts and expected counts, under the null hypothesis, are 
+
+\begin{itemize}
+    \item $O_{11} = 147$, $E_{11} = 375 \times \frac{434}{1017}$, 
+    \item $O_{12} = 186$, $E_{12} = 440 \times \frac{434}{1017}$, 
+    \item $O_{21} = 25$, $E_{12} = 375 \times \frac{62}{1017}$,
+    \item $\cdots$
+\end{itemize}
+
+where $O_{ij}$ is the number of times the $i$th-word appeared in $j$th-book and where 
+
+$$
+E_{ij} = {\textnormal{Total of words in the } i \textnormal{-book}} \times p_j,
+$$
+
+this is, the $ij$-th expected count is the product of the total number of all words in the $i$th-book times the estimated proportion for the $j$th word. Then, the $\chi^2$ statistic is 
+
+$$
+\sum \frac{(O-E)^2}{E} = 12.27
+$$
+
+with the degrees of freedom being 
+
+$$
+df = (6-1)(3-1) = 10.
+$$
+
+Then, by comparing it to the relevant cut-off gives the result to the experiment. 
+\end{tcolorbox}
+
+\begin{tcolorbox}[title= Example 2 of Generalised Chi-squared Independence Testing]
+
+We're interested in rating couples based sexual intercourse rates. The sample size is 91 couples and we're interested in cross-classifying them. Let the data be:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ Husband & N & F & V & A & Tot \\
+ N & 7 & 7 & 2 & 3 & 19\\ 
+ F & 2 & 8 & 3 & 7 & 20 \\ 
+ V & 1 & 5 & 4 & 9 & 19 \\
+ A & 2 & 8 & 9 & 14 & 33 \\
+ & 12 & 28 & 18 & 33 & 91
+\end{tabular}
+\end{center}
+
+where N: never, F: fairly often, V: very often, A: almost always. Our null hypothesis is $H_0:$ H and W ratings are independent, our alternative hypothesis is $H_a: $ not independent. 
+
+Under the null hypothesis, for example,
+
+$$
+\mathds{P}(H=N \textnormal{ and } W=A) = \mathds{P}(H=N) \mathds{P}(W=A).
+$$
+
+Our relevant statistic is 
+
+$$
+\chi^2 = \sum \frac{(O-E)^2}{E}.
+$$
+
+For example, our observed counts (under the null hypothesis) is $O_{11} = 7$ whilst the expected counts are $E_{11}= 91 \times \frac{19}{91}\times \frac{12}{91} = 2.51$. In general, $E_{ij} = \frac{n_{i+}n_{+j}}{n}$ with the number of degrees of freedom being $df = (\textnormal{Rows}-1)(\textnormal{Columns}-1)$.
+\end{tcolorbox}
+
+We can compute this test with the following R routine
+
+\begin{lstlisting}[language=R]
+x <- matrix(c(7,7,2,3,
+              2,8,3,7,
+              1,5,4,9,
+              2,8,9,14),4
+chisq.test(x)     
+\end{lstlisting}
+
+Which gives 
+
+$$
+\sum \frac{(O-E)^2}{E} = 16.96,
+$$
+
+with $df = 9$ degrees of freedom with a P-value of $.049$. Note that the chi-squared test are asymptotic tests, validated by the central limit theorem. The cell counts might be too small to use a large sample approximation. 
+
+These equal distribution and independence test yield the same results if 
+
+\begin{itemize}
+    \item the row totals are fixed,
+    \item or the column total are fixed, 
+    \item or the total sample size is fixed, 
+    \item or none are fixed. 
+\end{itemize}
+
+Note that mathematically equivalent results applied in different setting may result in wildly different interpretations. \\
+
+We can use a Monte-Carlo approximation to calculate an exact P-value for contingency tables
+
+\begin{tcolorbox}[title=Exact Permutation Test]
+
+Imagine if we got the individual data points as well as the contingency table. Let the raw data be\\
+
+W: NNNNNNNNFFFFFFFVVAAANNFFFFFFF$\cdots$.
+
+H: NNNNNNNNNNNNNNNNNNNNNNNFFFFFF$\cdots$.\\
+
+If the Wife's rating and the Husband's rating were independent, then the matching of the pairs of ratings would be irrelevant (we can map the correct husband to the correct wife or not, according to the null hypothesis this shouldn't matter at all). Thus we can permute either the W or H rows. Recalculate the contingency table we would have the same margins (the same number of husbands answering N, the same number of wives answering N and so on), we can then calculate the $\chi^2$ statistic for each permutation and calculate the percentage of times it is larger than the observed value is the exact P-value by using the R function: \texttt{chisq.test(x, simulate.p.value = TRUE}. 
+
+\end{tcolorbox}
 
 \subsubsection{Goodness of Fit Testing}
 
