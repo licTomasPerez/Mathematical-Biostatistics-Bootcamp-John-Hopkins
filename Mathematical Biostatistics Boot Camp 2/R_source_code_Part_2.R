@@ -225,4 +225,37 @@ P_value
 
 In [1]: 0.484084
 
--------------
+------------- -------------------
+------------- -------------------
+
+#### Quiz 1 - Week 1
+## A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that 
+## received the medication at baseline then two weeks later. The data is given as follows (SBP in mmHg)
+## Test the hypothesis that there was a mean reduction in blood pressure. Compare the difference between a paired and unpaired test for a two sided 5\% level test.
+
+# Part A: one sided two-group ordinary test 
+data_X_group1 <- c(140,138,150,148,135)
+data_Y_group2 <- c(137,136,148,146,133)
+alpha <- .05
+
+diff <- data_X_group1 - data_Y_group2
+n <- sum(!is.na(diff)) # number of pairs of data points
+mu <- mean(diff) # mean of the difference of the data groups
+std_error <- sd(diff) # standard deviation of the data groups 
+
+testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff) 
+
+Pvalue <- 2 * pt(abs(testStat), n-1, lower.tail = FALSE) 
+
+if(Pvalue > alpha/2){
+    print("Reject the null hypothesis")
+} else {
+    print("Fail to reject the null hypothesis")
+}
+
+cat("Mean data group 1", mean(data_X_group1))
+cat("Mean data group 2", mean(data_Y_group2))
+cat("Mean difference", mean(diff))
+cat("TS",testStat)
+cat("P-value", Pvalue)
+
