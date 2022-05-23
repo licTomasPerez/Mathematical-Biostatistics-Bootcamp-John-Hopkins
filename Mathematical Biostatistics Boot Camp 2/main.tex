@@ -349,8 +349,30 @@ which is the same as $(-\infty,\bar{X} + z_{\alpha}\frac{s}{\sqrt{n}})$. \\
 \section{Quiz 1 - Week 1}
 
 \begin{tcolorbox}[title=Question 1]
-In a  random sample of 100 patients at a clinic, you would like to test whether the mean RDI is $x$ or more using a one sided 5\% type 1 error rate. The sample mean RDI had a mean of 12 and a standard deviation of 4. What value of $x$ (testing $H_0 : \mu = x$ versus $H_a : \mu > x$ would you reject for?
+In a  random sample of 100 patients at a clinic, you would like to test whether the mean RDI is $x$ or more using a one sided 5\% type I error rate. The sample mean RDI had a mean of 12 and a standard deviation of 4. What value of $x$ (testing $H_0 : \mu = x$ versus $H_a : \mu > x$) would you reject for?
 \end{tcolorbox}
+
+Let the null hypothesis be $H_0 : \mu = x$ and let the alternative hypothesis be $H_a : \mu > x$, where the sample size is $n=100$, the sample mean RDI is $\mu_0$ is $12$ with a standard deviation of $4$ and a one-sided 5\% type I error rate. Our $Z$-test statistic of interest is 
+
+$$
+TS = \frac{x-\mu_0}{S/\sqrt{n}} = \frac{x-12}{4/\sqrt{100}}.
+$$
+
+In this type of one-sided test, we'll reject in favour of the alternative hypothesis if our sample mean (expressed in standard error units) is enough above $\mu_0$, with the threshold being given by the 95th standard normal quantile. This is 
+
+\begin{align*}
+    TS & \geq z_{1-\alpha} \Rightarrow \frac{x-\mu_0}{S/\sqrt{n}} \geq z_{1-\alpha} \\
+    & \Rightarrow x -\mu_0 \geq z_{1-\alpha} \frac{S}{\sqrt{n}} \\
+    & \Rightarrow x \geq \mu_ 0 +z_{1-\alpha} \frac{S}{\sqrt{n}} 
+\end{align*}
+
+Therefore, plugging in the numbers (given that $z_{95}=1.645$) we get that the rejection region is 
+
+$$
+\textnormal{Rejection Region}(x) = [12.66,\infty).
+$$
+
+ie. we reject in favour of the alternative hypothesis if $x \geq 12.66$
 
 \begin{tcolorbox}[title=Question 2]
 A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. The data
@@ -373,8 +395,100 @@ is given as follows (SBP in mmHg)
 Test the hypothesis that there was a mean reduction in blood pressure. Compare the difference between a paired and unpaired test for a two sided 5\% level test.
 \end{tcolorbox}
 
+In this case, we actually want to perform two tests. An ordinary paired two-group t-test and an independent two-group t-test. Since, in reality, the observations are paired (the data group 1 and data group 2 both consist of observations of the same test subjects), the correct way to do a statistical analysis would be with the ordinary paired two group t-test. \\
+
+Let $X$ represent the mean reduction in blood pressure for the baseline group whilst $Y$ represents the mean reduction in blood pressure for week 2- test subjects and let $\mu_d = \mu_1-\mu_2$, the difference between the paired observation means.
+
+\paragraph{\textbf{Ordinary Paired Two-group t-Test}} We'd like to test the null hypothesis $H_0: \mu_d = 0$ versus $H_a: \mu_d \neq 0$ (or one of the other two alternatives). Our test statistic of interest is 
+
+$$\frac{X-Y}{S_d/\sqrt{n}}$$
+
+where $S_d$ is the standard error, the sample size is $n=5$ and the type one error rate is $\alpha = .05$. This test can be performed with the following R-routine:
+
+\begin{lstlisting}[language=R]
+# Part A: one sided paired two-group ordinary test 
+data_X_group1 <- c(140,138,150,148,135)
+data_Y_group2 <- c(137,136,148,146,133)
+alpha <- .05
+
+diff <- data_X_group1 - data_Y_group2
+n <- sum(!is.na(diff)) # number of pairs of data points
+mu <- mean(diff) # mean of the difference of the data groups
+std_error <- sd(diff) # standard deviation of the data groups 
+
+testStat <- sqrt(n) * (mean(diff) - 0)/sd(diff) 
+
+Pvalue <- 2 * pt(abs(testStat), n-1, lower.tail = FALSE) 
+
+if(Pvalue > alpha){
+    print("Reject the null hypothesis")
+} else {
+    print("Fail to reject the null hypothesis")
+}
+
+cat("Mean data group 1", mean(data_X_group1))
+cat("Mean data group 2", mean(data_Y_group2))
+cat("Mean difference", mean(diff))
+cat("TS",testStat)
+cat("P-value", Pvalue)
+
+In [1]: "Fail to reject the null hypothesis"
+In [2]: Mean data group 1 142.2
+In [3]: Mean data group 2 140
+In [4]: Mean difference 2.2
+In [5]: TS 11
+In [5]: P-value 0.0003881713
+\end{lstlisting}
+
+From this numerical calculation we gt the test statistic is $11$ and the P-value, the probability of obtaining a result as or more extreme than this test statistic, is $3\times 10^{-4}$. Since both $TS = 11 > z_{.975} = 1.96$ and $P < \alpha$, we reject the null hypothesis. \\
+
+\paragraph{\textbf{Independent Two-group t-Test}}
+
+Now, let $H_0 : \mu_1 = \mu_2$ versus $H_a: \mu_1 \neq \mu_2$ (or one of the other two alternatives). Assuming a common error variance we have that the following statistic
+
+$$
+\frac{\bar{X}-\bar{Y}}{S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \sim t_{n_X+n_Y-2},
+$$
+
+where $S_p^2 = \frac{(n_X-1)S_x^2 + (n_Y-1)S_y^2 }{n_X+n_Y-2}$ is the pooled variance. Note that under the null hypothesis $\bar{X}-\bar{Y}$ has a hypothesised mean of $0$ if the data are iid Gaussian. We can perform this calculation with the following R-routine 
+
+\begin{lstlisting}[language=R]
+# Part B: one sided independent two-group ordinary test 
+data_X_group1 <- c(140,138,150,148,135)
+data_Y_group2 <- c(137,136,148,146,133)
+alpha <- .05
+
+mu1 <- mean(data_X_group1)
+mu2 <- mean(data_Y_group2)
+sd1 <- sd(data_X_group1)
+sd2 <- sd(data_Y_group2)
+
+n1 <- n2 <- 5 
+
+sp <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2)) # pooled variance
+testStat <- (mu1 - mu2)/(sp * sqrt(1/n1+1/n2))
+
+t_qt <- qt(1-alpha, n1+n2-2)
+
+if(testStat > t_qt){
+    print("Reject the null hypothesis")
+} else {
+    print("Fail to reject the null hypothesis")
+}
+
+cat("pooled variance", sp)
+cat("test Statistic", testStat)
+cat("95th T-quantile", t_qt)
+
+In [1]: "Fail to reject the null hypothesis"
+In [2]: pooled variance 6.545991
+In [3]: test Statistic 0.5313948
+In [4]: 95th T-quantile 1.859548
+\end{lstlisting}
+
+Thus, for an independent group test, we'd fail to reject the null hypothesis. Contrast this to the previous (the correct) result. \\
+
 \begin{tcolorbox}[title=Question 3]
-Question 3
 Brain volumes for 9 men yielded a 90\% confidence interval of 1,077 cc to 1,123 cc. Would you reject in a two sided 5\% hypothesis test of $H_0: \mu=1,078$? 
 \end{tcolorbox}
 
