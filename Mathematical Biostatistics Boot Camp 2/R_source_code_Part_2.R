@@ -233,7 +233,7 @@ In [1]: 0.484084
 ## received the medication at baseline then two weeks later. The data is given as follows (SBP in mmHg)
 ## Test the hypothesis that there was a mean reduction in blood pressure. Compare the difference between a paired and unpaired test for a two sided 5\% level test.
 
-# Part A: one sided two-group ordinary test 
+# Part A: one sided paired two-group ordinary test 
 data_X_group1 <- c(140,138,150,148,135)
 data_Y_group2 <- c(137,136,148,146,133)
 alpha <- .05
@@ -259,3 +259,35 @@ cat("Mean difference", mean(diff))
 cat("TS",testStat)
 cat("P-value", Pvalue)
 
+# Part B: one sided independent two-group ordinary test 
+
+data_X_group1 <- c(140,138,150,148,135)
+data_Y_group2 <- c(137,136,148,146,133)
+alpha <- .05
+
+mu1 <- mean(data_X_group1)
+mu2 <- mean(data_Y_group2)
+sd1 <- sd(data_X_group1)
+sd2 <- sd(data_Y_group2)
+
+n1 <- n2 <- 5 
+
+sp <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2)) # pooled variance
+testStat <- (mu1 - mu2)/(sp * sqrt(1/n1+1/n2))
+
+t_qt <- qt(1-alpha, n1+n2-2)
+
+if(testStat > t_qt){
+    print("Reject the null hypothesis")
+} else {
+    print("Fail to reject the null hypothesis")
+}
+
+cat("pooled variance", sp)
+cat("test Statistic", testStat)
+cat("95th T-quantile", t_qt)
+
+In [1]: "Fail to reject the null hypothesis"
+In [2]: pooled variance 6.545991
+In [3]: test Statistic 0.5313948
+In [4]: 95th T-quantile 1.859548
