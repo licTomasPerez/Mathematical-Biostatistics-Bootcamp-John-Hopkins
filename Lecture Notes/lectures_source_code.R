@@ -153,3 +153,20 @@ In [4]:	Pearsons Chi-squared test
 
 In [5]: data:  dat
 In [6]: X-squared = 8.963, df = 1, p-value = 0.002755
+
+--------------------
+
+# Performing a Generalised Chi-squared test
+x <- matrix(c(7,7,2,3,
+              2,8,3,7,
+              1,5,4,9,
+              2,8,9,14),4)
+chisq.test(x)     
+
+In [1]: Pearson's Chi-squared test
+
+In [2]: data:  x
+In [3]: X-squared = 16.955, df = 9, p-value = 0.04942
+
+In [4]: Warning message:
+In [5]: In chisq.test(x) : Chi-squared approximation may be incorrect
