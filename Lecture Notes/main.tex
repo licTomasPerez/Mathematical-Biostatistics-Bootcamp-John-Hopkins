@@ -14,11 +14,9 @@
 
 \subsubsection{Hypothesis testing}
 
-Hypothesis testing is concerned with making decisions using data. We label a null hypothesis as $H_0$. The null hypothesis is assumed true and statistical evidence is required to rejected in favor of an alternative hypothesis. 
+Hypothesis testing is concerned with making decisions using data. We label a null hypothesis as $H_0$. The null hypothesis is assumed true and statistical evidence is required to rejected in favour of an alternative hypothesis. \\
 
-For example, a respiratory disturbance index of more than 30 events/hour is considered evidence of severe sleep disorder breathing. Suppose that in a sample of 100 overweight subjects with other risk factors for sleep disordered breathing at a sleep clinic, the mean RDI was 32 events/hour with a standard deviation of 10 events/hour.
-
-We might want to test the hypothesis that 
+For example, a respiratory disturbance index of more than 30 events/hour is considered evidence of severe sleep disorder breathing. Suppose that in a sample of 100 overweight subjects with other risk factors for sleep disordered breathing at a sleep clinic, the mean RDI was 32 events/hour with a standard deviation of 10 events/hour. We might want to test the hypothesis that 
 
 \begin{itemize}
     \item $H_0 : \mu = 30$ 
@@ -27,6 +25,7 @@ We might want to test the hypothesis that
 
 where $\mu$ is the population mean RDI. The alternative hypothesis are typically of the form $<,> or \neq$. Note that there four possible outcome of our statistical decision process
 
+\begin{center}
 \begin{tabular}{ |p{1cm}||p{5cm}|p{5cm}|  }
  \hline
  \multicolumn{3}{|c|}{Statistical decision process} \\
@@ -36,7 +35,8 @@ where $\mu$ is the population mean RDI. The alternative hypothesis are typically
  $H_0$  & Correctly accept null & Type I error\\
  $H_a$ &  Type II error & Correctly reject null\\
  \hline
-\end{tabular} \\
+\end{tabular}
+\end{center}
 
 \begin{itemize}
     \item The type I error rate is a false positive \textit{ie.} the mistaken rejection of a (true) null hypothesis. 
@@ -54,6 +54,9 @@ For example, the probability of a Type I error and according to the Central Limi
 \end{align}
 
 Hence $\frac{C-30}{1}=1.645$ implying $C=31.645$. Now, since our mean is $32$ we reject the null hypothesis. We can plot a the 95th percentile of the standard normal distribution with the following R routine:
+
+\clearpage
+
 \begin{lstlisting}[language=R]
 xval <-  seq(-3.2, 3.2, length=1000)
 yval <- dnorm(xval)
@@ -64,7 +67,7 @@ text(mean(x), mean(dnorm(x))+0.2, "5%", cex=2)
 text(qnorm(.95), .01, "1.645",cex=2),
 \end{lstlisting} 
 
-which outputs plot \ref{fig: normal Z test}.
+which outputs plot \ref{fig: normal Z test}. 
 
 \begin{figure}
     \centering
