@@ -38,6 +38,21 @@ Then, we reject the null hypothesis in favour of the alternative hypothesis. \\
 
 \begin{tcolorbox}[title=Question 2]
 A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. The data are as follows (SBP in mmHg)
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+Subject & Baseline & Week2 \\ [0.5ex] 
+ \hline
+1 & 140 & 132 \\ 
+2 & 138 & 135 \\
+3 & 150 & 151 \\
+4 & 148 & 146 \\
+5 & 135 & 130 \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center}
+
 \end{tcolorbox}
 
 We are dealing with a pair of two non-independent data groups, thus we are to perform a two-sided paired test. Let $H_0: \mu_d = 0$ versus $H_a: \mu_d \neq 0$ where $\mu_d$ is the mean difference between followup and baseline. Our statistic of interest for this \textbf{ordinary paired two-group T-test} is 
@@ -47,13 +62,6 @@ $$
 $$
 
 Then, with the following R routine, we can know weather to reject or fail to reject the null hypothesis.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.7]{figs/data points_week1.png}
-    \caption{Data Points in mmHg}
-    \label{fig:data}
-\end{figure}
 
 \begin{lstlisting}[language=R]
 group1 = c(140,138,150,148,135) # R-array of group 1-data points
@@ -345,17 +353,25 @@ In a  random sample of 100 patients at a clinic, you would like to test whether 
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 2]
-A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. 
+A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. The data
+is given as follows (SBP in mmHg)
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+ Baseline & Week2 \\ [0.5ex] 
+ \hline
+ 140 & 138 \\ 
+ 138 & 136 \\
+ 150 & 148 \\
+ 148 & 146 \\
+ 135 & 133 \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center}
+
 Test the hypothesis that there was a mean reduction in blood pressure. Compare the difference between a paired and unpaired test for a two sided 5\% level test.
 \end{tcolorbox}
-
-The data are as follows (SBP in mmHg)
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.6]{figs/Quiz_1/quiz1-ex2.png}
-    \caption{Quiz 1 - Exercise 2}
-    \label{fig:my_label}
-\end{figure}
 
 \begin{tcolorbox}[title=Question 3]
 Question 3
@@ -363,33 +379,38 @@ Brain volumes for 9 men yielded a 90\% confidence interval of 1,077 cc to 1,123 
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Question 4]
-In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock (simulated) ER under the new and old triage system. 
-Give a Pvalue for the test of the hypothesis that the new system resulted in lower waiting times for a one sided t test.
+In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock (simulated) ER under the new and old triage system. Let the waiting times in natural log of hours be:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+\hline
+ Subject & 1 & 2 & 3 & 4 & 5 \\ [0.5ex]
+ \hline
+ New & 0.929 & -1.745 & 1.677 & 0.701 & 0.128 \\ 
+ Old & 2.233 & -2.513 & 1.204 & 1.938 & 2.533 \\
+ \hline
+\end{tabular}
+\end{center}
+
+Give a P-value for the test of the hypothesis that the new system resulted in lower waiting times for a one sided t test.
 \end{tcolorbox}
 
-Let the waiting times in natural log of hours be:
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.6]{figs/Quiz_1/quiz1-ex4.png}
-    \caption{Quiz 1 - Exercise 4}
-    \label{fig:my_label}
-\end{figure}
-
 \begin{tcolorbox}[title=Question 5]
-Refer to the previous question. Give a 95\% T confidence interval for the ratio of the waiting times (recall that the measurements were natural logged).
+Refer to the previous question. Give a 95\% T confidence interval for the ratio of the waiting times (recall that the measurements were natural logged). The data is 
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+\hline
+ Subject & 1 & 2 & 3 & 4 & 5 \\ [0.5ex]
+ \hline
+ New & 0.929 & -1.745 & 1.677 & 0.701 & 0.128 \\ 
+ Old & 2.233 & -2.513 & 1.204 & 1.938 & 2.533 \\
+ \hline
+\end{tabular}
+\end{center}
 
 In an effort to improve efficiency, hospital administrators are evaluating a new triage system for their emergency room. In an validation study of the system, 5 patients were tracked in a mock (simulated) ER under the new and old triage system. Their waiting times in natural log of hours were:
 \end{tcolorbox}
-
-Here's the data and setting again. 
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.6]{figs/Quiz_1/quiz1-ex5.png}
-    \caption{Quiz 1 - Exercise 5}
-    \label{fig:my_label}
-\end{figure}
 
 \begin{tcolorbox}[title=Question 6]
 Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was -3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI over the two year period appear to differ between the treated and placebo groups?  Assuming normality of the underlying data and a common population variance, give a pvalue for a two sided t test.
