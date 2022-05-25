@@ -1449,4 +1449,115 @@ $$
 
 This is an asymptotic test, since this test statistic follows a $\chi^2$ distribution for large $n$ with the degrees of freedom being the number of cells minus 1. There are others test, such as the Kolmogorov-Smirnov test, which do not require discretization. 
 
+\clearpage
+
+\subsection{Week 4}
+
+\subsubsection{Simpson's Paradox}
+
+We're interested in a cross classification of defendants from criminal trials by the race of the victim in murder trials and their relation to a death penalty verdict. Consider the data given in \ref{fig:Data Groups}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.8]{figs/data points_week4.png}
+    \caption{Data Groups}
+    \label{fig:Data Groups}
+\end{figure}
+
+By close inspection of the data we see that white defendants receive the death penalty a fewer percentage of the time, 11\% compared to 22\%, for both white and black victims. Zero of the white defendants received the death penalty whilst 2.8\% for the black victims. 
+
+But, if we disregard the race of the victim, it turns out that white defendants receive the death penalty a greater percentage of the time, 11\% compared to 7.9\%. And if we look the race of the victim, disregarding the race of the defendant, actually in the instance where the victim was white, the defendant received the death penalty a higher percentage of the time, 12.4\% compared to a 2.5\%. 
+
+In this setting, what would be the conclusion about death penalty verdicts vs. defendants and victim's race? A priori, we get two totally different and contradictory answers, depending if we're analysing the raw data itself or the marginal probabilities. Which one is the right answer? \\
+
+Let's analyse the data:
+
+\begin{itemize}
+    \item Marginally, white defendants received the death penalty a greater percentage of the time than black defendants.
+    \item Across white and black victims, black defendant's received the death penalty a greater percentage of the time than white defendants. 
+\end{itemize}
+
+Simpson's paradox refers to the fact that marginal and conditional associations can be opposing. The death penalty was enacted more often for the murder of a white victim than a black victim. Whites tend to kill whites (demographically), hence the larger marginal association. Thus, Simpson's paradox states that two variables can change when factoring a third variable\footnote{For further research, see Larry Wasserman's post "The normal deviate" on Simpson's Paradox.}. 
+
+\subsubsection{Simpson's Paradox, more examples}
+
+Consider now the following example. We're interested in comparing two player's batting averages. Let the data be 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{figs/data points_week4_part2.png}
+    \caption{Caption}
+    \label{fig: Data groups}
+\end{figure}
+
+Player 1 has a better batting average than Player 2 in both the first and second half of the season, yet has a worse batting average overall.  Player 1 had a very good batting average when they had relatively few bats and a modest batting average when they had lots of bats and vice-versa for player two. 
+
+A famous example of Simpson's paradox is present in UC Berkeley Admissions data. We're given a certain dataset and and the total number of admitted and rejected applications for males and females, as it can be seen in \ref{fig: Data group ucb}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{figs/data points_week4_part3.png}
+    \caption{Berkeley Admissions data}
+    \label{fig: Data group ucb}
+\end{figure}
+
+It turns out the male acceptance rate was higher than the females' acceptance rate, disregarding everything else. But if we study the acceptance rates by departments, it turns out that in almost every department, males had a lower acceptance rate than females. There are different gender acceptance rates by department. \\
+
+Mathematically, Simpson's paradox is not paradoxical. Let $a,\cdots,h \in \mathds{Z}$, then 
+
+\begin{align*}
+   \textnormal{if } a/b < c/d \textnormal{ and } e/f < g/h \Rightarrow (a+e)/(b+f) > (c+g)/(d+h)
+\end{align*}
+
+In statistical terms, it says that the apparent relationship between two random variables can change in the light or absence of a third random variable. It's only when we conflate the probabilistic statements and the evidence associated with probabilistic statements, vis a vie the data, with the causal statements, that so-called paradoxes may arise. In general, it's a non-trivial problem to determine how much conditioning is enough on a given dataset so as to extract reliable conclusion. This problem of confounding is treated by the Causal inference sub-discipline.  
+
+\subsubsection{Weighting and Confounding}
+
+Variable that are correlated with the explanatory and response variables can distort the estimated effect. In our previous example, victim's race was clearly correlated with the defendant's race and the death penalty verdict. With a confounder present, we're not able to distinguish an event being causally related with race in the death penalty experiment versus something that has a statistical association with race and death penalty verdict. We're interested in events or random variables which have a statistical association with the explanatory and response variables, where there is a plausible causal connection between them. 
+
+Let's assume we have a single confounder. How do we deal with it? One way is with regression, whilst another strategy in categorical data analysis to adjust for confounding variables is to stratify by the confounder and then combine the strata-specific estimates. This requires appropriately weighting the strata-specific estimates. Note that unnecessary stratification reduces precision. \\
+
+Suppose we have two unbiased scales, one with a variance of 1lb and the other one with variance of 9lbs. Confronted with weights from both scales, would you give both measurements equal creedance?
+
+Suppose that we weigh a certain object with the first scale. This is represented by a random variable which we assume to be normal, $X_1 \sim \mathcal{N}(\mu, \sigma_1^2)$. Similarly, weighing this object in the second scales gives another random variable which we assume to be normal as well, $X_2 \sim \mathcal{N}(\mu, \sigma_2^2)$. Note that both $\sigma_1$ and $\sigma_2$ are known. We'd like to estimate $\mu$, then the log-likelihood for $\mu$ is 
+
+$$
+-\frac{(x_1-\mu)^2}{2\sigma_1^2}-\frac{(x_2-\mu)^2}{2\sigma_2^2} + \cdots,
+$$
+
+where the dots stand for terms which don't depend on $\mu$. We take the derivative with respect to $\mu$ and we set it to zero:
+
+\begin{align*}
+-\frac{(x_1-\mu)}{\sigma_1^2}-\frac{(x_2-\mu)}{\sigma_2^2} = 0 \\
+\Rightarrow\frac{x_1r_1+x_2r_2}{r_1+r_2} = x_1 p_1 + x_2(1-p),
+\end{align*}
+
+where $r_i = \frac{1}{\sigma_i^2}$ and $p = \frac{r_1}{r_1+r_2}$. Note that if $X_1$ has very low variance, then its term dominates the estimate for $\mu$. The general principle thus being: instead of averaging over several unbiased estimates, take a single average weighted according to the inverse variances. In our example, $\sigma_1^2 =1$,  $\sigma_2^2 =9$ so $p=.9$.  
+
+\subsubsection{CMH Test}
+
+\subsubsection{Case Control Sampling}
+
+\subsubsection{Exact inference for the Odds Ratio}
+
+\subsubsection{Matched 2x2 Tables}
+
+\subsubsection{Dependence and Marginal Homogeneity}
+
+\subsubsection{Estimation of the Marginal Difference in Proportions}
+
+\subsubsection{Odds and Ends for Matched 2x2 Tables}
+
+\subsubsection{The Sign Test}
+
+\subsubsection{The Sign Rank Test}
+
+\subsubsection{The Rank Sum Test}
+
+\subsubsection{Poisson Distribution}
+
+\subsubsection{Poisson Likelihood}
+
+\subsubsection{Poisson P-value Calculation}
+
 \end{document}
