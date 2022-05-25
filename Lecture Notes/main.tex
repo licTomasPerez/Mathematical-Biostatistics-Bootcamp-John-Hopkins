@@ -23,7 +23,7 @@ For example, a respiratory disturbance index of more than 30 events/hour is cons
     \item $H_a : \mu > 30$ 
 \end{itemize}
 
-where $\mu$ is the population mean RDI. The alternative hypothesis are typically of the form $<,> or \neq$. Note that there four possible outcome of our statistical decision process
+where $\mu$ is the population mean RDI. The alternative hypothesis are typically of the form $<,> or \neq$. Note that there four possible outcome of our statistical decision process\\
 
 \begin{center}
 \begin{tabular}{ |p{1cm}||p{5cm}|p{5cm}|  }
@@ -43,15 +43,15 @@ where $\mu$ is the population mean RDI. The alternative hypothesis are typically
     \item The type II error rate is a false negative \textit{ie.} the mistaken acceptance of a (false) null hypothesis, we failed to reject a false $H_0$.
 \end{itemize}
 
-Let $\alpha$ denote the type I error rate, the probability of rejecting the null hypothesis when, in fact, then null hypothesis is correct. We'd like to minimise this kind of error. Considering our previous example, a reasonable strategy would reject the null hypothesis if $\Bar{X}$ was larger than some constant $C \in \mathds{R}_{+}$. Typically, $C$ is chosen so that the probability of a Type I error $\alpha$ is 0.05
+Let $\alpha$ denote the type I error rate, the probability of rejecting the null hypothesis when, in fact, then null hypothesis is correct. We'd like to minimise this kind of error. Considering our previous example, a reasonable strategy would reject the null hypothesis if $\Bar{X}$ was larger than some constant $C \in \mathds{R}_{+}$. Typically, $C$ is chosen so that the probability of a Type I error $\alpha$ is 0.05. \\
 
 For example, the probability of a Type I error and according to the Central Limit Theorem we have  
 
-\begin{align}
+\begin{align*}
         .05 &= \mathds{P}\bigg(\Bar{X}\geq C \bigg| \mu = 30 \bigg) \\
         &=\mathds{P}\bigg(\frac{\Bar{X}-30}{10/\sqrt{100}}\geq \frac{C-30}{10/\sqrt{100}} \bigg| \mu = 30 \bigg) \\
         &= \mathds{P}\bigg(Z\geq \frac{C-30}{10/\sqrt{100}}\bigg)
-\end{align}
+\end{align*}
 
 Hence $\frac{C-30}{1}=1.645$ implying $C=31.645$. Now, since our mean is $32$ we reject the null hypothesis. We can plot a the 95th percentile of the standard normal distribution with the following R routine:
 
@@ -96,15 +96,13 @@ Let $H_0 : \mu = \mu_0$ be the null hypothesis, then let
 where the test statistic $TS = \frac{\Bar{X}-\mu_0}{S/\sqrt{a}}$ (expressing the mean in standard error units), where $S/\sqrt{a}$ is the standard error. Thus, we reject the null hypothesis when 
 
 \begin{itemize}
-\item $H_1: TS \leq -Z_{1-\alpha}$ \textit{ie.} we reject $H_0$ in favour of $H_1$ if our sample mean is enough below $\mu_0$,
-    \item $H_2: |TS| \geq  Z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is too small. }, 
-    \item $H_3: TS \geq Z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
+    \item $H_1: TS \leq -z_{1-\alpha}$ \textit{ie.} we reject $H_0$ in favour of $H_1$ if our sample mean is enough below $\mu_0$,
+    \item $H_2: |TS| \geq  z_{1-\alpha/2}$ \textit{ie.} we reject in favour of $H_2$ if our sample mean is enough too different from $\mu_0$ (either too large or too small)\footnote{In this case, we look at the $(1-\alpha/2)\times 100\%$ error rate, we divide the probability of a type I error into half of it being accidentally rejected because of sample mean being too large and the other half of it being accidentally rejected because the sample mean is too small. }, 
+    \item $H_3: TS \geq z_{1-\alpha}$ \textit{ie.} we reject in favour of $H_3$ if our sample mean is enough above $\mu_0$.
 \end{itemize}
 \end{tcolorbox}
 
-The region of TS values for which the null hypothesis is rejected is the rejection region. In the case of $H_1$, the upper normal quantile and above is the rejection region, for $H_2$ it's the negative quantile and below or the upper quantile and above and finally, in the case of $H_3$, the normal quantile and below is the rejection region.
-
-We can graphically represent the second case, the case of a two-sided tail test, with the following R routine
+The region of TS values for which the null hypothesis is rejected is the rejection region. In the case of $H_1$, the upper normal quantile and above is the rejection region, for $H_2$ it's the negative quantile and below or the upper quantile and above and finally, in the case of $H_3$, the normal quantile and below is the rejection region. We can graphically represent the second case, the case of a two-sided tail test, with the following R routine
 
 \begin{lstlisting}[language=R]
 xval <-  seq(-3.2, 3.2, length=1000)
@@ -131,6 +129,8 @@ text(0, dnorm(0)/5, "95%",cex=2)
 \end{figure}
 
 In hypothesis testing, we fix the $\alpha$ (type I error value) to be low. So if we reject the null hypothesis, either our model is wrong or there is a low probability that we made and error. We haven't fixed the probability of a type II error $\beta$, therefore we tend to say "fail to reject $H_0$" rather than accepting $H_0$. In general, less is known about the type II error. Statistical significance is not the same as scientific significance. 
+
+\clearpage
 
 \subsubsection{Two sided tests}
 
@@ -171,6 +171,8 @@ text(0, dt(0,15)/5, "95%", cex=2)
 
 which outputs figure \ref{fig: two sided Student's T test}. \\
 
+\clearpage
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{figs/two sided T test.png}
@@ -205,7 +207,7 @@ This states that if $\mu_0$ lies inside the confidence interval, the we've faile
 In our previous example, we rejected the one-sided test when $\alpha = .05$, would we reject it if $.01$ or $.001$?
 
 The smallest value for $\alpha$ that you still reject the null hypothesis is called the \textbf{attained significance level}. This equivalent, but philosophically different, from the \textbf{P-value}.
-The P-value (same number but different concept) is the probability, under the null hypothesis, of obtaining evidence as extreme or more extreme than would be observed by chance alone, where chance is governed by the null distribution. If the P-value is small, then either $H_0$ is true and we have observed a rare event, given that the null hypothesis is true, or $H_0$ is false. It quantifies whether or not getting a test statistic as or more extreme than you observed was rare under the null hypothesis. If it's rare, then that casts some doubt on the veracity of the null hypothesis. 
+The P-value (same number but different concept) is the probability, under the null hypothesis, of obtaining evidence as extreme or more extreme than would be observed by chance alone, where chance is governed by the null distribution. If the P-value is small, then either $H_0$ is true and we have observed a rare event, given that the null hypothesis is true, or $H_0$ is false. It quantifies whether or not getting a test statistic as or more extreme than you observed was rare under the null hypothesis. If it's rare, then that casts some doubt on the veracity of the null hypothesis. \\ 
 
 In our example, the $T$ statistic was $0.8$. What's the probability of getting a $T$ statistic as large as $0.8$? This can be computed with the following R code 
 
@@ -221,8 +223,6 @@ where \texttt{pt} stands for $T$ probability, \texttt{lower.tail = FALSE} indica
     \item If the P-value is larger than $\alpha$, we fail to reject $H_0$. 
     \item If the P-value is smaller than $\alpha$, we reject $H_0$
 \end{itemize}
-
-\clearpage
 
 This can be understood via the following R routine 
 
@@ -332,8 +332,7 @@ Regarding the first item, if we're requiring less evidence to reject the null hy
 &= \mathds{P}\bigg(Z+\frac{\sqrt{n}(\mu_{a}-30)}{{\sigma}}>\frac{t_{1-\alpha, n-1}}{\sqrt{n-1}} \sqrt{\chi^2_{n-1}}\bigg| \mu = \mu_a \bigg),
 \end{align*}
 
-where $Z \sim \mathcal{N}(0,1)$ is the independent standard normal and where $\chi^2_{n-1}$ is the chi-squared random variable with $n-1$ degrees of freedom. In regards to the first expression, the power is the probability that our test statistic lies in the rejection region and it's performed under the alternative hypothesis and, in regards to the second-to-last expression, if the data are iid Gaussian $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ and can be computed with the Monte-Carlo method, by simulating pairs of $Z$ random variables and $\chi^2$ random variables and evaluating this inequality for every pair. Note that, in general, $\mu_a$ per sé needs not to be specified, what we need to know is how different is $\mu_a$ from $\mu_0$ in standard deviation units. This quantity, $\frac{\mu_a-\mu_0}{\sigma}$, is called an effect size is a unit free quantity. For example, a Monte Carlo simulation 
-can be performed to calculate the last expression for the RDI example with the following R code
+where $Z \sim \mathcal{N}(0,1)$ is the independent standard normal and where $\chi^2_{n-1}$ is the chi-squared random variable with $n-1$ degrees of freedom. In regards to the first expression, the power is the probability that our test statistic lies in the rejection region and it's performed under the alternative hypothesis and, in regards to the second-to-last expression, if the data are iid Gaussian $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ and can be computed with the Monte-Carlo method, by simulating pairs of $Z$ random variables and $\chi^2$ random variables and evaluating this inequality for every pair. Note that, in general, $\mu_a$ per sé needs not to be specified, what we need to know is how different is $\mu_a$ from $\mu_0$ in standard deviation units. This quantity, $\frac{\mu_a-\mu_0}{\sigma}$, is called an effect size is a unit free quantity. For example, a Monte Carlo simulation can be performed to calculate the last expression for the RDI example with the following R code
 
 \begin{lstlisting}[language=R]
 no_sim <- 100000 # number of simulation to perform 
