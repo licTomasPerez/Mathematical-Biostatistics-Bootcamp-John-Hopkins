@@ -1533,7 +1533,49 @@ where the dots stand for terms which don't depend on $\mu$. We take the derivati
 
 where $r_i = \frac{1}{\sigma_i^2}$ and $p = \frac{r_1}{r_1+r_2}$. Note that if $X_1$ has very low variance, then its term dominates the estimate for $\mu$. The general principle thus being: instead of averaging over several unbiased estimates, take a single average weighted according to the inverse variances. In our example, $\sigma_1^2 =1$,  $\sigma_2^2 =9$ so $p=.9$.  
 
-\subsubsection{CMH Test}
+\subsubsection{C Mantel Haenszel Estimator and Test}
+
+Consider the death penalty statistical trial. We have two two-by-two tables, were we are given the data of the defendant's race and whether or nor they got a death penalty verdict and then we stratified that by a third random variable, the victim's race. Thus, let $n_{ijk}$ be the $ij$th-entry of the $k$th-table. In other words, $k=1$ is the first victim's race, $k=2$ is the second victim's race and so on, then $i$ and $j$ would index defendant's race and whether or not the person got the death penalty. The $k$th-sample odds ratio (main diagonal elements divided by the off-diagonal elements) is given by 
+
+$$
+\hat{\theta}_k = \frac{n_{11k}n_{22k}}{n_{12k}n_{21k}},
+$$
+
+The Mantel Haenszel estimator is the weighted average of these strata-specific estimates and is given by
+
+\begin{align*}
+    \hat{\theta} = \frac{\sum_{k}r_{k}\hat{\theta}_k}{\sum_{k}r_{k}}\textnormal{ where the weights are } r_k = \frac{n_{12k}n_{21k}}{n_{++k}},
+\end{align*}
+
+this is, in essence, a simplicial convex combination of the strata-specific odds ratios. The weights are in essence inverse variances of hypergeometric distributions. The estimator simplifies to\footnote{
+The standard error can be found in Agresti (page 235) or Rosner (page 656)} 
+
+$$
+\hat{\theta}_{MH} = \frac{\sum_{k}\frac{n_{11k}n_{22k}}{n_{++k}}}{\sum_{k}\frac{ n_{12k}n_{21k}}{n_{++k}}}.
+$$
+
+Let's now consider the following example of a medication's medical trial with the dataset given in \ref{fig: CMH test}. Let T be the active drug, C the placebo, S stands for success and F for failure. We're interested in whatever policies and practices existed at the various centers at which the data was collected by the means of a center-stratification with 8 strata. Then we have eight odds ratio and we wish to analyse if the center, as a random variable, was a confound. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figs/data points_week4_part4.png}
+    \caption{Dataset for a medical trial in the context of a CMH test.}
+    \label{fig: CMH test}
+\end{figure}
+
+Let's first imagine if the center was specifically associated with the treatment application (some centers tended to apply the treatment more than others) and that the center was associated with the success of the treatment due to different policies. In order to gain insight, we stratify by center, obtain a strata-specific odds ratio and then factoring in the inverse variance of the odds ratios (since some centers have more patients than others). For example, center 1, with 73 test subjects, has more weight in the final result than center 7, which only has 14 test subjects; since the first center has a better, more precise, odds ratio. Therefore, the Mantel Haenszel estimate is 
+
+$$
+\theta_{MH} = \frac{(11 \times 27)/73+(16 \times 10)/25+ \cdots + (4 \times 1)/13}{(10 \times 25)/73+(4 \times 22)/25+\cdots +(6 \times 2)/13} = 2.13,
+$$
+
+also $\log \theta_{MH} = .758$ and $\hat{SE}_{\log \theta_{MH}} = .303$. 
+
+Another rationale for a stratified-estimate, is that we're under the impression that the center is at some level, a random effect, and is a modifier for the treatment. The centers studied are a random draw from the population of centers, and since we're not interested in a given center's specific (ie. we don't care if treatment worked at center number 1 or not), we care only if it worked overall. Therefore a CMH test is an average over a certain number of random draws from a given population of centers and quantifies it's effect on the treatment. This is called \underline{common odds ratio across centers}.\\
+
+Now, we're interested in testing if the common odds ratios are equal to 1. Let $\theta_i$ be the $i$th-strata-specific odds ratio, then let $H_0 : \theta_1 = \cdots=\theta_k = 1$ versus the alternative $H_a : = \cdots=\theta_k \neq 1.$ The CMH test does apply to the other alternatives but it works best for the previous alternative hypothesis. This test is, in essence, the same as the test for conditional independence of response and exposure given the stratifying variable. In the Cochran Mantel Haenszel test is executed by conditioning on the rows (similarly as Fisher's exact test) and columns for each of the $k$ contingency tables, resulting in $k$ hypergeometric distributions and leaving only the $n_{11k}$ cells free.  
+
+
 
 \subsubsection{Case Control Sampling}
 
