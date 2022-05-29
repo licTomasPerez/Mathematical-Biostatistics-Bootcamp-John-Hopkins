@@ -163,10 +163,32 @@ x <- matrix(c(7,7,2,3,
               2,8,9,14),4)
 chisq.test(x)     
 
-In [1]: Pearson's Chi-squared test
+In [1]: Pearsons Chi-squared test
 
 In [2]: data:  x
 In [3]: X-squared = 16.955, df = 9, p-value = 0.04942
 
 In [4]: Warning message:
 In [5]: In chisq.test(x) : Chi-squared approximation may be incorrect
+
+--------------------
+
+# Performing a Cochran Mantel-Haenszel test to determine whether or not the odds ratio is one, given that it's common across all strata
+
+dat <- array(c(11, 10, 25, 27,  16, 22,  4, 10,
+               14,  7,  5, 12,   2,  1, 14, 16,
+                6,  0, 11, 12,   1,  0, 10, 10,
+                1,  1,  4,  8,   4,  6,  2,  1),
+             c(2,2,8))
+mantelhaen.test(dat, correct=FALSE)
+
+In [1]: Mantel-Haenszel chi-squared test without continuity correction
+
+In [2]: data:  dat
+In [3]: Mantel-Haenszel X-squared = 6.3841, df = 1, p-value = 0.01151
+In [4]: alternative hypothesis: true common odds ratio is not equal to 1
+In [5]: 95 percent confidence interval:
+In [6]: 1.177590 3.869174
+In [7]: sample estimates:
+In [8]: common odds ratio 
+In [9]:         2.134549
