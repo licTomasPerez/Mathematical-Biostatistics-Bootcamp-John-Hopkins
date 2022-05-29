@@ -1582,11 +1582,139 @@ also $\log \theta_{MH} = .758$ and $\hat{SE}_{\log \theta_{MH}} = .303$.
 
 Another rationale for a stratified-estimate, is that we're under the impression that the center is at some level, a random effect, and is a modifier for the treatment. The centers studied are a random draw from the population of centers, and since we're not interested in a given center's specific (ie. we don't care if treatment worked at center number 1 or not), we care only if it worked overall. Therefore a CMH test is an average over a certain number of random draws from a given population of centers and quantifies it's effect on the treatment. This is called \underline{common odds ratio across centers}.\\
 
-Now, we're interested in testing if the common odds ratios are equal to 1. Let $\theta_i$ be the $i$th-strata-specific odds ratio, then let $H_0 : \theta_1 = \cdots=\theta_k = 1$ versus the alternative $H_a : = \cdots=\theta_k \neq 1.$ The CMH test does apply to the other alternatives but it works best for the previous alternative hypothesis. This test is, in essence, the same as the test for conditional independence of response and exposure given the stratifying variable. In the Cochran Mantel Haenszel test is executed by conditioning on the rows (similarly as Fisher's exact test) and columns for each of the $k$ contingency tables, resulting in $k$ hypergeometric distributions and leaving only the $n_{11k}$ cells free.  
+Now, we're interested in testing if the common odds ratios are equal to 1. Let $\theta_i$ be the $i$th-strata-specific odds ratio, then let $H_0 : \theta_1 = \cdots=\theta_k = 1$ versus the alternative $H_a : \theta_1 = \cdots=\theta_k \neq 1.$ The CMH test does apply to the other alternatives but it works best for the previous alternative hypothesis. This test is, in essence, the same as the test for conditional independence of response and exposure given the stratifying variable. In the Cochran Mantel Haenszel test is executed by conditioning on the rows (similarly as Fisher's exact test) and columns for each of the $k$ contingency tables, resulting in $k$ hypergeometric distributions and leaving only the $n_{11k}$ cells free. Under the conditioning and under the null hypothesis, 
 
+\begin{align*}
+    \mathds{E}(n_{11k}) = \frac{n_{1+k}n_{+1k}}{n_{++k}} \textnormal{ and } \mathds{V}\textnormal{ar}(n_{11k}) = \frac{n_{1+k}n_{2+k}n_{+1k}n_{+2k}}{n_{++k}^2(n_{++k}-1)}.
+\end{align*}
 
+Then the CMH test statistic is 
+$$
+\frac{[\sum_{k}(n_{11k}-\mathds{E}(n_{1+k}))^2]}{\sum_{k} \mathds{V}\textnormal{ar}(n_{11k})},
+$$
+
+the sum of the deviations of the upper left-hand cells from their expected values, summed up. Contrast this to the chi-squared test, where they are first squared and then summed up. For many large sample sizes and under the null hypothesis, this test statistic is $\chi^2(1)$, regardless of how many table are being summed up. Remember that the CMH test is used when we're interested in analysing whether or not the odds ratio is one, given that it's common across all strata. An CMH can be performed in R using the following R routine
+
+\begin{lstlisting}[language=R]
+dat <- array(c(11, 10, 25, 27,  16, 22,  4, 10,
+               14,  7,  5, 12,   2,  1, 14, 16,
+                6,  0, 11, 12,   1,  0, 10, 10,
+                1,  1,  4,  8,   4,  6,  2,  1),
+             c(2,2,8))
+mantelhaen.test(dat, correct=FALSE)
+
+In [1]: Mantel-Haenszel chi-squared test without continuity correction
+
+In [2]: data:  dat
+In [3]: Mantel-Haenszel X-squared = 6.3841, df = 1, p-value = 0.01151
+In [4]: alternative hypothesis: true common odds ratio is not equal to 1
+In [5]: 95 percent confidence interval:
+In [6]: 1.177590 3.869174
+In [7]: sample estimates:
+In [8]: common odds ratio 
+In [9]:         2.134549
+\end{lstlisting}
+
+The result for the CMH test statistic is 6.38 and we'll compare this to $\chi^2(1)$ value and we're going to reject for larger values. Since the P-value is $0.012$ the CMH test suggest that the treatment and response are not conditionally independent given center. \\
+
+It's possible to perform an analogous test in a random effects logit model that benefits from a complete model specification. It's also possible to test heterogeneity of the strata-specific odds radio. It's also possible to test if all the odds ratios are equal by the means of a Wolffe's tests. Note that exact test, which guarantee the type I error rate, are also possible in R by the means of the \texttt{exact = TRUE} command. 
 
 \subsubsection{Case Control Sampling}
+
+In this section, we're going to treat case control methods, the instance where using using retrospective case control data and a so called rare disease assumption, we can estimate prospective odds ratios; and finally the exact inference for odds ratios. \\
+
+Let's start by studying retrospective in reference sampling. We're interested in studying lung cancer cases and controls and to ascertain whether or not they were a smoker. There are two ways to collect this data: we could follow a given number of test subjects over time, some of them would smoke, and some of then wouldn't, and then we could quantify the amount of positive lung cancer diagnosis. This sampling method is inadequate and impossible for large sample sizes. Another form to obtain this data would be by finding a given number of positive lung cancer patients and find the same number of controls, at some level comparable to the first group. And the we'd retrospectively determine whether or not they were smokers. The margins for both groups are fixed (both are 709). In case-control studies, it's also the norm to find a control which very closely matches a specific case and repeat this procedure for all cases. 
+Let the data be given by the following table
+
+\begin{center}
+Table 1 = 
+\begin{tabular}{ |c|c|c|c| } 
+& Lung cancer & \\
+\hline
+Smoker & Cases & Controls & Total \\
+\hline
+Yes & 688 & 650 & 1338 \\ 
+No & 21 & 59 & 80\\  
+\hline 
+& 709 & 709 & 1418
+\end{tabular}
+\end{center}
+
+We're interested in ascertaining who is a smoker and whether or not the cases group had a greater proportion of smokers and to make prospective conclusions to this retrospective data. It's impossible to directly estimate $\mathds{P}(\textnormal{Case}|\textnormal{Smoker})$, but it's possible to estimate $\mathds{P}(\textnormal{Smoker}|\textnormal{Case})$ given the data. We can also estimate the odds ratios in particular, we're interested in the odds of being a case given that the test subject is a smoker relative to the odds of becoming a case given that the test subject is a non-smoker. But this is equivalent to finding the odds of being a smoker given that the test subject is a case relative to the odds of being a smoker given that the test subject is a case. This is
+
+$$
+\frac{Odds(\textnormal{Case}|\textnormal{Smoker})}{Odds(\textnormal{Case}|\textnormal{Smoker}^c)} = \frac{Odds(\textnormal{Smoker}|\textnormal{case})}{Odds(\textnormal{Smoker}|\textnormal{case}^c)}.
+$$
+
+Let $C$ stand for Case, and $S$ for smoker, then
+
+\begin{align*}
+    \frac{Odds(\textnormal{Case}|\textnormal{Smoker})}{Odds(\textnormal{Case}|\textnormal{Smoker}^c)} &=\frac{\mathds{P}(C|S)/\mathds{P}(\bar{C}|S)}{{\mathds{P}(C|\bar{S})/\mathds{P}(\bar{C}|\bar{S})}} = \frac{\mathds{P}(C, S)/\mathds{P}(\bar{C}, S)}{{\mathds{P}(C, \bar{S})/\mathds{P}(\bar{C}, \bar{S})}}\\
+    &=\frac{\mathds{P}(C, S)\mathds{P}(\bar{C}, \bar{S})}{{\mathds{P}(C, \bar{S})\mathds{P}(\bar{C}, {S})}},
+\end{align*}
+
+which is the probability of caseness and smokerness times by the probability of being neither a case nor a smoker divided by the product of the off-diagonal probabilities. Note that
+by exchanging $C$ and $S$ we get the same result since $\mathds{P}(A,B)=\mathds{P}(B,A)$. 
+
+Remember that the sample odds ratio is $\frac{n_{11}n_{22}}{n_{12}n_{21}}$, which remains unchanged if a row or column is multiplied by a constants, and is transpose-invariant (the odds ratio do not change by changing which factor is the outcome and which factor is the predictor). \\
+
+Now, it turns out that the odds ratio is related to the relative risk. In effect
+
+\begin{align*}
+    OR &= \frac{\mathds{P}(S|C)/\mathds{P}(\bar{S}|C)}{{\mathds{P}(S|\bar{C})/\mathds{P}(\bar{S}|\bar{C})}} \\
+    &= \frac{\mathds{P}(C|S)/\mathds{P}(\bar{C}|S)}{{\mathds{P}(C|\bar{S})/\mathds{P}(\bar{C}|\bar{S})}} \\
+    &= \frac{\mathds{P}(C|S)}{\mathds{P}(C|\bar{S})} \frac{\mathds{P}(\bar{C}|\bar{S})}{\mathds{P}(\bar{C}|S)}\\
+    &= RR \times \frac{1- \mathds{P}(C | \bar{S})}{1- \mathds{P}(C | {S})} \textnormal{ where } RR =   \frac{\mathds{P}(C|S)}{\mathds{P}(C|\bar{S})}
+\end{align*}
+
+where in line 2 we reversed the odds ratio. Note that the odds ratio aproximates the relative risk if $\mathds{P}(\bar{C}|\bar{S})$ and $\mathds{P}(C|\bar{S})$ are nearly equal or very small. This is case when the case-ness is very small ie. regardless of whether a test subject smokes or not, the probability of lung cancer is very small. This is the case of the \textbf{rare disease assumption} which implies $OR \approx RR$. It's important to clarify that, for the rare disease assumption to be valid, it has to be rare among the exposed and non-exposed both, not rare overall.
+
+Consider the following example 
+
+\begin{tcolorbox}[title=Example of Rare Disease Assumption]
+
+Let the data be given by the following table
+
+\begin{center}
+Table 2 = 
+\begin{tabular}{ |c|c|c|c| } 
+& Disease & \\
+\hline
+Exposure & Yes & No & Total \\
+\hline
+Yes & 9 & 1 & 10 \\ 
+No & 1 & 999 & 1000\\  
+\hline 
+& 10 & 1000 & 1010
+\end{tabular}
+\end{center}
+
+The estimated probability of the disease is $\hat{\mathds{P}}(D) = \frac{10}{1010}\approx .01$, the odds ratios is $\hat{OR}=\frac{9\times 999}{1 \times 1} = 8991$, $\hat{RR}=\frac{9/10}{1/1000} = 900$. Disease is rare overall but it's not rare among the exposed which explains why the odds ratio doesn't approximate the relative risk. 
+\end{tcolorbox}
+
+Let's do a recap:
+
+\begin{itemize}
+    \item $OR=1$ implies no association between the data, 
+    \item $OR >1$ implies a positive association
+    \item whilst $OR < 1$ implies a negative association. 
+    \item For retrospective case control studies, the odds ratio can be interpreted prospectively.
+    \item For diseases rare among both the case and control groups, the odds ratio approximate the relative risk.
+    \item The delta method gives the standard error for the logarithm of the odds ratio as 
+    $$
+    \sqrt{\frac{1}{n_{11}}+\frac{1}{n_{12}}+\frac{1}{n_{21}}+\frac{1}{n_{22}}}
+    $$
+\end{itemize}
+
+Going back to table 1 and the lung cancer example we have that the estimated odds ratio is $\hat{OR}= \frac{688 \times 59}{21 \times 650} = 3.0$, the estimated standard error for the logarithm of the estimated odds ratio is 
+
+$$
+\hat{SE}_{\log \hat{OR}} = \sqrt{\frac{1}{688}+\frac{1}{650}+\frac{1}{21}+\frac{1}{59}} = .26.
+$$
+
+The confidence interval at 95\% confidence is $CI= \log(3.0) \pm 1.96 \times .26 = [.59, 1.61]$.
+
+Note that the estimated odds of lung cancer for smokers is three times that of the odds for non-smokers with an interval of [exp(.59), exp(1.61)] = [1.80, 5.00]. 
 
 \subsubsection{Exact inference for the Odds Ratio}
 
