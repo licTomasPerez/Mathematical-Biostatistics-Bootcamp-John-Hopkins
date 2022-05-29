@@ -1718,6 +1718,43 @@ Note that the estimated odds of lung cancer for smokers is three times that of t
 
 \subsubsection{Exact inference for the Odds Ratio}
 
+Let $X$ be the number of smokers for the cases and $Y$ be the number of smokers for the controls. The margins are fixed and $X$ and $Y$ are random numbers modelled as binomial distributions. We desire to calculate an exact confidence interval for the odds ratio. In order to do that, first we need to eliminate the nuisance parameter. 
+
+Let $\textnormal{logit}(p)=\log\frac{p}{1-p}$ be the log-odds. The differences in logits are the log-odds ratios ($\textnormal{logit}(p_1) -\textnormal{logit}(p_2) = \textnormal{logit}(p_1/p_2) $.
+
+\begin{align*}
+   & \textnormal{If } \textnormal{logit}(\mathds{P}(\textnormal{Smoker}|\textnormal{Case}))=\delta \textnormal{ then }\mathds{P}(\textnormal{Smoker}|\textnormal{Case}) =\frac{e^{\delta}}{1+e^{\delta}}, \\
+   &\textnormal{If } \textnormal{logit}(\mathds{P}(\textnormal{Smoker}|\textnormal{Control}))=\delta + \theta \textnormal{ then }\mathds{P}(\textnormal{Smoker}|\textnormal{Control}) =\frac{e^{\delta+ \theta}}{1+e^{\delta+ \theta}},
+\end{align*}
+
+where $\theta$ is the log-odds ratio and $\delta \in \mathds{R}$ is the nuisance parameter, which we wish to eliminate. If $X \sim \textnormal{Binom}\bigg(n_1, p_1 = \frac{e^{\delta}}{1+e^{\delta}}\bigg)$ and if $Y \sim \textnormal{Binom}\bigg(n_2, p_2 = \frac{e^{\delta+ \theta}}{1+e^{\delta+ \theta}}\bigg)$, then 
+
+\begin{align*}
+\mathds{P}(X = x) &= {{n_1}\choose{x}} \bigg( \frac{e^{\delta}}{1+e^{\delta}}\bigg)^x\bigg( \frac{1}{1+e^{\delta}}\bigg)^{n_1-x} \\
+&= {{n_1}\choose{x}} e^{x\delta} \bigg( \frac{1}{1+e^{\delta}}\bigg)^{n_1}.
+\end{align*}
+
+Then 
+
+\begin{align*}
+   \mathds{P}(Y = z-x) &=  {{n_2}\choose{z-x}} e^{(z-x)\delta+(z-x)\theta}\bigg( \frac{1}{1+e^{\delta+\theta}}\bigg)^{n_2}.
+\end{align*}
+
+Thus, since $X$ and $Y$ are not identically distributed we have 
+
+\begin{align*}
+    \mathds{P}(X+Y = z) = \sum_{u} \mathds{P}(X=u) \mathds{P}(Y=z-u).
+\end{align*}
+
+Finally, the probability that the random variable $X$ takes a particular value $x$ given that the sum of random variables $X+Y$ takes on a particular value $z$ is 
+
+\begin{align*}
+    \mathds{P}(X=x | X+Y = z; \theta) &= \frac{\mathds{P}(X=x)\mathds{P}(Y=z-x)}{\sum_{u}\mathds{P}(X=u)\mathds{P}(Y=z-u)} \\
+    &= \frac{{{n_1}\choose{x}}{{n_2}\choose{z-x}}e^{x\theta}}{\sum_{u}{{n_1}\choose{u}}{{n_2}\choose{z-u}}e^{u\theta}},
+\end{align*}
+
+this distribution is so called the non-central hypergeometric distribution, where $\theta$ is the log odds ratio\footnote{Note this test is similar to Fisher's exact test but the difference lies in that we haven't assumed the null hypothesis to be true and depends on $\theta$.} and it doesn't depend on $\delta$ (we've conditioned on $X+Y$ and eliminated the nuisance parameter). This distribution can then be used to calculate exact hypothesis tests for $H_0: \theta = \theta_0$. Inverting said exact test yields the exact confidence interval for the odds ratio. Note that this distribution simplifies to the hypergeometric distribution for $\theta = 0$ and the test is none other than Fisher's exact test. The R-routine \texttt{Fisher.test} performs this calculation. 
+
 \subsubsection{Matched 2x2 Tables}
 
 \subsubsection{Dependence and Marginal Homogeneity}
