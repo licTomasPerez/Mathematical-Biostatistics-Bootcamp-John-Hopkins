@@ -1773,7 +1773,67 @@ In this case, 749 had the same positive opinion in both surveys and 150 approved
 
 \subsubsection{Dependence and Marginal Homogeneity}
 
+Matched binary data can arise from 
+
+\begin{itemize}
+    \item Measuring a response at two occasions, 
+    \item matching on case status in a retrospective study,
+    \item or by matching on exposure status in a prospective or cross-sectional study.
+\end{itemize}
+
+Matching in general induces dependence which need to be accounted for in the analysis. 
+The pairs on binary observations are dependent, so our existing methods are no longer applicable. We'll discuss the process of making conclusions about the marginal probabilities and odds. We'll assume independence across pairs and dependence within pairs. 
+
+Let's consider a general example for matched tables and notations. Consider figure \ref{fig:notations} and the standard contigency table notation given in table 1.  
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figs/data points_week4_part6.png}
+    \caption{Notation convention for matched 2x2 tables.}
+    \label{fig:notations}
+\end{figure}
+
+We assume that $(n_{11},n_{12}, n_{21},n_{22})$ are multinomial with $n$ trials and success probabilities $(\pi_{11},\pi_{12},\pi_{21},\pi_{22})$ respectively. This is, every time 1-time 2 collection pair of measurements, is going to be a one or a zero in exactly in one of these four locations. So the person will have either said yes at both occasions, a yes and no, a no and a yes or no at both occasions. The probability of being a one in the $ij$th-cell is $\pi_{ij}$. Note that $\pi_{1+}$ and $\pi_{+1}$ are the marginal probabilities of a yes response at the two occasions, this is $\pi_{1+} = \mathds{P}(\textnormal{Yes}|\textnormal{Time 1})$ (regardless of Time 2's results) and $\pi_{+1} = \mathds{P}(\textnormal{Yes}|\textnormal{Time 2})$ (regardless of Test 1's results). Similarly for the second set of $\pi_2$.\\
+
+We define marginal homogeneity is the hypothesis $H_0: \pi_{1+}=\pi_{+1}$ which is equivalent to the (transpose) symmetry of the off-diagonal elements $H_0: \pi_{12}=\pi_{21}$\footnote{This statement is only true for 2-by-2 tables and doesn't stand for more general cases.}. The obvious estimate for $\pi_{12}-\pi_{21}$ is 
+
+$$
+\frac{n_{12}}{n} - \frac{n_{21}}{n},
+$$
+
+which quantifies how far away from symmetry the data is ie. how far away from marginal homogeneity the data is. 
+Note that under the null hypothesis, a consistent estimate of the variance is $
+\frac{n_{12}+n_{21}}{n^2}.$
+
+Therefore the $z$-statistic is the previous estimate divided by the standard error ie. 
+
+$$
+\frac{(n_{12}-n_{21})^2}{n_{12}+n_{21}} \underset{\textnormal{asymp.}}{\sim} \chi^2_{1}.
+$$
+
+This is the so-called \textbf{McNemar's test statistic}, and we reject the null hypothesis if the test statistic is large. Notice only discordant cells enter into the test, both $n_{12}$
+and $n_{21}$ carry the relevant information about whether or nor $\pi_{1+}$ and $\pi_{+1}$ differ. Notice $n_{11}$ and $n_{22}$ contribute information to estimating the magnitude of this difference. \\
+
+Consider the approval rating example. In that case, we have $86$ and $150$ as the off-diagonal cells, then the test statistic is $\frac{(86-150)^2}{86+150} = 17.36$, with a P-value of $3\times 10^{-5}$. Hence, we reject the null hypothesis and conclude there is evidence to suggest a change in opinion between the two polls. This test can be performed via the following R routine
+
+\begin{lstlisting}[language=R]
+mcnemar.test(matrix(c(794, 86, 150, 570), 2),
+             correct=FALSE)
+\end{lstlisting}
+
+which doesn't applies a continuity correction. \\
+
 \subsubsection{Estimation of the Marginal Difference in Proportions}
+
+We'd also like to construct a confidence interval for our test. Let $\hat{\pi}_{ij} = \frac{n_{ij}}{n}$ be the estimated sample proportions and we're interested in estimating $d = \hat{\pi}_{1+}-\hat{\pi}_{+1}= \frac{n_{12}-n_{21}}{n}$, the difference in marginal proportions. The variance of $d$, in general (needing not the null hypothesis to be true) is 
+
+$$
+\sigma^2_d = \frac{1}{n} \times \bigg[{\pi}_{1+}(1-{\pi}_{1+})+{\pi}_{+1}(1-{\pi}_{+1})-2({\pi}_{11}{\pi}_{22}-{\pi}_{12}{\pi}_{21})\bigg],
+$$
+
+where the last term accounts for the correlation in the dataset, where $\frac{d-({\pi}_{1+}-{\pi}_{+1})}{\hat{\sigma}_d} \underset{\textnormal{asymp.}}{\sim} \mathcal{N}(0,1)$, from where it's trivial to construct the confidence interval. \\
+
+We could also compare $\sigma_d^2$ with what we would use if the proportions were independent, this is: instead of asking the same test subjects on two occasion whether or not they approve, what if we tested a different set of people each time? it would be logical to think that people who approved on the first occasion, would be more likely to approve on the second occasion, and the same logic applies to disapproval rates; the measurements tend to be concordant. This happens when ${\pi}_{11}{\pi}_{22} > {\pi}_{12}{\pi}_{21}$, tending to lie on the main diagonal, which implies a dramatic reduction in the variance. Failing to account for the fact that the same people were asked twice, would imply a much wider, less precise, confidence interval. 
 
 \subsubsection{Odds and Ends for Matched 2x2 Tables}
 
