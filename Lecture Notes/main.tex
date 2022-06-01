@@ -1837,6 +1837,70 @@ We could also compare $\sigma_d^2$ with what we would use if the proportions wer
 
 \subsubsection{Odds and Ends for Matched 2x2 Tables}
 
+Now, let's go through our example:
+
+\begin{itemize}
+    \item the difference in marginal proportions is $d= \frac{944}{1600}-\frac{880}{1600} = .59 - .55 = .04$,
+    \item $\hat{\pi}_{11}=.50$, $\hat{\pi}_{12}=.09$, $\hat{\pi}_{21}=.05$, $\hat{\pi}_{22}=.36$, 
+    \item $\hat{\sigma}_d^2 = \frac{.59(1-.59)+.55(1-.55) - 2\times(.50 \times .36 - .09 \times .05}{1600}$, thus $\hat{\sigma}_d = .0095$.
+    \item $95\% CI = .04 \pm 1.96 \times 0.095 = [.06, .02]$.
+\end{itemize}
+
+Note that ignoring dependence would yield $\hat{\sigma}_d = .0175$, giving a lower performing confidence interval. \\
+
+There's a non-trivial relationship to the Cochran-Mantel-Haenszel test and the matched 2-by-2 tables. Consider the situation in which we take each pair and represented their time, first and second, and report their responses, either a yes or a no. This can be thought as an extremely stratified setting where every strata has the two measurements. Doing this leaves only four possible tables, pictured in \ref{fig:matched-2x2-cmh}. These tables will exactly reproduce the two-by-two table. 
+
+\begin{figure}
+    \centering
+    \includegraphics{figs/data points_week4_part7.png}
+    \caption[scale=.5]{Relationship to the Cochran-Mantel-Haenszel test.}
+    \label{fig:matched-2x2-cmh}
+\end{figure}
+
+The McNemar's test is equivalent to the CMH test where subject is the stratifying variable and each 2$\times$2 table is the observed zero-one table for that subject. This is useful only as a theoretical justification. Performing the CMH test on these heavily-stratified dataset, the tables, with the stratifying variable being the subjects results in McNemar's test. \\
+
+McNemar's test has an exact version. Consider the off-diagonal cells, $n_{12}$ and $n_{21}$. Under the null hypothesis $H_0 : \frac{\pi_{12}}{\pi_{12}+\pi_{21}} = .5$. Therefore, under $H_0$, $n_{21} |n_{12}+n_{21}$ is binomial with success probability $.5$ and $n_{12}+n_{21}$ trials. We can use this result to construct an exact P-value for matched pairs data. Under the null hypothesis, the two off-diagonal probabilities are identical. Landing on either of the off-diagonal cells is a fair coin-toss for every matched pair. We'd have evidence against $H_0$ if the said number of trials were not equal. This is related to the \textbf{non-parametric sine test}, under the null hypothesis, results should exchangeable whether they agree in terms of approving and disapproving or disapproving and approving. 
+
+Consider the approval rating data. Let $H_0 : \pi_{21}=\pi_{12}$ versus the alternative $H_a: \pi_{21} < \pi_{12} \equiv \pi_{+1}<\pi_{1+}$, where $\pi_{+1}$ is the approval at time 2 disregarding time 1 whilst $\pi_{1+}$ is the approval at time 1 disregarding time 2. We're testing if the approval at time 2 is lower that the approval at time 1. 86 people disapproved on the first survey and approved on the second survey ($n_{21}$ cell). In particular, we're going to test if that is smaller than what would be expected by chance and find the probability of getting data as or more extreme in favour of the alternative case: $\mathds{P}(X \leq 86 |86 + 150) = .0 \textnormal{ where } X\sim \textnormal{Bin}(p=.5, n=236).$ We then reject the null hypothesis. For two sided tests, we can double the smaller of the two one-sided tests. \\
+
+The marginal odds ratio is the odds of approval at time 1 relative to the odds of approval at time 2:
+
+$$
+\frac{\pi_{1+}/\pi_{2+}}{\pi_{+1}/\pi_{+2}} = \frac{\pi_{1+}\pi_{+2}}{\pi_{+1}\pi_{2+}}.
+$$
+
+which is the quotient of the odds of approval at time 1 divided by the odds of approval at time 2 in the denominator, its a marginal odds ratio since we're dealing with marginal probabilities. Note this is in essence a paired-group test since the same sample group was tested twice. 
+The maximum likelihood estimate of the marginal log odds ratio is 
+
+$$
+\hat{\theta} = \log \frac{\pi_{1+}\pi_{+2}}{\pi_{+1}\pi_{2+}},
+$$
+
+and the asymptotic variance of this estimator is 
+
+$$
+\frac{1}{\pi_{1+}\pi_{2+}} + \frac{1}{\pi_{+1}\pi_{+2}} - 2\frac{(\pi_{11}\pi_{22}-\pi_{12}\pi_{21})/(\pi_{1+}\pi_{2+}\pi_{+1})\pi_{+2}}{n},
+$$
+
+which can then be used to calculate a confidence interval for a two by two dataset. 
+
+In the approval rating example, the marginal OR compares the odds of approval at time 1 to that at time 2. Then $\hat{\theta}= \log(944\times 720/(880\times656)) = .16$, with an estimated standard error of $.039$. Therefore the confidence interval for the log odds ratio is $.16 \pm 1.96 \times .039 = [.084, .236]$. \\
+
+Let's imagine if we created a logit model for our approval rating data. 
+
+\begin{align*}
+   & \textnormal{logit}(\mathds{P}(\textnormal{Person } i \textnormal{ says Yes at Time 1}) = \alpha + U_i \\
+    & \textnormal{logit}(\mathds{P}(\textnormal{Person } i \textnormal{ says Yes at Time 2}) = \alpha + \gamma + U_i,
+\end{align*}
+
+where each $U_i$ contains person-specific random effects. A person with a large $U_i$ is likely to answer Yes at both occasions, where $\gamma$ is the \textbf{log odds ratio} comparing a response of Yes at Time 1 to a response of Yes at Time 2, which is a subject specific effect. If we subtract the log odds of a yes responde for two different people, the $U_i$ terms wouldn't cancel. One way to eliminate $U_i$ is to perform a conditional estimate, and to condition on the total number of Yes responses for each person: 1. if they answered yes or no on both ocassion then you know both responses, therefore only discordant pairs have any relevant information after conditioning. Therefore, the conditional ML estimate for $\gamma$ and its standard error are
+
+\begin{align*}
+    \log \frac{n_{21}}{n_{12}} & \sqrt{\frac{1}{n_{21}}+\frac{1}{n_{21}}}.  
+\end{align*}
+
+The marginal ML has a marginal interpretation. The effect is averaged over all of the values of $U_i$. The conditional ML estimate has a subject specific interpretation. Marginal interpretations are in general more useful for policy type statements. Policy makers tend to be interested in how factors influence populations. Subject specific interpretations are more useful in clinical applications. Physicians are interested in how many factor influence the individuals. 
+
 \subsubsection{The Sign Test}
 
 \subsubsection{The Sign Rank Test}
