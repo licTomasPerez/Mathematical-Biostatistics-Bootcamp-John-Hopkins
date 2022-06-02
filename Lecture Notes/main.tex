@@ -1903,6 +1903,36 @@ The marginal ML has a marginal interpretation. The effect is averaged over all o
 
 \subsubsection{The Sign Test}
 
+In this section we'll treat some non-parametric tests, which include the sign test, the signed rank test (useful for paired tests),  Monte-Carlo simulations of said test, independent groups, the Mann-Whitney test and their relationship to permutation tests. \\
+
+In general, distribution-free methods require fewer assumptions than parametric methods. In said types of test, the focus is on testing rather than estimation and are not sensitive to outlying observation. These are specially suited to analyse cruder data, like ranks, and discard some of the information in the data, which is a downside. Therefore they may be less powerful than parametric counterparts, even when the parametric assumptions are true. For large-enough samples, they are equally efficient to parametric counterparts. 
+
+Consider the following example, where 25 fish were tested at two locations for their mercury levels in parts per million. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{figs/data points_week4_part8.png}
+    \caption{Dataset for the Sign test.}
+    \label{fig: sign test}
+\end{figure}
+
+In this dataset, since the same fish were tested at two different locations, each fish serves as its own control. Therefore with a non-parametric test we're interested in analysing the validity of the assumptions, such as normality. 
+
+Let $D_i = \textnormal{difference} (P-SR)$, let $\theta$ be the population median of the difference $D_i$. The null hypothesis is $H_0: \theta = 0$ versus $H_a: \theta \neq 0$, or one of the other two alternatives. By definition of the median, $\theta=0$ if and only if $p = \mathds{P}(D>0)=.5$.
+Assuming iid data, let $X$ be the number of times $D>0$ which in turn implies $X\sim \textnormal{Binom}(n,p)$. The sign tests whether $H_0: p=.5$ using X, if $X$ is excessively large or excessively small, this would dispute the null hypothesis, by performing an exact binomial test.\\
+
+Consider the previous example. Let $\theta = \textnormal{median difference } p - sr$, with the null hypothesis being $H_0: \theta = 0$ versus the alternative hypothesis being  $H_a: \theta \neq 0$. The number of instances where the difference is bigger than 0 is 15 out 25 trials. From the R-function, we can test if 15 out 25 trials is excessively larger than 12.5 \texttt{binom.test(15,25)} which gives the \texttt{p-value = .4244}, thus there's a 42\% chance of happening under the null hypothesis for a two sided test. Or we could have used large sample tests for a binomial proportion:
+
+\begin{lstlisting}[language=R]
+prop.test(15, 25, p=.5)
+X-squared = .64, df = 1, p-value = 0.4237
+\end{lstlisting}
+
+In essence this test analyses if levels of one data group are higher than the levels of the other group, by counting the number of pairs from the matched pairs where it's higher and by quantifying if this number is excessively large relative to a coin flip for each pair.\\
+
+The only assumption made on the data is that the data-points are iid. There are some problems with these kind of problems. The magnitude of the difference itself is discarded, perhaps too much information being lost in the process. 
+We could easily test $H_0: \theta=\theta_0$, for any value of $\theta_0$, by calculating the number of times $D>\theta_0$ and performing a binomial test. We can invert these test to get a distribution free confidence interval for the median. 
+
 \subsubsection{The Sign Rank Test}
 
 \subsubsection{The Rank Sum Test}
