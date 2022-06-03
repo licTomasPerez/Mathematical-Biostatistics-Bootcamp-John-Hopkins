@@ -1935,6 +1935,54 @@ We could easily test $H_0: \theta=\theta_0$, for any value of $\theta_0$, by cal
 
 \subsubsection{The Sign Rank Test}
 
+The main issue with the sign test is that the magnitude of differences is discarded, the test potentially not being as powerful as other techniques. \\
+
+Wilcoxon treated the problem of discarding the magnitude of the differences by creating a test statistic which also takes into account the signed ranks of the differences, saving some of the information regarding the magnitude of the differences. The null hypothesis $H_0: \theta = 0$ is thus tested against one of the three alternatives. Appropriately normalised, the test statistic follows a normal distribution. Also note the exact small sample distribution of the signed rank statistic is known if there are no ties. With this test we can quantise how "normal" our distribution is. The signed rank procedure can be implemented as follows:
+
+\begin{itemize}
+    \item Take the paired differences, 
+    \item take the absolute values of the differences, \item rank these absolute values and throwing away the zeros (throwing away the ties).
+    \item Then, multiply the ranks by the sign of the difference, 
+    \item and calculate the rank sum $W_+$ of the positive ranks
+\end{itemize}
+
+Therefore, remembering $\theta$ is the median,
+
+\begin{itemize}
+    \item If $\theta > 0$, then $W_+$ should be large.
+    \item If $\theta < 0$ then $W_+$ should be small.
+\end{itemize}
+
+Properly normalized $W_+ \sim \mathcal{N}(\mu, \sigma^2)$ for some $\mu, \sigma \in \mathds{R}$. For small sample sizes $W_+$ has an exact distribution under the null hypothesis, being able to extract critical values from standardises tables.\\
+
+This test can be performed with Monte Carlo simulations by simulating $n$ observation from any distribution symmetric around zero, this is with $\theta=0$ as its median, getting the small sample distribution out of this procedure\footnote{Note that under the null hypothesis, the signs are equally likely to be distributed anywhere among the ranks. Then we'll take the ranks of numbers between $1$ and $n$ and randomly allocate the signs (by essentially flipping a coin) which gives the null distribution of the signed rank statistic}.
+Then, we rank the absolute value of the data, retain the signs, and calculate the signed rank statistic. Applying this procedure a great many number of times, the proportion of time that the observed statistic is larger or smaller is a Monte Carlo approximation to the P-value, depending on the hypothesis. Consider the ranks $1,\cdots,n$. Randomly assign the signs as binary with probability .5 of being positive and .5 of being negative. Then, by calculating the signed rank statistic and applying this produce for many simulations, the proportion of times that the observed test statistic is larger or smaller is a Monte Carlo approximation to the P-value.  \\
+
+We're interested in studying the large sample distribution of $W_+$. Under $H_0$ and if there are no ties, 
+
+\begin{align*}
+    &\mathds{E}(W_+) = \frac{n(n+1)}{4}, \\
+    &\mathds{V}\textnormal{ar}(W_+)=\frac{n(n+1)(2n+1)}{24}, \\
+    TS = \frac{W_+-\mathds{E}(W_+)}{SD(W_+)} \rightarrow \mathcal{N}(0,1).
+\end{align*}
+
+There is a correction term necessary to account for ties. Without ties, it's possible however to perform an exact small sample test. \\
+
+A Wilcoxon test can be performed with the following R routine
+ 
+\begin{lstlisting}[language=R]
+diff <- c(.07, .07, .00, -.04,...)
+wilcox.test(diff,exact=FALSE)
+
+In [1]: Wilcoxon signed rank test with continuity correction
+
+In [2]: data:  diff
+In [3]: V = 5, p-value = 0.4142
+In [4]: alternative hypothesis: true location is not equal to 0
+\end{lstlisting}
+
+In this case, since the P-value is large, we cannot rule out the null hypothesis. \\
+
 \subsubsection{The Rank Sum Test}
 
 \subsubsection{Poisson Distribution}
