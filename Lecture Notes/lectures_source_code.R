@@ -192,3 +192,16 @@ In [6]: 1.177590 3.869174
 In [7]: sample estimates:
 In [8]: common odds ratio 
 In [9]:         2.134549
+
+--------------------
+
+# Performing a Wilcoxon's non-parametric signed rank test to determine whether the median of the data is zero or not
+
+diff <- c(.07, .07, .00, -.04,...)
+wilcox.test(diff,exact=FALSE)
+
+In [1]: Wilcoxon signed rank test with continuity correction
+
+In [2]: data:  diff
+In [3]: V = 5, p-value = 0.4142
+In [4]: alternative hypothesis: true location is not equal to 0
