@@ -16,22 +16,6 @@
   colorlinks=true,
 }
 
-% Question command
-\gdef\@unitname{Ejercicio}
-\newcounter{UnitCounter}
-\newcommand{\setunitname}[1]{\gdef\@unitname{#1}}
-\newcommand{\question}[1][\arabic{UnitCounter}] {
-  \def\@currentlabel{#1}
-  \ifthenelse{\equal{#1}{\value{UnitCounter}}}
-  {\stepcounter{UnitCounter}}{}
-  \setcounter{section}{0}
-  \renewcommand{\thesection}{#1.\arabic{section}}
-  \renewcommand{\theHsection}{#1.\the\value{section}}
-  \addcontentsline{toc}{part}{#1. \@unitname{}}
-  \vspace*{0.5\baselineskip}\needspace{8\baselineskip}
-  \noindent\textbf{\@unitname{} #1. }\ignorespaces
-}
-
 % Bonus question environment
 \theoremstyle{definition}
 \newtheorem{bonus}{\@unitname{} (Bonus)}
