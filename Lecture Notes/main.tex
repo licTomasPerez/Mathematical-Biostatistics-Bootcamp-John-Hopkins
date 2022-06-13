@@ -9,6 +9,105 @@
 \begin{document} \maketitle
 
 \section{Part 1}
+
+\subsection{Week 1}
+
+The expected value of the average of a collection of  random variables from the same distribution is the same as the expected value of the individual random variables. Thus, the expected value of the sample mean is the population mean that it's trying to estimate. 
+
+\subsection{Week 2}
+
+\paragraph{Bayes' rule}
+
+Bayes' rule establishes a relationship between the conditional probabilities of $A$ given $B$ with the conditional probabilities of $B$ given $A$.\\
+
+Let $f(x | y)$ be the conditional density or mass function for ${\bf X}$ given that ${\bf Y}=y$. Let $f(y)$ be the marginal distribution for ${\bf Y}$:
+
+\begin{align*}
+\textnormal{If } {\bf Y} \textnormal{ is continuous then }
+f(y|x) = \frac{f(x|y)f(y)}{\int dt f(x|t)f(t)}, \\
+\textnormal{If } {\bf Y} \textnormal{ is discrete then }
+f(y|x) = \frac{f(x|y)f(y)}{\sum_{t} f(x|t)f(t)}.
+\end{align*}
+
+A special case for this relationship is given for the case of two events $A$ and $B$ in the event space $\mathcal{F}(\Omega)$, 
+
+$$
+\mathds{P}(B|A)= \frac{\mathds{P}(A|B)\mathds{P}(B)}{\mathds{P}(A|B)\mathds{P}(B)+\mathds{P}(A|B^c)\mathds{P}(B^c)},
+$$
+
+which can be readily proved by setting ${\bf X}$ to be an indicator that event $A$ has occurred and, similarly, letting ${\bf Y}$ be an indicator that event $B$ has occurred and plugging said information into the discrete version of Bayes' rule. \\
+
+\paragraph{Diagnostic testing}
+
+Consider a diagnostic test for some disease. Let + and - be the events in which the diagnostic test result came back as positive and negative respectively ie. the sample space is $\Omega=\{+,-\}$. Let $D$ and $D^c$ be the event in which the test subject does or doesn't have the disease respectively ie. the event space is $\mathcal{F} =\{D, D^c\}$. We can define two quantities of interest 
+
+\begin{itemize}
+\item The \textbf{sensitivity} is the probability that the test is positive given that the subject actually has the disease, $\mathds{P}(+|D)$.
+\item The \textbf{specificity} is the probability that the test is negative given that the subject doesn't have the disease, $\mathds{P}(-|D^c)$. 
+\item The \textbf{positive predictive value} is the probability that the subject has the disease given that the test is positive, $\mathds{P}(D|+)$ (it quantifies the test's predictive "power").
+\item The \textbf{negative predictive value} is the probability that the subject doesn't have the disease given that the test is negative, $\mathds{P}(D^c|-)$.
+\item We define the \textbf{prevalence of the disease} as the marginal probability of disease, $\mathds{P}(D)$.
+\end{itemize}
+
+We define the \textbf{diagnostic likelihood ratio of a positive test}, labelled $DLR_+$, as 
+
+$$
+DLR_+ = \frac{\mathds{P}(+|D)}{\mathds{P}(+|D^c)} = \frac{\textnormal{sensitivity}}{1-\textnormal{specificity}},
+$$
+
+ie. the probability the test subject has the disease given the test result was positive divided by the probability the test subject doesn't have the disease given the test result was positive, whilst \textbf{diagnostic likelihood ratio of a negative test}, labelled $DLR_-$, is 
+
+$$
+DLR_- = \frac{\mathds{P}(-|D)}{\mathds{P}(-|D^c)} = \frac{1-\textnormal{sensitivity}}{\textnormal{specificty}}.
+$$
+
+ie. probability of a negative test result given the test subject actually has the disease divided by the probability of a negative test result given the subject doesn't have the disease. \\
+
+Consider now the following example:
+
+\begin{tcolorbox}[title = Diagnostic test example]
+
+A study comparing the efficacy of HIV tests, reports an experiment which concluded that HIV antibody tests have a sensitivity of $99.7\%$ and a specificity of $98.5\%$. Suppose that a subject, from a population with a $.1\%$ prevalence of HIV, receives a positive result. What is the probability that the subject has HIV? \\
+
+We desire to compute $\mathds{P}(D|+)$ given the sensitivity is $\mathds{P}(+|D)=.997$, the specificity is $\mathds{P}(-|D^c)=.985$ and the prevalence being $\mathds{P}(D) = .001$. Thus, according to Bayes' rule
+
+\begin{align*}
+    \mathds{P}(D|+) &= \frac{\mathds{P}(+|D)\mathds{P}(D)}{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \\
+    &= \frac{\mathds{P}(+|D)\mathds{P}(D)}{\mathds{P}(+|D)\mathds{P}(D)+(1-\mathds{P}(-|D^c))(1-\mathds{P}(D))} \textnormal{ since } \mathds{P}(+|D^c) = 1-\mathds{P}(-|D^c) \\
+    &= \frac{.997 \times .001}{.997 \times .001 + .015 \times .999} = .062,
+\end{align*}
+
+Thus, in this population, a positive test result only suggests a 6\% probability that the subject has the disease. The positive predictive value for this test is 6\%. \\
+
+Now, note that the test's sensitivity (has the disease given a positive test result) is 99.9\% for any arbitrary test subject whilst the specificity (doesn't have the disease given a negative test result) is 98.5\%. Why is the positive predictive value so low? this is due to low prevalence of disease and the somewhat modest specificity. This is entirely due to Bayes' rule's nature: we start with a very low probability of thinking that this person has the disease, it's updated with the information of the positive test result by taking into account the test's sensitivity and specificity and informs the positive predictive value. In this particular case, we started with such a low prior.
+
+In contrast, suppose it was known that some test subject was an intravenous drug user and routinely had intercourse with an HIV infected user, now the prior is much higher than the low prevalence of the previous example. Thus we'd expect a much higher positive predictive value. 
+Notice that the evidence implied by a positive test result doesn't change because of the prevalence of the disease in the subject's population, only our interpretation of that evidence changes.  \end{tcolorbox} 
+
+The previous example begs the question of what's the component of the calculation which doesn't depend on changes on the prevalence? the diagnostic likelihood ratios. In effect, according to Bayes' rule
+
+\begin{align*}
+    \mathds{P}(D|+) &= \frac{ \mathds{P}(+|D)\mathds{P}(D) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \textnormal{ and } \mathds{P}(D^c|+) &= \frac{ \mathds{P}(+|D^c)\mathds{P}(D^c) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \\
+    &\rightarrow \textnormal{therefore } \frac{\mathds{P}(D|+)}{\mathds{P}(D^c|+)} = \frac{\mathds{P}(+|D)}{\mathds{P}(+|D^c)} \times \frac{\mathds{P}(D)}{\mathds{P}(D^c)}, \\
+    &\rightarrow \textnormal{post-test odds of } D = DLR_+ \times \textnormal{pre-test odds of D }
+\end{align*}
+
+thus the $DLR_+$ is a multiplicative factor which dampens or amplifies the probabilities based on the pre-test odds.
+
+\begin{tcolorbox}[title = Diagnostic test example continued]
+
+Continuing from our previous example, suppose a subject has a positive HIV test. Thus, the $DLR_+ = \frac{.997}{1-.985} = 66$, then the result of the positive test is that the odds of disease is now 66 times the pretest odds. Or equivalently, the hypothesis of disease is 66 times more supported by the data than the data of no disease. \\
+
+Now, suppose a subject has a negative test result, then the diagnostic likelihood ratio for a negative test is $DLR_- = \frac{1-.997}{.985} = .003$. Therefore the post-test odds of disease is now .3\% of the pretest odds given the negative test. Or equivalently, the hypothesis of disease is supported .003 times than that of the hypothesis of absence of disease given the negative test result\footnote{According to Bayesian's statistics, Bayes' rule establishes the change of belief in theory given the data. The posterior belief is multiplied by the DLR vis-a-vis the data. According to the frequentist interpretation, a given subject either has the disease or they don't, leaving no room for probability. But it's interpreted in the  infinite fictitious repetitions of this experiment.}. 
+
+\end{tcolorbox}
+
+\subsection{Week 3}
+
+\subsection{Week 4}
+
+\clearpage
+
 \section{Part 2}
 \subsection{Week 1}
 
