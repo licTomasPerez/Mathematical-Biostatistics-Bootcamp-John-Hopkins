@@ -99,8 +99,26 @@ thus the $DLR_+$ is a multiplicative factor which dampens or amplifies the proba
 Continuing from our previous example, suppose a subject has a positive HIV test. Thus, the $DLR_+ = \frac{.997}{1-.985} = 66$, then the result of the positive test is that the odds of disease is now 66 times the pretest odds. Or equivalently, the hypothesis of disease is 66 times more supported by the data than the data of no disease. \\
 
 Now, suppose a subject has a negative test result, then the diagnostic likelihood ratio for a negative test is $DLR_- = \frac{1-.997}{.985} = .003$. Therefore the post-test odds of disease is now .3\% of the pretest odds given the negative test. Or equivalently, the hypothesis of disease is supported .003 times than that of the hypothesis of absence of disease given the negative test result\footnote{According to Bayesian's statistics, Bayes' rule establishes the change of belief in theory given the data. The posterior belief is multiplied by the DLR vis-a-vis the data. According to the frequentist interpretation, a given subject either has the disease or they don't, leaving no room for probability. But it's interpreted in the  infinite fictitious repetitions of this experiment.}. 
-
 \end{tcolorbox}
+
+\paragraph{Likelihood}
+
+A common and fruitful approach to statistics to statistics is to assume the data arises from a family of distributions indexed by a parameter which represents a useful summary of the distribution. The \textbf{likelihood} of a collection of data is the join density evaluated as a function of the parameters with the data fixed. Likelihood analysis of data uses the likelihood to perform inference regarding the unknown parameter. With this approach, the estimators can be used to know the estimands. \\
+
+Given a statistical probability mass function or density, denoted by $f({\bf x}, \theta)$ where ${\bf x} \in \mathds{R}^n$ is a random vector and where $\theta$ is an unknown parameter. Then the likelihood is $f$ viewed as function of $\theta$ for a fixed, observed value of ${\bf x}$. \\
+
+The likelihood has the following properties:
+
+\begin{itemize}
+    \item Ratios of likelihood values measure the relative evidence of one value of the unknown parameter to another. This is called the \textbf{law of likelihood}, which is the notion that the extent to which the evidence supports one parameter value or hypothesis against another is indicated by the ratio of their likelihood ie.
+    
+    $$
+    \Lambda = \frac{\mathcal{L}(a | {\bf X}=x)}{\mathcal{L}(b | {\bf X}=x)} = \frac{\mathds{P}({\bf X}=x|a)}{\mathds{P}({\bf X}=x|b)}.
+    $$
+    
+    This number is the degree to which the observation $x$ supports parameter value or hypothesis $a$ against $b$. If this ratios is 1, evidence is indifferent, if greater than 1 the evidence supports $a$ against $b$, then vice versa- In Bayesian statistics, this ratio is the Bayes' factor. \item Given a statistical model and observed data, all of the relevant information contained in the data regarding the unknown parameter is contained in the likelihood. This theorem is called the \textbf{likelihood principle}.
+    \item If $\{{\bf X}_i\}_{i=1}^{m}$ are independent random variables, then the global likelihood is the product of the individual likelihoods. This is, the likelihood of the parameters given all of the ${\bf X}_i$ is simply the product of thee individual likelihoods. 
+\end{itemize}
 
 \subsection{Week 3}
 
