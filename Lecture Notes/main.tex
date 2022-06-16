@@ -120,6 +120,53 @@ The likelihood has the following properties:
     \item If $\{{\bf X}_i\}_{i=1}^{m}$ are independent random variables, then the global likelihood is the product of the individual likelihoods. This is, the likelihood of the parameters given all of the ${\bf X}_i$ is simply the product of thee individual likelihoods. 
 \end{itemize}
 
+\paragraph{\textbf{Some technical aspects}}
+
+A \textbf{measure} is a mathematical device which reflects the notion of quantity for a given set. Let ${\bf X}$ be a set, then each subset ${\bf U} \in {\bf X}$ is assigned a positive real number $\mu[{\bf U}]$. Thus, the measure is a function
+
+$$
+\mu: \mathcal{P}({\bf X}) \rightarrow \mathds{R},
+$$
+
+where $\mathcal{P}({\bf X}) = \{{\bf S} \in {\bf X}\}$ is the power set of ${\bf X}$. However, it's usually impossible to define a satisfactory notion of quantity for all subsets of ${\bf X}$. Therefore, $\textnormal{Dom}(\mu) \in {\bf X}$ ie. only some subsets of ${\bf X}$ will be measurable. Before defining a proper measure, it's domain must be specified first. This domain will be a collection of subsets of the space ${\bf X}$, called a \textbf{sigma algebra}. \\
+
+Let ${\bf X}$ be a set. A \textbf{sigma algebra} over ${\bf }$ is a collection $\mathcal{F}$ of subsets of ${\bf X}$ with the following properties:
+
+\begin{itemize}
+    \item $\mathcal{F}$ is closed under \underline{countable unions} ie.
+    
+    $$
+    \{{\bf U}_i\}_{i \in \mathds{N}} \textnormal{ } | \textnormal{ } {\bf U}_i \subset \mathcal{F} \Rightarrow \underset{i \in \mathds{N}}{\cup} {\bf U}_i \subset \mathcal{F}.
+    $$\\
+    
+    \item $\mathcal{F}$ is closed under \underline{countable intersections} ie.
+    
+    $$
+    \{{\bf U}_i\}_{i\in \mathds{N}} \textnormal{ } | \textnormal{ } {\bf U}_i \subset \mathcal{F} \Rightarrow \underset{i\in \mathds{N}}{\cap} {\bf U}_i \subset \mathcal{F}. 
+    $$\\
+    
+    \item $\mathcal{F}$ is closed under \underline{complementation}: if ${\bf U} \subset \mathcal{F}$, then 
+    
+    $$
+    {\bf U}^c = {\bf X} / {\bf U} \subset \mathcal{F}.
+    $$\\
+\end{itemize}
+
+A \textbf{measurable space} is an ordered pair $({\bf X}, \mathcal{F})$, where ${\bf X}$ is a set and where $\mathcal{F}$ is a sigma-algebra on ${\bf X}$. Some of the most common examples of $\sigma$-algebras are
+
+\begin{itemize}
+    \item Trivial $\sigma$-algebras: for any set ${\bf X}$ the collection $\{\}$
+\end{itemize}
+
+
+Consider a triplet $(\Omega, \mathcal{F}, \mathds{P})$ where 
+
+\begin{itemize}
+    \item $\Omega$ is the \textbf{sample space}, the set of all possible outcomes, \\
+    \item the set $\mathcal{F}$ is the \textbf{event space}, where an event is a set of outcomes drawn from $\Omega$,
+    \item 
+\end{itemize}
+
 \subsection{Week 3}
 
 \subsection{Week 4}
