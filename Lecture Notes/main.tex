@@ -122,6 +122,8 @@ The likelihood has the following properties:
 
 \paragraph{\textbf{Some technical aspects}}
 
+\underline{\textbf{An introduction to Measure Theory}}
+
 A \textbf{measure} is a mathematical device which reflects the notion of quantity for a given set. Let ${\bf X}$ be a set, then each subset ${\bf U} \in {\bf X}$ is assigned a positive real number $\mu[{\bf U}]$. Thus, the measure is a function
 
 $$
@@ -277,9 +279,10 @@ Then a \textbf{measure space} is an ordered triple $({\bf X}, \mathcal{F}, \mu)$
     \mu_{\rho}({\bf B}) = \int_{{\bf B}} \rho.
     $$
     
-    We call $\rho$ the \textbf{density function} for $\mu$. 
+    We call $\rho$ the \textbf{density function} for $\mu$. \\
     
-    \item \textbf{Probability Measures}: A measure $\mu$ on ${\bf X}$ is a \textbf{probability measure} if $\mu[{\bf X}] = 1$. Then the ordered triple $({\bf X}, \mathcal{F}, \mu)$ is a \textbf{probability space}.
+    \item \textbf{Probability Measures}: A measure $\mu$ on ${\bf X}$ is a \textbf{probability measure} if $\mu[{\bf X}] = 1$. Then the ordered triple $({\bf X}, \mathcal{F}, \mu)$ is a \textbf{probability space}.\\
+    
     \item \textbf{Stochastic processes} are a particular king of probability measures, which represent a system randomly evolving in time. Let $\mathcal{S}$ be any  randomly-evolving complex system, let ${\bf X}$ be the set of all possible states of the system $\mathcal{S}$ and let $\mathds{T}$ be a set representing time. For example, 
     
     \begin{itemize}
@@ -304,7 +307,148 @@ Then a \textbf{measure space} is an ordered triple $({\bf X}, \mathcal{F}, \mu)$
     
     Suppose that ${\bf X}$ has a $\sigma$-algebra $\mathcal{F}$, then it follows ${\bf H}$'s $\sigma$-algebra is $\mathcal{H}= \bigtimes\limits_{t \in \mathds{T}}\mathcal{F}_t$. An \textbf{event} is an element of $\mathcal{F}$ and thus corresponds to a cylinder set, a countable union of cylinder sets etc.
     
-    Suppose, for all ${t\in \mathds{T}}$, that ${\bf U}_t \in \mathcal{F}$ with ${\bf U}_t = X$ for all but finitely many $t$. The cylinder set ${\bf U} = \prod_{t \in \mathds{T}} {\bf U}_t$ thus corresponds to the assertion: "for every ${t\in \mathds{T}}$, at time $t$, the state of $\mathcal{S}$ was inside ${\bf U}_t$. A probability measure on $(\bf H, \mathcal{H})$ is then a way of assigning probabilities to such assertions. 
+    Suppose, for all ${t\in \mathds{T}}$, that ${\bf U}_t \in \mathcal{F}$ with ${\bf U}_t = X$ for all but finitely many $t$. The cylinder set ${\bf U} = \prod_{t \in \mathds{T}} {\bf U}_t$ thus corresponds to the assertion: "for every ${t\in \mathds{T}}$, at time $t$, the state of $\mathcal{S}$ was inside ${\bf U}_t$. A probability measure on $(\bf H, \mathcal{H})$ is then a way of assigning probabilities to such assertions. \\
+\end{itemize}
+
+\underline{\textbf{Convergence of random variables:}}
+
+Let $\{{\bf X}_n\}_{n=1}$ be a sequence of random variables, let ${\bf X}$ be a random variable, all of them defined on the same probability space $(\Omega, \mathcal{F}, \mathds{P})$. There are several, important, types of stochastic convergence, which will be treated as follows\\
+
+\begin{itemize}
+    \item A sequence $\{{\bf X}_n\}_{n=1}$ of real-valued random variables is said to \textbf{converge in distribution} or to \textbf{weakly-converge} to a random variable $\X$ if 
+    
+    $$
+    \X_n \overset{\mathcal{D}}{\rightarrow} \X \textnormal{ if }\mathds{P}(\X_n \leq x) \underset{n \rightarrow \infty}{\rightarrow} \mathds{P}(\X \leq x)\textnormal{, } 
+    $$
+    
+    for every real number $x$ at which the cumulative distribution functions are continuous. For random vectors, the definition is completely analogous. We say that a sequence of random vectors $\{\X_{n}\}_{n=1}^{\cdots} \subset \mathds{R}^k$ converges in distribution to a random $k$-vector $\X$ if
+    
+    $$
+    \X_n \overset{\mathcal{D}}{\rightarrow} \X \textnormal{ if }\mathds{P}(\X_n \in {\bf A}) \underset{n \rightarrow \infty}{\rightarrow} \mathds{P}(\X \in {\bf A})\textnormal{, } 
+    $$
+    
+    for every $ {\bf A} \in \mathds{R}^k$ which is a continuity set of $\X$, ie. the set in which the function is continuous. Some important consequences of weak convergence are
+    
+    \begin{itemize}
+        \item $\mathds{E}f(\X_n) \rightarrow\mathds{E}f(\X) \textnormal{ } \forall f\in C^{0}(\mathds{R}).$ \\
+        \item \textbf{Continous mapping theorem}: Let $g \in C^{0}(\mathds{R})$, if the sequence $\{\X\}_{n=1}^{\cdots}$ converges in distribution to $\X$, then $\{g(\X)\}_{n=1}^{\cdots}$ converges to $g(\X)$. \\
+    \end{itemize}
+    \item \textbf{Convergence in probability}: A sequence $\seq$ of random variables converges to the random variable $\X$ if 
+    
+    $$
+    \forall \epsilon \in \mathds{R}_+ \textnormal{ }, \mathds{P}(|\X_n - \X|) > \epsilon) \underset{n \rightarrow \infty}{\rightarrow} 0,
+    $$
+    
+    ie. let $\mathds{P}_n(\epsilon)$ be the probability that $\X_n$ is outside the $\epsilon$-ball centered at $\X$. Then $\seq$ is said to converge in probability to $\X$ if, for any $\epsilon, \delta \in \mathds{R}_+$, there exists a number $N(\epsilon, \delta)$ such that for all $n \geq N$, $\mathds{P}_n(\epsilon) < \delta$.
+    
+    $$
+    \seq \overset{p}{\rightarrow} \X \textnormal{ if } \forall \epsilon \textnormal{, } \delta \in \mathds{R}_+, \exists N(\epsilon, \delta) \in \mathds{R} \textnormal{ such that } \forall n \geq N, (\mathds{P}|\X-\X_n| - 0) < \delta.
+    $$
+    
+    Note that, for any sequence of random variables to converge in probability to another random variable, it isn't possible for $\X$ and $\X_n$ to be independent random variables, for each $n$. Thus convergence in probability is a condition on the joint cumulative distribution function, as opposed to convergence in distribution, which is a condition on the individual CDF's. For random elements $\seq$ on a separable metric space $(S, d)$, convergence in probability is similarly defined by 
+    
+    $$
+    \forall \epsilon \in \mathds{R}_+, \mathds{P}(d(\X_n, \X) \geq \epsilon) \rightarrow 0.
+    $$
+    
+    Some important consequences of convergence in probability are:
+    
+    \begin{itemize}
+        \item convergence in probability implies convergence in distribution: 
+        
+        $$
+        \seq \overset{p}{\rightarrow} \X \Rightarrow \seq \overset{d}{\rightarrow} \X
+        $$. \\
+        
+        \item Convergence in distribution implies convergence in probability only when the limiting random variable is a constant. \\
+        
+        \item The continuous mapping theorem, which states that 
+        
+        $$
+        \forall g \in C^{0}(\mathds{R}) \textnormal{, if } \seq \overset{p}{\rightarrow}  \Rightarrow g(\seq) \overset{p}{\rightarrow} g(\X)
+        $$\\
+        
+        \item Convergence in probability defines a topology on the space of random variables over  a fixed probability space. This topology is metrizable by the Ky Fan-metric:
+        
+        $$
+        d(\X_a,\X_b) = \inf \{\epsilon \in \mathds{R}_+: \mathds{P}(|\X_a-\X_b|>\epsilon) \geq \epsilon\},
+        $$
+        
+        or alternately by 
+        
+        $$
+        d(\X_a,\X_b) = \mathds{E}[\min(|\X_a-\X_b|,1)].
+        $$ \\
+        \end{itemize}
+        \item \textbf{Almost sure convergence}: We say a sequence $\seq$ converges almost surely or almost everywhere or strongly converges towards $\X$ if 
+        
+        $$
+        \mathds{P}\bigg(\lim_{n\rightarrow \infty} \X_n = \X\bigg)=1.
+        $$
+        
+        This means that the values of $\seq$ approach the value of $\X$ in the sense that events for which $\seq$ doesn't converge to $\X$ have probability 0. The previous statement is equivalent to
+        
+        $$
+        \seq \overset{a.e.}{\rightarrow} \X \textnormal{, if } \mathds{P}\bigg( \omega \in \Omega : \X_n(\omega) \underset{n \rightarrow \infty}{\rightarrow} \X(\omega) \bigg),
+        $$
+        
+        which in turn is equivalent to the following statement:
+        
+        $$
+        \seq \overset{a.e.}{\rightarrow} \X \textnormal{, if } \mathds{P}\bigg(\underset{n \rightarrow \infty}{\textnormal{lim sup}}\{ \omega \in \Omega : |\X_n(\omega) -  \X(\omega)| > \epsilon \}\bigg) = 0 \textnormal{, } \forall \epsilon \in \mathds{R}_+.
+        $$
+        
+        For generic random elements $\seq$ on a metric space $(S,d)$, strong converge is defined as 
+        
+        $$
+        \mathds{P}\bigg(\omega \in \Omega: d(\X_{n}(\omega),\X(\omega)) \underset{n \rightarrow \infty}{\rightarrow} 0\bigg) = 1.
+        $$
+        
+        Some consequences of strong convergence are 
+        
+        \begin{itemize}
+            \item By Fatou's lemma, almost sure convergence implies convergence in probability and hence implies convergence in distribution. This is the notion which justifies the strong law of large numbers. \\
+        \end{itemize}
+        
+        \item \textbf{Pointwise convergence}
+        We say a sequence of random variables $\seq$ pointwise converges towards $\X$ if 
+        
+        $$
+        \lim_{n \rightarrow \infty} \X_n (\omega) = \X(\omega) \textnormal{, } \forall \omega \in \Omega,
+        $$
+        
+        in other words 
+        
+        $$
+        \bigg\{\omega \in \Omega | {n \rightarrow \infty} \X_n (\omega) = \X(\omega) \bigg\} = \Omega.
+        $$\\
+        
+        \item \textbf{Convergence in mean}: Given a real number $r > 1$, we say a sequence $\seq$ converges in $r$-th mean (or in the $L^r$-norm) towards the $\X$-random variable if the $r$-th absolute moments,
+        $\mathds{E}(|\X_n|^r)$ and $\mathds{E}(|\X|^r)$, of both $\seq$ and $\X$ exist and
+        
+        $$
+        \seq \overset{L^r}{\rightarrow} \X \textnormal{ if } \lim_{n \rightarrow \infty} \mathds{E}(|\X_n - \X|^r)= 0
+        $$.
+        
+        Some important cases and consequences of $r$-th mean convergence are:
+        
+        \begin{itemize}
+            \item When $\seq$ converges in $1$-th mean to $\X$, we say it converges in mean to $\X$.  \\
+            \item When $\seq$ converges in $2$-th mean to $\X$, we say it converges in mean square to $\X$.  \\
+            \item Note that $r$-th mean, for $r \geq 1$, implies convergence in probability by Markov's inequality:
+            
+            $$
+            \textnormal{If } \X \textnormal{is a non-negative random variable and } a > 0, \textnormal{then } \mathds{P})(\X\geq a) \leq \frac{\mathds{E}(\X)}{a},
+            $$
+            
+            ie. the probability that X is at least $a$ is at most the expectation of X divided by a:
+            
+            or in measure-theoretic language, let $f$ be a measurable extended real-value function and $\epsilon \in \mathds{R}_+$
+            
+            $$
+            {\displaystyle \mu (\{x\in X:|f(x)|\geq \varepsilon \})\leq {\frac {1}{\varepsilon }}\int _{X}|f|\,d\mu .}.
+            $$\\
+        \end{itemize}
 \end{itemize}
 
 \subsection{Week 3}
