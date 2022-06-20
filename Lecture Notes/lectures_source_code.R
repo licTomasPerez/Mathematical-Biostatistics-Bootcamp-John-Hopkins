@@ -1,4 +1,5 @@
-# Confidence intervals for small samples using chi-squared distribution quantiles
+# Confidence intervals for the variance for small samples using chi-squared distribution quantiles
+
 n <- 513
 mean <- 1150.315
 s2 <- 105.977^2 
