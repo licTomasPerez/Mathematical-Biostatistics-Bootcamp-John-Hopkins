@@ -1,3 +1,35 @@
+# Confidence intervals for small samples using chi-squared distribution quantiles
+n <- 513
+mean <- 1150.315
+s2 <- 105.977^2 
+
+alpha <- .05 
+lower_qtile <- qchisq(alpha/2, n-1)
+upper_qtile <- qchisq(1-alpha/2, n-1)
+
+upper_bound <- (n-1)*s2/lower_qtile
+lower_bound <- (n-1)*s2/upper_qtile
+
+print(sqrt(lower_bound))
+print(sqrt(upper_bound))
+
+In [1]:  99.86484 112.89216
+
+# or more succinctly 
+
+n <- 513
+mean <- 1150.315
+s2 <- 105.977^2 
+
+alpha <- .05 
+qtiles <- qchisq(c(alpha/2, 1-alpha/2), n-1)
+ci <- rev((n-1)*s2/qtiles)
+sqrt(ci)
+
+In [1]: 99.86484 112.89216
+
+
+----------
 # We can plot a the 95th percentile of the standard normal distribution with the following R routine:
 xval <-  seq(-3.2, 3.2, length=1000)
 yval <- dnorm(xval)
