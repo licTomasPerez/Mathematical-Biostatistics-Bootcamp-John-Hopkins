@@ -1,10 +1,9 @@
-% Tashfeen's symbol macros
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hwsymb}[2021/01/01 hwsymb]
 \usepackage{dsfont}
 \RequirePackage{amsmath, amssymb, amsthm, amscd, graphicx}
 
-\usepackage{mathabx}
+\usepackage{mathabx, bm}
 %usepackage{kpfonts}
 \usepackage{multirow}
 \usepackage{ulem}
@@ -26,6 +25,13 @@
 % Symbols
 \newcommand{\X}{{\bf X}}
 \newcommand{\seq}{\{{\bf X}_n\}_{n=1}^{\infty}}
+\newcommand{\var}{\mathds{V}\textnormal{ar}}
+\newcommand{\cov}{\mathds{C}\textnormal{ov}}
+\newcommand{\n}{n \rightarrow \infty}
+\newcommand{\Rp}{\mathds{R}_+}
+\newcommand{\R}{\mathds{R}}
+\newcommand{\prob}{\mathds{P}}
+\newcommand{\E}{\mathds{E}}
 
 \newcommand*{\eg}{\leavevmode\unskip , e. g., \ignorespaces}
 \newcommand*{\ie}{\leavevmode\unskip, i. e., \ignorespaces}
