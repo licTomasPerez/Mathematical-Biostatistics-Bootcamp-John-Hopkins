@@ -1,6 +1,6 @@
 \documentclass{homework}
 \author{Tomás Pérez}
-\class{Mathematical Biostatistics Boot Camp 1}
+\class{Mathematical Biostatistics Boot Camp - Lecture Notes}
 \date{\today}
 \title{Theory \& Notes}
 
@@ -12,7 +12,7 @@
 
 \subsection{Week 1}
 
-The fundamentals of probability theory can be read from Glen Cowan's Statistical Data Analysis or Cassela & Berger's Statistical Inference book. 
+The expected value of the average of a collection of  random variables from the same distribution is the same as the expected value of the individual random variables. Thus, the expected value of the sample mean is the population mean that it's trying to estimate. 
 
 \subsection{Week 2}
 
@@ -87,7 +87,7 @@ Notice that the evidence implied by a positive test result doesn't change becaus
 The previous example begs the question of what's the component of the calculation which doesn't depend on changes on the prevalence? the diagnostic likelihood ratios. In effect, according to Bayes' rule
 
 \begin{align*}
-    \mathds{P}(D|+) &= \frac{ \mathds{P}(+|D)\mathds{P}(D) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \textnormal{ and } \mathds{P}(D^c|+) &= \frac{ \mathds{P}(+|D^c)\mathds{P}(D^c) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \\
+    \mathds{P}(D|+) &= \frac{ \mathds{P}(+|D)\mathds{P}(D) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)}  \textnormal{ and } \mathds{P}(D^c|+) = \frac{ \mathds{P}(+|D^c)\mathds{P}(D^c) }{\mathds{P}(+|D)\mathds{P}(D)+\mathds{P}(+|D^c)\mathds{P}(D^c)} \\
     &\rightarrow \textnormal{therefore } \frac{\mathds{P}(D|+)}{\mathds{P}(D^c|+)} = \frac{\mathds{P}(+|D)}{\mathds{P}(+|D^c)} \times \frac{\mathds{P}(D)}{\mathds{P}(D^c)}, \\
     &\rightarrow \textnormal{post-test odds of } D = DLR_+ \times \textnormal{pre-test odds of D }
 \end{align*}
@@ -105,7 +105,7 @@ Now, suppose a subject has a negative test result, then the diagnostic likelihoo
 
 A common and fruitful approach to statistics to statistics is to assume the data arises from a family of distributions indexed by a parameter which represents a useful summary of the distribution. The \textbf{likelihood} of a collection of data is the join density evaluated as a function of the parameters with the data fixed. Likelihood analysis of data uses the likelihood to perform inference regarding the unknown parameter. With this approach, the estimators can be used to know the estimands. \\
 
-Given a statistical probability mass function or density, denoted by $f({\bf x}, \theta)$ where ${\bf x} \in \mathds{R}^n$ is a random vector and where $\theta$ is an unknown parameter. Then the likelihood is $f$ viewed as function of $\theta$ for a fixed, observed value of ${\bf x}$. \\
+Given a statistical probability mass function or density, denoted by $f({\bf x}, \theta)$ where ${\bf x} \in \mathds{R}^n$ is a random vector and where $\theta \in \Theta$ is an unknown parameter in the parameter space $\Theta$. Then the likelihood is $f$ viewed as function of $\theta$ for a fixed, observed value of ${\bf x}$. \\
 
 The likelihood has the following properties:
 
@@ -116,11 +116,49 @@ The likelihood has the following properties:
     \Lambda = \frac{\mathcal{L}(a | {\bf X}=x)}{\mathcal{L}(b | {\bf X}=x)} = \frac{\mathds{P}({\bf X}=x|a)}{\mathds{P}({\bf X}=x|b)}.
     $$
     
-    This number is the degree to which the observation $x$ supports parameter value or hypothesis $a$ against $b$. If this ratios is 1, evidence is indifferent, if greater than 1 the evidence supports $a$ against $b$, then vice versa- In Bayesian statistics, this ratio is the Bayes' factor. \item Given a statistical model and observed data, all of the relevant information contained in the data regarding the unknown parameter is contained in the likelihood. This theorem is called the \textbf{likelihood principle}.
-    \item If $\{{\bf X}_i\}_{i=1}^{m}$ are independent random variables, then the global likelihood is the product of the individual likelihoods. This is, the likelihood of the parameters given all of the ${\bf X}_i$ is simply the product of thee individual likelihoods. 
+    This number is the degree to which the observation $x$ supports parameter value or hypothesis $a$ against $b$. If this ratios is 1, evidence is indifferent, if greater than 1 the evidence supports $a$ against $b$, then vice versa- In Bayesian statistics, this ratio is the Bayes' factor. This is a special case of the Neymann-Pearson lemma. \\
+    \item Given a statistical model and observed data, all of the relevant information contained in the data regarding the unknown parameter is contained in the likelihood. This theorem is called the \textbf{likelihood principle}. \\
+    \item If $\{{\bf X}_i\}_{i=1}^{m}$ are independent random variables, then the global likelihood is the product of the individual likelihoods. This is, the likelihood of the parameters given all of the ${\bf X}_i$ is simply the product of thee individual likelihoods. \\
 \end{itemize}
 
-\paragraph{\textbf{Some technical aspects}}
+Consider now the following example, 
+
+\begin{tcolorbox}[title = Likelihoods example]
+
+Consider a coin-flip experiment, it's results being described by a dichotomic Bernoulli random variable ${\bf X} \sim \textnormal{Bernoulli}(1,\theta)_{\theta \in \Theta \simeq \mathds{R}_{[0,1]}}$. The mass function for $x$ is 
+
+$$
+f(x, \theta) = \theta^x (1- \theta)^{1-x} \textnormal{ for } \theta \in \mathds{R}_{[0,1]},
+$$
+
+where $x$ is either 0 for tails or 1 for heads. Suppose the result is a head, the likelihood is 
+
+$$
+\mathcal{L}(\theta,1) = \theta^1 (1-\theta)^{1-1} = \theta. 
+$$
+
+Therefore, for example, $\frac{\mathcal{L}{(.5,1)}}{\mathcal{L}{(.25,1)}} = \frac{.5}{.25}=2$, there is twice as much evidence supporting the hypothesis of $\theta = .5$ than the hypothesis of $\theta = .25$. \\
+
+Consider now multiple independent coin flips, in this case, four, obtaining the sequence $1, 0, 1, 1$ . Thus, we're dealing with four Bernoulli random variables $\{{\bf X}_i | {\bf X}_i \sim \textnormal{Bernoulli}(1,p)\}_{i=1}^{4} $, note that the sum of said random variables is a binomial random variable: ${\bf Y} = \sum_{i=1}^{4} {\bf X}_i \sim \textnormal{Binom}(n=4,p)$. The likelihood is obtained as the product of the four, independent, probability mass functions
+
+$$
+\mathcal{L}(\theta, a_1=1, a_2=0, a_3=1, a_4=1) = \prod_{i=1}^{4} \theta^{a_i}(1-\theta)^{a_i} = \theta^3 (1-\theta)^1.
+$$
+
+This likelihood only depends on the total number of heads and the total number of tails, as such we can denote it $\mathcal{L}(\theta, 1,3)$. For example, given that $\frac{\mathcal{L}{(.5,1,3)}}{\mathcal{L}{(.25,1,3)}} = 5.33$, there is over five times as much evidence supporting the hypothesis of $\theta=.5$ over than $\theta =.25$. \\
+\end{tcolorbox}
+
+Refering to the previous example, in general, we're not interested in performing pair-wise comparisons of the likelihoods for different parameter values. Generally, we want to consider all values $\theta \in\mathds{R}_{[0,1]}$. A \textbf{likelihood plot} displays $\mathcal{L}(\theta, x) \textnormal{ vs }. \theta$, normalized so its height is 1. \\
+
+The value of $\theta$ where the curve reaches its maximum is the data's most well supported value of $\theta$. Said point is called the \textbf{maximum likelihood estimate} of $\theta$
+
+$$
+\hat{\theta} = \underset{\theta \in \Theta}{\textnormal{argmax }} \mathcal{L}(\theta,x).
+$$
+
+Another interpretation for the MLE is that it's the value of $\theta$ that would make the data we observed the most probable. \\
+
+\paragraph{\textbf{Some technical aspects}} 
 
 \underline{\textbf{An introduction to Measure Theory}}
 
@@ -132,7 +170,9 @@ $$
 
 where $\mathcal{P}({\bf X}) = \{{\bf S} \in {\bf X}\}$ is the power set of ${\bf X}$. However, it's usually impossible to define a satisfactory notion of quantity for all subsets of ${\bf X}$. Therefore, $\textnormal{Dom}(\mu) \in {\bf X}$ ie. only some subsets of ${\bf X}$ will be measurable. Before defining a proper measure, it's domain must be specified first. This domain will be a collection of subsets of the space ${\bf X}$, called a \textbf{sigma algebra}. \\
 
-Let ${\bf X}$ be a set. A \textbf{sigma algebra} over ${\bf }$ is a collection $\mathcal{F}$ of subsets of ${\bf X}$ with the following properties:
+\clearpage
+
+Let ${\bf X}$ be a set. A $\sigma$\textbf{-algebra} over ${\bf }$ is a collection $\mathcal{F}$ of subsets of ${\bf X}$ with the following properties:
 
 \begin{itemize}
     \item $\mathcal{F}$ is closed under \underline{countable unions} ie.
@@ -357,21 +397,21 @@ Let $\{{\bf X}_n\}_{n=1}$ be a sequence of random variables, let ${\bf X}$ be a 
         \item convergence in probability implies convergence in distribution: 
         
         $$
-        \seq \overset{p}{\rightarrow} \X \Rightarrow \seq \overset{d}{\rightarrow} \X
-        $$. \\
+        \seq \overset{p}{\rightarrow} \X \Rightarrow \seq \overset{d}{\rightarrow} \X.
+        $$ 
         
         \item Convergence in distribution implies convergence in probability only when the limiting random variable is a constant. \\
         
         \item The continuous mapping theorem, which states that 
         
         $$
-        \forall g \in C^{0}(\mathds{R}) \textnormal{, if } \seq \overset{p}{\rightarrow}  \Rightarrow g(\seq) \overset{p}{\rightarrow} g(\X)
-        $$\\
+        \forall g \in C^{0}(\mathds{R}) \textnormal{, if } \seq \overset{p}{\rightarrow} \X \Rightarrow g(\seq) \overset{p}{\rightarrow} g(\X)
+        $$
         
         \item Convergence in probability defines a topology on the space of random variables over  a fixed probability space. This topology is metrizable by the Ky Fan-metric:
         
         $$
-        d(\X_a,\X_b) = \inf \{\epsilon \in \mathds{R}_+: \mathds{P}(|\X_a-\X_b|>\epsilon) \geq \epsilon\},
+        d(\X_a,\X_b) = \inf \{\epsilon \in \mathds{R}_+: \mathds{P}(|\X_a-\X_b|>\epsilon) \leq \epsilon\},
         $$
         
         or alternately by 
@@ -438,7 +478,7 @@ Let $\{{\bf X}_n\}_{n=1}$ be a sequence of random variables, let ${\bf X}$ be a 
             \item Note that $r$-th mean, for $r \geq 1$, implies convergence in probability by Markov's inequality:
             
             $$
-            \textnormal{If } \X \textnormal{is a non-negative random variable and } a > 0, \textnormal{then } \mathds{P})(\X\geq a) \leq \frac{\mathds{E}(\X)}{a},
+            \textnormal{If } \X \textnormal{ is a non-negative random variable and } a > 0, \textnormal{then } \mathds{P}(\X\geq a) \leq \frac{\mathds{E}(\X)}{a},
             $$
             
             ie. the probability that X is at least $a$ is at most the expectation of X divided by a:
@@ -462,7 +502,9 @@ The law of large numbers is a theorem that describes the result of performing th
      \bar{\X} \overset{p}{\rightarrow} \mu \textnormal{ that is } \lim_{n \rightarrow \infty} \mathds{P} \bigg(|\bar{\X} - \mu| < \epsilon \bigg) = 1.
     $$
     
-    The weak law states that for any non-zero margin specified $\epsilon$, no matter how small, with a sufficiently large sample there will be a very high probability that the average of the observations will be close to the expected value, that is, within the margin. This weak law applies in the case of iid random variables. \\
+    The weak law states that for any non-zero margin specified $\epsilon$, no matter how small, with a sufficiently large sample there will be a very high probability that the average of the observations will be close to the expected value, that is, within the margin. This weak law applies in the case of iid random variables. 
+    
+    \clearpage
     
     \item The \textbf{Strong law of large number} states that the sample average converges almost surely to the expected value 
     
@@ -470,7 +512,7 @@ The law of large numbers is a theorem that describes the result of performing th
       \bar{\X} \overset{a.s}{\rightarrow} \mu \textnormal{ that is } \mathds{P}\bigg(\lim_{n \rightarrow \infty} \bar{\X} = \mu \bigg) = 1. 
     $$
     
-    This strong law states that the probability of the average of observations converging to the expected values, as the number of trials goes to infinity, is equal to one. The strong law applies to iid random value having an expected value.
+    This strong law states that the probability of the average of observations converging to the expected values, as the number of trials goes to infinity, is equal to one. The strong law applies to iid random value having an expected value.\\
 \end{itemize}
 
 There are some technical differences between the strong law and the weak law. The weak law states that for a specified large $n$, the average $\bar{\bf X}$ is likely to be near $\mu$. Thus, it leaves open the possibility that $|\bar{\bf X}- \mu|>\epsilon$ happens an infinite number of times, at very infrequent intervals. The strong law shows that this almost surely will not occur. This doesn't imply the previous statement with probability 1, we have that for any $\epsilon \in \mathds{R}_+$, the inequality $|\bar{\bf{X}}-\mu|<\epsilon$ holds for all large enough $n$, since the convergence isn't necessarily uniform on the set where it holds. \\
@@ -494,8 +536,68 @@ $$
 or more generally, if $g$ is an extended real-valued measurable function, non-negative and non-decreasing, with ${\displaystyle g(t)\neq 0}$
 
 $$
-{\displaystyle \mu (\{x\in X\,:\,\,f(x)\geq t\})\leq {1 \over g(t)}\int _{X}g\circ f\,d\mu .}\\
+{\displaystyle \mu (\{x\in X\,:\,\,f(x)\geq t\})\leq {1 \over g(t)}\int _{X}g\circ f\,d\mu}.\\
 $$
+
+\underline{\textbf{Central Limit Theorem}}: The CLT establishes that, in many situations, the properly normalized sum of independent random variables tends to a normal distribution even if the original variables themselves are not normally distributed. There are several, distinct, formulations of the CLT, as follows
+
+\begin{itemize}
+    \item \textbf{Lindeberg-Lévy CLT}: Suppose $\seq$ is a sequence of iid random variables with $\mathds{E}[\X_i]= \mu$ and $\var = \sigma^2 < \infty$. Then, as $n \rightarrow \infty$, the random variables $\sqrt{n}(\bar{\X}_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0,\sigma^2)$:
+    
+    $$
+   \sqrt{n}(\bar{\X}_n - \mu) \overset{\mathcal{D}}{\rightarrow} \mathcal{N}(0,\sigma^2).
+   $$ 
+   
+   ie. the cumulative distribution functions of $\sqrt{n}(\bar{\X}_n - \mu)$ pointwise converge to the cumulative distribution functions of $\mathcal{N}(0,\sigma^2)$:
+   
+   $$
+   \forall z \in \mathds{R} \textnormal{ then } \mathds{P}[\sqrt{n}(\bar{\X}_n - \mu) \leq z] \underset{n \rightarrow \infty}{\rightarrow} \Phi(\frac{z}{\sigma}),
+   $$
+   
+   where $ \Phi(\frac{z}{\sigma})$ is the standard normal cdf evaluated at $z$. Equivalenty, the convergence is uniform in $z$ in the sense that 
+   
+   $$
+   \lim_{\n} \sup_{z \in \mathds{R}} \bigg|\mathds{P}[\sqrt{n}(\bar{\X}_n - \mu) \leq z]-\Phi(\frac{z}{\sigma})\bigg| = 0. 
+   $$\\
+   
+   \item \textbf{Lyapunov's CLT}: in this version of the CLT, the sequence of random variables needs not to be identically distributed. \\
+   
+   Suppose $\seq$ is a sequence of independent random variables, each with finite expected value $\mu_i$ and variance $\sigma^2_i$. Let 
+   
+   $$
+   s_n^2 = \sum_{i=1}^{n} \sigma_i^2.
+   $$
+   
+   If for some $\delta \in \mathds{R}_+$, the Lyapunov conditions 
+   
+   $$
+   \lim_{\n} \frac{1}{s_n^{2+\delta}} \sum_{i=1}^{n} \mathds{E}\bigg[|\X_i - \mu_i|^{2+\delta}\bigg] = 0,
+   $$
+   
+   is satisfied, then a sum of $\frac{\X_i - \mu_i}{s_n}$
+   converges to a standard normal random variable, as $n$ goes to infinity 
+   
+   $$
+   \frac{1}{s_n} \sum_{i=1}^{n} (\X_i - \mu_i) \overset{\mathcal{D}}{\rightarrow} \mathcal{N}(0,1).
+   $$
+   
+   Slutsky's theorem extends the properties of sum, multiplication and division to distribution-convergent sequences of real-valued random variables. This theorem allows us to substitute $s_n \rightarrow \sigma^2$. \\
+   
+   \item \textbf{Multivariate CLT}. The previous theorems can be readily extended to $\R^k$-random vectors $\seq$ with mean vector $\bm{\mu}=\E[\X_i]$ and covariance matrix $\bm{\Sigma}$, where these random vectors are iid. The multivariate version states that 
+   
+   $$
+   \sqrt{n}(\bar{\X}_n - \bm{\mu}) \overset{\mathcal{D}}{\rightarrow} \mathcal{N}_k (0, \bm{\Sigma}),
+   $$
+   
+   where the covariance matrix is 
+   
+   $$
+   (\bm{\Sigma})_{ij} = \bigg\{ \begin{array}{ccc}
+       \var(\X_i)  & \textnormal{if } i=j  \\
+       \cov(\X_i \X_j)  & \textnormal{if } i \neq j, 
+    \end{array}.
+   $$ \\
+\end{itemize}
 
 \subsection{Week 3}
 
