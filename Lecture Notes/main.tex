@@ -451,6 +451,52 @@ Let $\{{\bf X}_n\}_{n=1}$ be a sequence of random variables, let ${\bf X}$ be a 
         \end{itemize}
 \end{itemize}
 
+\underline{\textbf{Law of large numbers}}:
+
+The law of large numbers is a theorem that describes the result of performing the same experiment a large number of times. According to the law, the average of the results obtained from a large number of trials should be close to the expected value and tends to become closer to the expected value as more trials are performed. There are two versions of this theorem:
+
+\begin{itemize}
+    \item The \textbf{Weak law of large numbers} states that the sample average converges in probability towards the expected value 
+    
+    $$
+     \bar{\X} \overset{p}{\rightarrow} \mu \textnormal{ that is } \lim_{n \rightarrow \infty} \mathds{P} \bigg(|\bar{\X} - \mu| < \epsilon \bigg) = 1.
+    $$
+    
+    The weak law states that for any non-zero margin specified $\epsilon$, no matter how small, with a sufficiently large sample there will be a very high probability that the average of the observations will be close to the expected value, that is, within the margin. This weak law applies in the case of iid random variables. \\
+    
+    \item The \textbf{Strong law of large number} states that the sample average converges almost surely to the expected value 
+    
+    $$
+      \bar{\X} \overset{a.s}{\rightarrow} \mu \textnormal{ that is } \mathds{P}\bigg(\lim_{n \rightarrow \infty} \bar{\X} = \mu \bigg) = 1. 
+    $$
+    
+    This strong law states that the probability of the average of observations converging to the expected values, as the number of trials goes to infinity, is equal to one. The strong law applies to iid random value having an expected value.
+\end{itemize}
+
+There are some technical differences between the strong law and the weak law. The weak law states that for a specified large $n$, the average $\bar{\bf X}$ is likely to be near $\mu$. Thus, it leaves open the possibility that $|\bar{\bf X}- \mu|>\epsilon$ happens an infinite number of times, at very infrequent intervals. The strong law shows that this almost surely will not occur. This doesn't imply the previous statement with probability 1, we have that for any $\epsilon \in \mathds{R}_+$, the inequality $|\bar{\bf{X}}-\mu|<\epsilon$ holds for all large enough $n$, since the convergence isn't necessarily uniform on the set where it holds. \\
+
+\underline{\textbf{Chebyshev's inequality}}: This inequality guarantees that, for a wide class of probability distributions, no more than a certain fraction of value can be more than a certain distance from the mean. Specifically, no more than $\frac{1}{k^2}$ of the distribution's values can be $k$ or more standard deviations away from the mean ie. al least $1-\frac{1}{k^2}$ of the distribution's values are less than $k$ standard deviations away from the mean. \\
+
+Let ${\bf X}$ be a random variable with finite expected value $\mu$, non-zero finite variance $\sigma^2$ then
+
+$$
+\forall k \in \mathds{R}_+ \textnormal{: } \mathds{P}(|{\bf X} - \mu| \geq k\sigma) \leq \frac{1}{k^2}. 
+$$
+
+As an example, using $k=\sqrt{2}$ shows that the probability that the values lie outside the interval $(\mu - \sqrt{2}\sigma, \mu+ \sqrt{2}\sigma)$ doesn't exceed $\frac{1}{2}$. For $k=2$ this value is 25\% and when $k=3$, this value is 12.5\%. \\
+
+In measure-theoretic language, let $f$ be an extended real-valued measurable function defined on X. Then for any real number $t > 0$ and $0 < p < \infty$, then 
+
+$$
+{\displaystyle \mu (\{x\in X\,:\,\,|f(x)|\geq t\})\leq {1 \over t^{p}}\int _{|f|\geq t}|f|^{p}\,d\mu .}
+$$
+
+or more generally, if $g$ is an extended real-valued measurable function, non-negative and non-decreasing, with ${\displaystyle g(t)\neq 0}$
+
+$$
+{\displaystyle \mu (\{x\in X\,:\,\,f(x)\geq t\})\leq {1 \over g(t)}\int _{X}g\circ f\,d\mu .}\\
+$$
+
 \subsection{Week 3}
 
 \subsection{Week 4}
