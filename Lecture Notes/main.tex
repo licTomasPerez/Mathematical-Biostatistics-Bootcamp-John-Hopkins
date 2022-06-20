@@ -601,6 +601,83 @@ $$
 
 \subsection{Week 3}
 
+\paragraph{\textbf{Confidence intervals and CI for normal variables }}
+
+For small samples, the best confidence intervals can be created using Gosset's \tdis. To treat Gosset's $t$-distribution, first we need to discuss the \chidis. \\
+
+In general the procedure to construct confidence intervals is to create a pivot or statistic which doesn't depend on the parameter of interest and then solve the probability that the pivot lies between bounds for the parameter. \\
+
+Suppose that $S^2$ is the sample variance from a collection of iid $\N(\mu, \sigma^2)$ data, then 
+
+$$
+\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1},
+$$
+
+the \chidis  with $n-1$ degrees of freedom, which has support over $\Rp$, with $\E[\chi^2_{n}] = n$ and $\var[\chi^2_{n}] = 2n$. We can use this distribution to create a confidence interval for the variance. Note that if $\chi^2_{n-1, \textnormal{ }\alpha}$ is the $\alpha$-th quantile of the \chidis then
+
+$$
+1-\alpha = \prob\bigg(\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}} \leq \frac{(n-1)S^2}{\sigma^2} \leq \chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}} \bigg) \\
+= \prob\bigg(\frac{1}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \geq \frac{\sigma^2}{(n-1)S^2} \geq \frac{1}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \bigg) \\
+= \prob\bigg(\frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \leq {\sigma^2} \leq \frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \bigg),
+$$
+
+so that 
+
+$$
+CI(\sigma^2) = \bigg[\frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}}, \frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}}\bigg] 
+$$
+
+is a $100(1-\alpha)\%$ confidence interval. The confidence interval for $\sigma$ can be obtained by square-rooting up the endpoints of the previous CI. Note that, by definition, $\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}} > \chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}$, with the second one being on the left one's right. This interval relies heavily on the assumed normality. It turns out 
+
+$$
+(n-1)S^2 \sim \textnormal{Gamma}\bigg(\frac{(n-1)}{2}, 2\sigma^2\bigg),
+$$
+
+therefore, this can be used to plot a likelihood function for $\sigma^2$. \\
+
+Consider the following example:
+
+\begin{tcolorbox}[title=Example of \chidis CI]
+
+A recent study on 513 organo-lead manufacturing workers reported an average total brain volume of $1150.315 cm^3$ with a standard deviation of $105.977 cm^3$. Assuming normality of the underlying measurements, calculate a confidence interval for the popuulation variation in total brain volume. 
+
+\end{tcolorbox}
+
+This can be calculated with the following R-routine
+
+\begin{lstlisting}[language=R]
+n <- 513
+mean <- 1150.315
+s2 <- 105.977^2 
+
+alpha <- .05 
+lower_qtile <- qchisq(alpha/2, n-1)
+upper_qtile <- qchisq(1-alpha/2, n-1)
+
+upper_bound <- (n-1)*s2/lower_qtile
+lower_bound <- (n-1)*s2/upper_qtile
+
+print(sqrt(lower_bound))
+print(sqrt(upper_bound))
+
+In [1]:  99.86484 112.89216
+\end{lstlisting}
+
+or more succinctly
+
+\begin{lstlisting}[language=R]
+n <- 513
+mean <- 1150.315
+s2 <- 105.977^2 
+
+alpha <- .05 
+qtiles <- qchisq(c(alpha/2, 1-alpha/2), n-1)
+ci <- rev((n-1)*s2/qtiles)
+sqrt(ci)
+
+In [1]: 99.86484 112.89216
+\end{lstlisting}
+
 \subsection{Week 4}
 
 \clearpage
