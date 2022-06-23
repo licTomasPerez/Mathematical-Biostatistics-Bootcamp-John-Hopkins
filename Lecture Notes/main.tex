@@ -603,9 +603,22 @@ $$
 
 \paragraph{\textbf{Confidence intervals and CI for normal variables }}
 
+In general the procedure to construct confidence intervals is to create a pivot or statistic which doesn't depend on the parameter of interest and then solve the probability that the pivot lies between bounds for the parameter. \\
 For small samples, the best confidence intervals can be created using Gosset's \tdis. To treat Gosset's $t$-distribution, first we need to discuss the \chidis. \\
 
-In general the procedure to construct confidence intervals is to create a pivot or statistic which doesn't depend on the parameter of interest and then solve the probability that the pivot lies between bounds for the parameter. \\
+\underline{Chi-squared distribution}: 
+
+The \chidis with $k$ degree of freedoms is the distribution of a sum of the squares of $k$ independent standard normal random variables. If $\seq$ are independent standard normal random variables $\N(0, 1)$, then 
+
+$$
+\textnormal{ let } {\bf Q} = \sum_{i=1}^{k} \X_i \sim \chi^2_k.
+$$
+
+In particular, Cochran's theorem establishes that if $\seq$ are iid standard normal variables then
+
+$$
+\sum_{i=1}^{k} (\X_i - \bar{\X}) \sim \chi^2_{k-1} \textnormal{ where } \bar{\X} = \frac{1}{k} \sum_{\X_i}.
+$$
 
 Suppose that $S^2$ is the sample variance from a collection of iid $\N(\mu, \sigma^2)$ data, then 
 
@@ -615,11 +628,11 @@ $$
 
 the \chidis  with $n-1$ degrees of freedom, which has support over $\Rp$, with $\E[\chi^2_{n}] = n$ and $\var[\chi^2_{n}] = 2n$. We can use this distribution to create a confidence interval for the variance. Note that if $\chi^2_{n-1, \textnormal{ }\alpha}$ is the $\alpha$-th quantile of the \chidis then
 
-$$
+\begin{align*}
 1-\alpha = \prob\bigg(\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}} \leq \frac{(n-1)S^2}{\sigma^2} \leq \chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}} \bigg) \\
-= \prob\bigg(\frac{1}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \geq \frac{\sigma^2}{(n-1)S^2} \geq \frac{1}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \bigg) \\
-= \prob\bigg(\frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \leq {\sigma^2} \leq \frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \bigg),
-$$
+&= \prob\bigg(\frac{1}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \geq \frac{\sigma^2}{(n-1)S^2} \geq \frac{1}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \bigg) \\
+&= \prob\bigg(\frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }1-\frac{\alpha}{2}}} \leq {\sigma^2} \leq \frac{(n-1)S^2}{\chi^2_{n-1, \textnormal{ }\frac{\alpha}{2}}} \bigg),
+\end{align*}
 
 so that 
 
@@ -677,6 +690,25 @@ sqrt(ci)
 
 In [1]: 99.86484 112.89216
 \end{lstlisting}
+
+\underline{\textbf{Student's $t$-distribution and CI for normal means}}: \\
+
+\tdis arises when estimating the mean of a normally distributed population in situations where the sample size is small and the population's standard deviation is unknown (and has to be inferred through a suitable estimator). This distribution plays a central role in a wide number of statistical analyses, including Student's $t$-test for assessing the statistical significance of the difference between two sample means, the construction of confidence intervals for the difference between two population means. 
+If we take $n$ observations from a normal distribution, then the \tdis with $\nu = n-1$ degrees of freedom can be defined as the distribution of the location of the sample mean relative to the true mean, divided by the sample standard deviation after multiplying by the standardizing term $\sqrt{n}$. In this way, the \tdis can be used to construct a confidence interval for the true mean. Said distribution is symmetric and bell shape, but with heavier tails. \\
+
+Let $\seq$ be iid distributions, drawn from the $\N(\mu,\sigma^2)$ distribution. Let 
+
+\begin{align*}
+{\displaystyle {\bar {X}}={\frac {1}{n}}\sum _{i=1}^{n}X_{i}}, && {\displaystyle S^{2}={\frac {1}{n-1}}\sum _{i=1}^{n}(X_{i}-{\bar {X}})^{2}},
+\end{align*}
+
+be the sample mean and the Bessel-corrected sample variance (an unbiased estimate for the sample variance), respectively. Then, the random variables 
+
+\begin{align*}
+    {\displaystyle {\frac {{\bar {X}}-\mu }{\sigma /{\sqrt {n}}}} \sim \N(\mu,\sigma^2)}, && {\displaystyle {\frac {{\bar {X}}-\mu }{S/{\sqrt {n}}}} \sim t_{n-1}}.
+\end{align*}
+
+This is so since the quantity $V = (n-1) \frac{S_{n-1}}{\sigma^2} \sim \chi^2_{n-1}$ by Cochran's theorem. It is readily shown that 
 
 \subsection{Week 4}
 
