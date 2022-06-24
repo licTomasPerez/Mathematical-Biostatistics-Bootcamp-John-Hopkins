@@ -29,6 +29,85 @@ sqrt(ci)
 
 In [1]: 99.86484 112.89216
 
+----------
+# Sleep data originally analyzed in Gosset's Biometrika paper, calculating confidence interval 
+
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+sample_var <- sd(diff) 
+
+if (length(g1) == length(g2)){
+    n <- length(g1)
+} else if (length(g1) > length(g2)){
+    n <- length(g1)    
+} else if (length(g2) > length(g1)){
+    n <- length(g2)
+}
+
+CI <- mean_diff + c(-1,1) * qt(.975, n-1) * sample_var / sqrt(n)
+print(CI)
+
+t.test(diff) 
+
+In [1]: 0.7001142 2.4598858
+
+In [2]:	One Sample t-test
+
+In [3]: data:  diff
+In [4]: t = 4.0621, df = 9, p-value = 0.002833
+In [5]: alternative hypothesis: true mean is not equal to 0
+In [6]: 95 percent confidence interval:
+In [7]:  0.7001142 2.4598858
+In [7]: sample estimates:
+In [8]: mean of x 
+     1.58 
+
+----------
+# Likelihood plot for the effect size \frac{\mu}{\sigma} for the non-central \tdis.
+
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+sample_var <- sd(diff) 
+
+if (length(g1) == length(g2)){
+    n <- length(g1)
+} else if (length(g1) > length(g2)){
+    n <- length(g1)    
+} else if (length(g2) > length(g1)){
+    n <- length(g2)
+}
+
+non_central_tstat <- sqrt(n) * mean_diff /sample_var
+x_vals <- seq(0, 3, length = 1000)
+likVals <- dt(non_central_tstat, n-1, ncp = sqrt(n) * x_vals) ## ncp = non-centrality parameter
+likVals <- likVals/max(likVals)
+plot(x_vals, likVals, type = 'l')
+
+lines(range(x_vals[likVals > 1/8]), c(1/8,1/8))
+lines(range(x_vals[likVals > 1/16]), c(1/16,1/16))
+
 
 ----------
 # We can plot a the 95th percentile of the standard normal distribution with the following R routine:
