@@ -691,7 +691,7 @@ sqrt(ci)
 In [1]: 99.86484 112.89216
 \end{lstlisting}
 
-\underline{\textbf{Student's $t$-distribution and CI for normal means}}: \\
+\paragraph{\textbf{Student's $t$-distribution and CI for normal means}}: \\
 
 \tdis arises when estimating the mean of a normally distributed population in situations where the sample size is small and the population's standard deviation is unknown (and has to be inferred through a suitable estimator). This distribution plays a central role in a wide number of statistical analyses, including Student's $t$-test for assessing the statistical significance of the difference between two sample means, the construction of confidence intervals for the difference between two population means. 
 If we take $n$ observations from a normal distribution, then the \tdis with $\nu = n-1$ degrees of freedom can be defined as the distribution of the location of the sample mean relative to the true mean, divided by the sample standard deviation after multiplying by the standardizing term $\sqrt{n}$. In this way, the \tdis can be used to construct a confidence interval for the true mean. Said distribution is symmetric and bell shape, but with heavier tails. \\
@@ -708,7 +708,132 @@ be the sample mean and the Bessel-corrected sample variance (an unbiased estimat
     {\displaystyle {\frac {{\bar {X}}-\mu }{\sigma /{\sqrt {n}}}} \sim \N(\mu,\sigma^2)}, && {\displaystyle {\frac {{\bar {X}}-\mu }{S/{\sqrt {n}}}} \sim t_{n-1}}.
 \end{align*}
 
-This is so since the quantity $V = (n-1) \frac{S_{n-1}}{\sigma^2} \sim \chi^2_{n-1}$ by Cochran's theorem. It is readily shown that 
+This is so since the quantity ${\bf V} = (n-1) \frac{S_{n}^2}{\sigma^2} \sim \chi^2_{n-1}$ by Cochran's theorem. It is readily shown that 
+
+$$
+{\bf Z} = (\bar{\X}_n - \mu) \frac{\sqrt{n}}{\sigma} \sim \N(0,1),
+$$
+
+since the sample mean $\bar{\X}_n$ is normally distributed with mean $\mu$ and variance $\sigma^2/n$. It also turns out that both ${\bf V}$ and ${\bf Z}$ are independent. Consequently, the pivotal quantity
+
+$$
+{\bf T} = \frac{{\bf Z}}{\sqrt{\frac{{\bf V}}{n-1}}} =  (\bar{\X}_n - \mu) \frac{\sqrt{n}}{S_n} \sim t_{n-1}
+$$
+
+which differs from ${\bf Z}$ in that the exact standard deviation $\sigma$ is replaced by the random variable  $S_n$. Notice that the unknown population variance $\sigma^2$ doesn't appear in ${\bf T}$, which only depends on $\nu = n-1$ but not on $\mu$. In other words
+
+$$
+t_{df} = \frac{{\bf Z}}{\sqrt{\frac{\chi^2}{df}}},
+$$
+
+which naturally converges to a normal random variable as $df \rightarrow \infty$. \\
+
+Notice that the previous ${\bf T}$-random variable can be used as a pivot, therefore it's useful for creating a confidence interval for $\mu$. Thus, let $t_{df, \textnormal{ } \alpha}$ be the $\alpha$-th quantile of the \tdis with $df = n-1$ degrees of freedom
+
+\begin{align*}
+    1-\alpha &= \prob \bigg( -t_{n-1, \textnormal{ } 1-\frac{\alpha}{2}} \leq (\bar{\X}_n - \mu) \frac{\sqrt{n}}{S_n} \leq t_{n-1, \textnormal{ } 1-\frac{\alpha}{2}} \bigg) \\
+    &= \prob \bigg(\bar{\X}_n -t_{n-1, \textnormal{ } 1-\frac{\alpha}{2}} \frac{S_n}{\sqrt{n}} \leq \mu \leq \bar{\X}_n +t_{n-1, \textnormal{ } 1-\frac{\alpha}{2}} \frac{S_n}{\sqrt{n}}\bigg) \\
+    &\Rightarrow \mathds{C}\mathds{I}(\mu) = \bar{\X}_n \pm t_{n-1, \textnormal{ } 1-\frac{\alpha}{2}} \frac{S_n}{\sqrt{n}}, 
+\end{align*}
+
+This $t$-test assumes iid normal data (but it's robust to this assumption) and works well for symmetrically-distributed and mound shaped but for skewed distributions, the $t$-test performs poorly (since, in these cases, it doesn't make much sense to center the interval at the mean).. Note that, for large degrees of freedom, $t$-quantiles converge to standard normal quantiles, therefore this random interval 
+converges to the same interval yielded by the CLT.  \\
+
+In R, typing \texttt{data(sleep)} brings up the sleep data originally analyzed in Gosset's Biometrika paper, which shows the increase in hours for 10 patients on two soporific drugs. In this case, R treats the data as two independent data groups and not paired. This can be computed and analyzed with the following R-code snippet 
+
+\begin{lstlisting}[language=R]
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+sample_var <- sd(diff) 
+
+if (length(g1) == length(g2)){
+    n <- length(g1)
+} else if (length(g1) > length(g2)){
+    n <- length(g1)    
+} else if (length(g2) > length(g1)){
+    n <- length(g2)
+}
+
+CI <- mean_diff + c(-1,1) * qt(.975, n-1) * sample_var / sqrt(n)
+print(CI)
+
+t.test(diff) 
+
+In [1]: 0.7001142 2.4598858
+
+In [2]:	One Sample t-test
+
+In [3]: data:  diff
+In [4]: t = 4.0621, df = 9, p-value = 0.002833
+In [5]: alternative hypothesis: true mean is not equal to 0
+In [6]: 95 percent confidence interval:
+In [7]:  0.7001142 2.4598858
+In [7]: sample estimates:
+In [8]: mean of x 
+     1.58 
+\end{lstlisting}
+
+\underline{\textbf{The non-central \tdis}}: If $\X \sim \N(\mu, \sigma^2)$ and ${\bf Y} \sim \chi^2_{df}$, then 
+$\frac{\X/\sigma}{\sqrt{\frac{\chi^2}{df}}}$ is a non-central \tdis random variable with non-centrality parameter $\mu/\sigma$. Also note that 
+
+\begin{align*}
+    \textnormal{if } \bar{\X} \sim \N(\mu, \sigma^2) \textnormal{ and } \frac{(n-1)S^2}{\sigma^2} \sim \chi_{n-1}^2 \\
+    \Rightarrow \frac{\sqrt{n}\bar{\X}}{S} \sim t_{n-1}\bigg(\frac{\sqrt{n}\mu}{\sigma}\bigg),
+\end{align*}
+
+where $\mu/\sigma$ is the non-centrality parameter. The previous result can then be used to create a likelihood for $\frac{\mu}{\sigma}$, the effect size, with the following R routine (using the sleep trial data), which outputs figure \ref{fig:likplot_nctdis}
+
+\begin{lstlisting}[language=R]
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+sample_var <- sd(diff) 
+
+if (length(g1) == length(g2)){
+    n <- length(g1)
+} else if (length(g1) > length(g2)){
+    n <- length(g1)    
+} else if (length(g2) > length(g1)){
+    n <- length(g2)
+}
+
+non_central_tstat <- sqrt(n) * mean_diff /sample_var
+x_vals <- seq(0, 3, length = 1000)
+likVals <- dt(non_central_tstat, n-1, ncp = sqrt(n) * x_vals) ## ncp = non-centrality parameter
+likVals <- likVals/max(likVals)
+plot(x_vals, likVals, type = 'l')
+
+lines(range(x_vals[likVals > 1/8]), c(1/8,1/8))
+lines(range(x_vals[likVals > 1/16]), c(1/16,1/16))
+\end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{figs/non-central-tdis-mu-div-sigma-likelihood.png}
+    \caption{Likelihood plot for the effect size $\frac{\mu}{\sigma}$ for the non-central \tdis. }
+    \label{fig:likplot_nctdis}
+\end{figure}
 
 \subsection{Week 4}
 
