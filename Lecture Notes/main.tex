@@ -826,7 +826,9 @@ plot(x_vals, likVals, type = 'l')
 
 lines(range(x_vals[likVals > 1/8]), c(1/8,1/8))
 lines(range(x_vals[likVals > 1/16]), c(1/16,1/16))
-\end{lstlisting}
+\end{lstlisting} 
+
+\textnormal{ } \\
 
 \begin{figure}
     \centering
@@ -834,6 +836,148 @@ lines(range(x_vals[likVals > 1/16]), c(1/16,1/16))
     \caption{Likelihood plot for the effect size $\frac{\mu}{\sigma}$ for the non-central \tdis. }
     \label{fig:likplot_nctdis}
 \end{figure}
+
+\underline{\textbf{Profile Likelihoods:}}
+
+To obtain a likelihood for $\mu$ alone, the preferred method is called profiling. The profile for parameter $\mu_0$ is obtained by maximizing the joint likelihood for $\sigma$ with $\mu$ fixed at $\mu_0$, this process being repeated for many values of $\mu_0$.
+
+Consider a joint likelihood with $\mu$ fixed at $\mu_0$ given by 
+
+$$
+\propto \prod_{i=1}^{n} \Bigg[(\sigma^2)^{-\frac{1}{2}} \exp\bigg(-\frac{(x_i-\mu_0)^2}{2\sigma^2}\bigg)\bigg].
+$$
+
+With $\mu_0$ fixed, the ML estimator for $\sigma^2$ is $\hat{\sigma} = \frac{1}{n} \sum_{i=1}^{n} (x_i-\mu_0)^2$\footnote{This result is similar in nature to the sample variance, but not exactly since $\mu_0$ is not the sample mean but rather some arbitrary, fixed, number.}. Plugging this into the likelihood returns 
+
+$$
+\bigg(\sum_{i=1}^{n} \frac{(x_i-\mu_0)^2}{n}\bigg)^{-\frac{n}{2}} e^{-\frac{n}{2}}.
+$$
+
+Therefore, up-to multiplicative constants, the profile likelihood is
+
+$$
+\bigg(\sum_{i=1}^{n} \frac{(x_i-\mu_0)^2}{n}\bigg)^{-\frac{n}{2}},
+$$
+
+which is clearly maximized at $\mu = \bar{\X}$, the same as the ML estimate for $\mu$ for the complete likelihood. This profile likelihood is presented at \ref{fig:prof_lik} using the sleep dataset with the following R code:
+
+\begin{lstlisting}[language=R]
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+    n <- length(g1)
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+
+muvals <- seq(0, 3, length = 10^3)
+
+prof_lik <- function(mu){
+            (sum((diff-mu)^2)/sum((diff-mean_diff)^2))^(-n/2)
+            }
+
+likelihood_vals <- sapply(muvals, prof_lik)
+plot(muvals, likelihood_vals,type='l')
+\end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figs/plotting profile likelihood for mu.png}
+    \caption{Plot of the profile likelihood for $\mu$ of joint likelihood distribution for $n$ iid gaussian $\N(\mu,\sigma^2).$}
+    \label{fig:prof_lik}
+\end{figure}
+
+\textnormal{ } \\
+
+\paragraph{\textbf{{$t$-confidence intervals}}}
+
+As motivation for developing confidence intervals using the \tdis, suppose that we desire to compare mean blood pressure between two group in a randomized trial, those who received the treatment versus those who received a placebo. We can't use a paired $t$-test (basically, taking differences of the data) since the groups are independent and may have different sample sizes. There are, however, different methods for comparing independent groups. \\
+
+We're interested in constructing a $t$-interval for the variance, supposing the treated and control group have the same variance, 
+
+\begin{itemize}
+    \item Let ${\bf X}_1, \cdots, {\bf X}_{n_x}$ be iid $\N(\mu_x,\sigma^2)$, the first group's data,
+    \item let ${\bf Y}_1, \cdots, {\bf Y}_{n_y}$ be iid $\N(\mu_y,\sigma^2)$,  the first group's data,
+    \item let $\bar{\bf X}$, $\bar{\bf Y}$, ${\bf S}_x$ and ${\bf S}_y$ be the means and standard deviations respectively.
+\end{itemize}
+
+Using the fact that linear combinations of normal random variables are again normal random variables, we know that $\bar{\bf Y}-\bar{\bf X} \sim \N(\mu_Y-\mu_X, \sigma^2\bigg(\frac{1}{n_x}+\frac{1}{n_y}\bigg))$, then the pooled variance estimator
+
+\begin{align*}
+{\bf S}_p^2 &= \frac{(n_x-1){\bf S}_x^2+(n_y-1){\bf S}_y^2}{n_x+n_y-2} \\
+&= \pi {\bf S}_x^2 + (1-\pi) {\bf S}_y^2 \textnormal{ where } \pi=\frac{n_x-1}{n_x+n_y-2} 
+\end{align*}
+
+is a good estimator for $\sigma^2$. It's a mixture of the group variances, placing greater weight on whichever has a larger sample size. Should the sample sizes be equal, the pooled variance estimate is the average of the group variances. As an estimator, it's unbiased since 
+
+\begin{align*}
+    \E({\bf S}_p^2) &= \frac{(n_x-1)\E({\bf S}_x^2)+(n_y-1)\E({\bf S}_y^2)}{n_x+n_y-2} \\
+    &= \frac{(n_x-1)\sigma^2+(n_y-1)\sigma^2}{n_x+n_y-2}.
+\end{align*}
+
+Note that the pooled variance estimate is independent of $\bar{\bf Y}-\bar{\bf X}$ since ${\bf S}_x$ is independent of $\bar{\bf X}$ and ${\bf S}_y$ is independent of $\bar{\bf Y}$. The sum of two independent \chidis random variables is again another random variable with its degrees of freedom being the sum of the degrees of freedom of the summands. Therefore, remembering that ${\bf V} = (n-1) \frac{{\bf S}_{n}^2}{\sigma^2} \sim \chi^2_{n-1}$ then
+
+\begin{align*}
+    (n_x+n_y-2)\frac{{\bf S}_{p}^2}{\sigma^2} = (n_x-1) \frac{{\bf S}_{x}^2}{\sigma^2} + (n_y-1) \frac{{\bf S}_{y}^2}{\sigma^2} \\
+    &\sim \chi^2_{n_x-1} + \chi^2_{n_y-1} \\
+    &\sim \chi^2_{n_x+n_y-2}
+\end{align*}
+
+This is useful to create a pivot, since a $t$-confidence intervals are constructed by getting a standard normal out of the data and dividing it by its degrees of freedom and the squared root of a \chidis, in other words
+
+$$
+\frac{{\bf Z}}{\sqrt{\frac{{\bf V}}{n-1}}} =  (\bar{\X}_n - \mu) \frac{\sqrt{n}}{S_n} \sim t_{n-1}.
+$$
+
+Then the statistic 
+
+$$
+\frac{\frac{\bar{{\bf Y}}-\bar{{\bf X}} - (\mu_Y-\mu_X) }{\sigma\left(\frac{1}{n_X}+\frac{1}{n_Y}\right)}}{\sqrt{\frac{(n_X+n_Y-2){\bf S}_p^2}{n_X+n_Y-2\sigma^2}}} \sim \frac{\N(0,1)}{\sqrt{\frac{\chi^2_{n_x+n_y-2}}{{n_x+n_y-2}}}},
+$$
+
+which can be rewritten as 
+
+$$
+ \frac{\bar{{\bf Y}}-\bar{{\bf X}}- (\mu_Y-\mu_X)}{{\bf S}_p \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)^{1/2}} \sim t_{n_x+n_y-2}
+$$
+
+
+a standard normal (since $\bar{Y}-\bar{X} \sim \mathcal{N}\left(\mu_{Y}-\mu_{X},\sigma^2 \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)\right)$) divided by  the square root of an independent Chi-squared divided by its degrees of freedom. Thus, this statistic follows a Gosset's $t$ distribution with $n_X+n_Y-2$ degrees of freedom. This is a special case of an ANOVA test. \\
+
+Therefore a $(1-\alpha)\times 100\%$-confidence interval for $\mu_Y-\mu_X$ can be written as follows
+
+$$
+\bar{Y}-\bar{X}\pm t_{n_{X}+n_{Y}-2,1-\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}.
+$$
+
+Notice that the previous random variable follows a non-central $t$-distribution with non-centrality parameter given by $ \frac{(\mu_Y-\mu_X)}{{\bf S}_p \left(\frac{1}{n_X}+\frac{1}{n_Y}\right)^{1/2}}$. Then we can use this statistic to create a likelihood for $\frac{\mu_Y-\mu_X}{\sigma}$, a standardized measure of the change in group means. \\
+
+If we're unwilling to assume equal variances accross the two data groups, we can assert that 
+
+$$
+\bar{{\bf Y}}-\bar{{\bf X}} \sim \N\bigg(\mu_Y-\mu_X, \frac{\sigma^2_x}{n_x}+\frac{\sigma^2_y}{n_y}\bigg),
+$$
+
+since we can't factor out $\sigma^2$ out of the square root, then the statistic
+
+$$
+\bar{Y}-\bar{X}\pm t_{n_{X}+n_{Y}-2,1-\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}},
+$$
+
+approximately follows a Gosset's \tdis with its degrees of freedom equal to 
+
+$$
+\frac{(\frac{{\bf S}_x^2}{n_x}+\frac{{\bf S}_y^2}{n_y})^2}{\bigg(\frac{{\bf S}_x^2}{n_x}\bigg)^2 \frac{1}{n_x-1}+\bigg(\frac{{\bf S}_y^2}{n_x}\bigg)^2 \frac{1}{n_y-1}}.
+$$
+
+The confidence interval can be readily computed using the appropriate $t$-quantile. 
 
 \subsection{Week 4}
 
