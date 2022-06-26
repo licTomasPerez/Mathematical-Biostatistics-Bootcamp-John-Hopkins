@@ -1001,11 +1001,107 @@ ie. the deviance of the delete-one estimates from the average delete-one estimat
 
 \begin{tcolorbox}[title=Example: Using the Jackknife]
 
-Consider the data-set of $630$ measurements of gray matter volume for workers from a lead manufacturing plant. The median gray matter volume if around 589 cubic centimeters and we wish to estimate the bias and standard error of the median. 
+Consider the data-set of $630$ measurements of gray matter volume for workers from a lead manufacturing plant. The median gray matter volume if around 589 cubic centimetres and we wish to estimate the bias and standard error of the median. \\
+
+The general procedure can be implemented as an algorithm in R with the following routine:
+
+\begin{lstlisting}[language=R]
+n <- length(gmVol)
+theta <- median(gmVol)
+
+jk <- sapply(1:n, 
+             function(i) median(gmVol[-i])
+             )
+thetaBar <- mean(jk)
+biasEst <- (n-1) * (thetaBar - theta)
+seEst <- sqrt((n-1) * mean((thetaBar - theta)^2))
+\end{lstlisting}
+
+or using the boostrap package
+
+\begin{lstlisting}[language=R]
+library(bootstrap)
+out <- jackknife(gmVol, median)
+out$jack.se
+out$jack.bias
+\end{lstlisting}
+
+Both methods yield an estimated bias of 0 and a standard error of 9.94. In general, the jackknife estimate of the bias for the median is always 0 when the number of observations is even. 
+\end{tcolorbox}
+
+\textnormal{ } \\
+
+It has been proven that the jackknife is a linear approximation to the bootstrap. Generally it's not recommended to use the jackknife for sample quantiles like the median, since it has poor properties. 
+
+Another interesting way to think about the jackknife uses pseudo observations, defined as 
+
+$$
+\textnormal{Pseudo Obs } = n \hat{\theta} - (n-1)\hat{\theta}_i,
+$$
+
+in other words these are "whatever observation i contributes to the estimate of $\theta$". Note that when $\theta$ is the sample mean, the pseudo observations are the data themselves. 
+
+Then the sample standard error of these observation is the previous jackknife estimated standard error. The mean of these observations is a bias-corrected estimate for $\theta$. 
+
+\paragraph{\textbf{Bootstrapping}}
+
+The bootstrap is a tremendously useful tool for constructing confidence intervals and calculating standard errors for difficult statistic. \\
+
+Suppose that a certain statistic, for example the median, estimates some population parameter, but it's sampling distribution is not known. The bootstrap principle suggests using the distribution defined by the data to approximate its sampling distribution. Said data-induced distribution is discrete and puts probability $\frac{1}{N}$ on every one of the $N$ data points with its mean being the sample mean. 
+
+In practice, the bootstrap principle is always carried out by simulations. The general procedure follows by first simulating complete data sets from the observed data with replacement\footnote{Note that sampling without replacement would wind up to be a permutation of the original data set.} (this is approximately drawing from the sampling distribution of that statistic, at least as far as the date is able to approximate the true population distribution), then calculating the statistic
+for each simulated data set. Then, we use the simulated statistics to either define a confidence interval or take the standard deviation to calculate a standard error. \\
+
+Sampling with replacing is exactly drawing iid samples
+from the empirical distribution, which places probability $\frac{1}{N}$ on each data point. Consider the previous' section example:
+
+\begin{tcolorbox}[title=Example: Using the Jackknife]
+
+Consider the data-set of $630$ measurements of gray matter volume for workers from a lead manufacturing plant. The median gray matter volume if around 589 cubic centimetres and we wish to estimate the bias and standard error of the median. \\
+
+The bootstrap procedure for calculating the median from a data set of $n$ observations is 
+
+\begin{itemize}
+    \item Sampling $n$ observations with replacement from the observed data resulting in one simulated data set,
+    \item taking the median of the simulated data set,
+    \item repeating these two steps $B$ times, resulting in $B$ medians.
+    \item These medians are approximate draws from the sampling distribution of the median of $n$ observations, they are exact draws from the sampling distribution of the median of $N$ observations from the distribution of the observed data, therefore we can 
+    \begin{itemize}
+        \item draw a histogram of them,
+        \item calculate their standard deviations to estimate the standard error of the median,
+        \item or take the 2.5-th and 97.5-th percentiles as a confidence interval for the median. This is a bootstrap confidence interval. 
+    \end{itemize}
+\end{itemize}
+
+Numerically, this can be done in R:
+
+\begin{lstlisting}[language=R]
+B <- 1000 
+n <- length(gmVol)
+resamples <- matrix(sample(gmVol, 
+                           n*B,
+                           replace=TRUE),
+                    B,n)
+medians <- apply(resamples, 1, median)
+sd(medians)
+\end{lstlisting}
+
+or by using the bootstrap library
+
+\begin{lstlisting}
+library(boot)
+stat <- function(x, i) {median(x[i])}
+boot.out <- boot(data = gmVol,
+                 statistic = stat,
+                 R = 1000)
+boot.ci(boot.out)
+\end{lstlisting}    
 
 \end{tcolorbox}
 
-\paragraph{\textbf{Bootstrapping}}
+\textnormal{ }\\
+
+The bootstrap is non-parametric and work best for large samples. Further details can be found in "An introduction to the Bootrstrap" by Efron and Tibshirani. 
 
 \subsection{Week 4}
 
