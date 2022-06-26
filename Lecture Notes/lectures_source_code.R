@@ -136,6 +136,47 @@ prof_lik <- function(mu){
 likelihood_vals <- sapply(muvals, prof_lik)
 plot(muvals, likelihood_vals,type='l')
 
+----------
+# Jackknife approximation for the standard error and the median 
+
+n <- length(gmVol)
+theta <- median(gmVol)
+
+jk <- sapply(1:n, 
+             function(i) median(gmVol[-i])
+             )
+thetaBar <- mean(jk)
+biasEst <- (n-1) * (thetaBar - theta)
+seEst <- sqrt((n-1) * mean((thetaBar - theta)^2))
+
+# or with the R-bootstrap library
+
+library(bootstrap)
+out <- jackknife(gmVol, median)
+out$jack.se
+out$jack.bias
+
+----------
+# Bootstrap principle implementation for calculating the median of a data-set with n observation and B trials
+
+B <- 1000 
+n <- length(gmVol)
+resamples <- matrix(sample(gmVol, 
+                           n*B,
+                           replace=TRUE),
+                    B,n)
+medians <- apply(resamples, 1, median)
+sd(medians)
+
+# or with the R-bootstrap library
+
+library(boot)
+stat <- function(x, i) {median(x[i])}
+boot.out <- boot(data = gmVol,
+                 statistic = stat,
+                 R = 1000)
+boot.ci(boot.out)
+
 
 ----------
 # We can plot a the 95th percentile of the standard normal distribution with the following R routine:
