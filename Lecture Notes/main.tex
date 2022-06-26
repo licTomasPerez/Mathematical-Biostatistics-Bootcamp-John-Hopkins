@@ -977,7 +977,35 @@ $$
 \frac{(\frac{{\bf S}_x^2}{n_x}+\frac{{\bf S}_y^2}{n_y})^2}{\bigg(\frac{{\bf S}_x^2}{n_x}\bigg)^2 \frac{1}{n_x-1}+\bigg(\frac{{\bf S}_y^2}{n_x}\bigg)^2 \frac{1}{n_y-1}}.
 $$
 
-The confidence interval can be readily computed using the appropriate $t$-quantile. 
+The confidence interval can be readily computed using the appropriate $t$-quantile. \\
+
+\paragraph{\textbf{Jackknife}}
+
+The jackknife is a tool for estimating standard errors and the bias of estimators. Both the jackknife and the bootstrap involve resampling data, ie. repeatedly creating new data sets from the original data. \\
+
+The jacknife deletes each observation and calculates an estimated based on the remaining $n-1$ of them. It uses this collection of estimates to do things like estimating bias and standard errors. Note that estimating the bias and having a standard error are not relevant quantities to compute a sample mean, which we know are unbiased estimates of population means and what their standard error are. \\
+
+Consider the jackknife for univariate data. Let $\seq$ be a collection of data used to estimate a parameter $\theta$, with $\hat{\theta}$ being the estimate based on the full data-set. Let $\hat{\theta}_i$ be the estimate of $\theta$ obtained by deleting the $i$-th observation and finally let $\bar{\theta}=\frac{1}{n}\sum_{i=1}^{n} \hat{\theta}_i$. Then the jackknife estimate for the bias is 
+
+$$
+(n-1)(\bar{\theta}-\hat{\theta}),
+$$
+
+ie. how far the average delete-one estimate is from the actual estimate, with the jackknife standard error is 
+
+$$
+\bigg[\frac{n-1}{n}\sum_{i=1}^{n} (\bar{\theta}-\hat{\theta})^{\frac{1}{2}}\bigg],
+$$
+
+ie. the deviance of the delete-one estimates from the average delete-one estimate. 
+
+\begin{tcolorbox}[title=Example: Using the Jackknife]
+
+Consider the data-set of $630$ measurements of gray matter volume for workers from a lead manufacturing plant. The median gray matter volume if around 589 cubic centimeters and we wish to estimate the bias and standard error of the median. 
+
+\end{tcolorbox}
+
+\paragraph{\textbf{Bootstrapping}}
 
 \subsection{Week 4}
 
