@@ -110,6 +110,34 @@ lines(range(x_vals[likVals > 1/16]), c(1/16,1/16))
 
 
 ----------
+# Plot of the profile likelihood for $\mu$ of joint likelihood distribution for $n$ iid gaussian $\N(\mu,\sigma^2).$
+
+data(sleep)
+
+g1 <- sleep$extra[1:10]
+g2 <- sleep$extra[11:20]
+l1 <- length(g1); l2 <- length(g2)
+
+if (l1 == l2){
+    diff <- g2 - g1
+    n <- length(g1)
+} else{
+    print("Incompatible list dimensions")
+} 
+
+mean_diff <- mean(diff)
+
+muvals <- seq(0, 3, length = 10^3)
+
+prof_lik <- function(mu){
+            (sum((diff-mu)^2)/sum((diff-mean_diff)^2))^(-n/2)
+            }
+
+likelihood_vals <- sapply(muvals, prof_lik)
+plot(muvals, likelihood_vals,type='l')
+
+
+----------
 # We can plot a the 95th percentile of the standard normal distribution with the following R routine:
 xval <-  seq(-3.2, 3.2, length=1000)
 yval <- dnorm(xval)
