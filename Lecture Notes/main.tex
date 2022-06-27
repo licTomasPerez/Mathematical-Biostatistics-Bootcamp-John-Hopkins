@@ -1105,6 +1105,53 @@ The bootstrap is non-parametric and work best for large samples. Further details
 
 \subsection{Week 4}
 
+\paragraph{\textbf{Binomial proportions}}: \\
+
+Let $\X \sim \textnormal{ Binom}(n,p)$ we know that 
+
+\begin{itemize}
+    \item $\hat{p}=\frac{\X}{n}$ is the maximum likelihood estimator for $p$, the sample proportion of successes. 
+    \item $\E[\hat{p}] = p$,
+    \item $\var[\hat{p}] = \frac{p(1-p)}{n}$,
+    \item Since $\hat{p}$ is an average of Bernoulli trials, the Central Limit Theorem holds, therefore
+    $\frac{\hat{p}-p}{\sqrt{\frac{p(1-p)}{n}}}$ follows a normal distribution for large $n$. \\
+\end{itemize}
+
+The latter fact leads to the Wald interval for $p$
+
+$$
+\hat{p} \pm z_{1-\frac{\alpha}{2}} \sqrt{\frac{p(1-p)}{n}},
+$$
+
+which performs poorly. Asymptotically, coverage at $\alpha$-th level is guaranteed, however in practice coverage probability varies wildly, sometimes being quite low for certain values of $n$ even when $p$ is not near the boundaries. For example, when $p = .5$ and $n=40$, the actual coverage of a 95\% interval is only 92\%. When $p$ is small or large, coverage can be quite poor even for extremely large values of $n$. For example, when $p=.005$ and $n=1876$ the actual coverage rate of a 95\% interval is only 90\%. \\
+
+A simple fix for the problem is to add two successes and two failures, which is yet again a random variable, and to treat the latter as if it were the data. That is, let $\tilde{\bf p} = \frac{\X+2}{n+4}$. The Agresti-Coull interval is 
+
+$$
+\tilde{p} \pm  z_{1-\frac{\alpha}{2}} \sqrt{\frac{\tilde{p}(1-\tilde{p})}{n}}
+$$
+
+When $p$ is either very large or very small, the distribution of $\hat{p}$ is skewed and it doesn't make sense to center the interval at the MLE, but rather at another artificially created center with pseudo-observations, pulling the center of the interval towards $.5$. This interval is the inversion of the hypothesis testing technique. \\
+
+\begin{tcolorbox}[title= Binomial proportions example:]
+
+Suppose that in a random sample of an at-risk population of 13 out of 20 subjects had hypertension and we'd like to estimate the prevalence of hypertension in this population. 
+
+\begin{itemize}
+    \item $\hat{p}=.65$, $n=20$,
+    \item $\tilde{p}=.65$, $\tilde{n}=n+4=20$,
+    \item $z_{975} = 1.96$, 
+    \item Wald interval $[.44, .86]$,
+    \item Agresti-Coull interval $[.44, .82]$,
+    \item $\frac{1}{8}$ likelihood interval $[.44, .84]$.
+\end{itemize}
+
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\end{tcolorbox}
+
 \clearpage
 
 \section{Part 2}
