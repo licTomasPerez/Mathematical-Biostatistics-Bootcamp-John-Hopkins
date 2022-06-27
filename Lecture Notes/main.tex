@@ -1145,12 +1145,43 @@ Suppose that in a random sample of an at-risk population of 13 out of 20 subject
     \item Agresti-Coull interval $[.44, .82]$,
     \item $\frac{1}{8}$ likelihood interval $[.44, .84]$.
 \end{itemize}
-
-\begin{itemize}
-    \item 
-\end{itemize}
-
 \end{tcolorbox}
+
+\textnormal{ } \\
+
+\paragraph{\textbf{Bayesian Analysis}}: \\
+
+Bayesian statistics posits a \textbf{prior} on the parameter of interest, a probability distribution that represent our beliefs on that parameter. All inferences are then performed on the distribution of the parameter given the data, the so called \textbf{posterior}. In general
+
+$$
+\textnormal{Posterior } \propto \textnormal{ Likelihood  }\times \textnormal{ Prior}. 
+$$
+
+Therefore the likelihood is the factor by which our prior beliefs are updated to produce conclusions in light of the data. \\
+
+Our binomial data is discrete, only taking values between 0 and 1, but the proportion to be estimated is continuous, $p \in \Theta \sim \R_{[0,1]}$. Thus we need a continuous distribution, with a lower bound at 0 and an upper bound at 1. The beta distribution is the default prior for parameters between 0 and 1. The beta density depends on two parameters, $\alpha \textnormal{ and } \beta$, and its pdf is given by
+
+$$
+\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} p^{\alpha-1}(1-p)^{\beta-1} \textnormal{ for } 0 \leq p \leq 1,
+$$
+
+where $\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}$ arises as a normalization constant since $\int_{p\in\Theta}dp p^{\alpha-1}(1-p)^{\beta-1} = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}$. Its mean is $\frac{\alpha}{\alpha+\beta}$ and its variance is $\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$. The uniform density is the special case where $\alpha=\beta=1$. \\
+
+Suppose that we chose values of $\alpha$ and $\beta$ so that the beta prior is indicative of our degrees of belief regarding $p$ in the absence of data. Then, according to Bayes' rule
+
+$$
+\textnormal{Posterior } \propto \textnormal{ Likelihood  }\times \textnormal{ Prior}. 
+$$
+
+Therefore, up-to to $p$-independent multiplicative factors
+
+\begin{align*}
+    \textnormal{Posterior } &\propto p^{x}(1-p)^{n-x} \times p^{\alpha}(1-p)^{\beta-x} \\
+    &\propto p^{x+\alpha-1}(1-p)^{n-x+\beta-1},
+\end{align*}
+
+which is another beta density with parameters $\tilde{\alpha}=x+\alpha$ and $\tilde{\beta}=n-x+\beta$.
+Then, we can calculate the posterior mean
 
 \clearpage
 
