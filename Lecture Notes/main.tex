@@ -1181,7 +1181,32 @@ Therefore, up-to to $p$-independent multiplicative factors
 \end{align*}
 
 which is another beta density with parameters $\tilde{\alpha}=x+\alpha$ and $\tilde{\beta}=n-x+\beta$.
-Then, we can calculate the posterior mean
+Then, we can calculate the posterior mean given the data is
+
+\begin{align*}
+    \E[p |{\bf X}] &= \frac{\tilde{\alpha}}{\tilde{\alpha}+\tilde{\beta}} \\
+    &= \frac{x+\alpha}{x+\alpha + n- x+\beta} \\
+    &= \frac{x+\alpha}{n+\alpha+\beta} \\
+    &= \frac{x}{n} \cdot \frac{n}{n+\alpha+\beta} + \frac{\alpha}{\alpha+\beta} \cdot \frac{\alpha+\beta}{n+\alpha+\beta} \\
+    &= \textnormal{MLE } \times \pi + \textnormal{ Prior Mean } \times (1-\pi),
+\end{align*}
+
+where $\pi = \frac{n}{n+\alpha+\beta}$ and where we used the fact that the posterior is the distribution of the parameter given the data, the likelihood is the probability of the data given the parameter and the prior is the probability of the parameter disregarding the data. So, the previous equation is an average of the MLE and the prior mean, but each without .5 probability each. Note that when $n >> 1$, then $\pi >> 1$ and the MLE term dominates. Therefore, as the sample size gets bigger, the data means more. On the contrary, as $\alpha, \beta >> 1$ and $n$ remains constant, the prior mean term dominates. \\
+
+The posterior variance is 
+
+\begin{align*}
+    \var[p |{\bf X}] &= \frac{\tilde{\alpha}\tilde{\beta}}{(\tilde{\alpha}+\tilde{\beta})^2(\tilde{\alpha}+\tilde{\beta}+1)} \\
+    &= \frac{(x+\alpha)(n-x+\beta)}{(n+\alpha+\beta)^2(n+\alpha+\beta+1)}.
+\end{align*}
+
+Let $\tilde{p} = \frac{x+\alpha}{n+\alpha+\beta}$ and let $\tilde{n}=n+\alpha+\beta$ then 
+
+$$
+\var[p |{\bf X}] = \frac{\tilde{p}(1-\tilde{p})}{\tilde{n}+1},
+$$
+
+which is very similar (but not quite) to the variance of a binomial random variable. 
 
 \clearpage
 
