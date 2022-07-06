@@ -1206,7 +1206,69 @@ $$
 \var[p |{\bf X}] = \frac{\tilde{p}(1-\tilde{p})}{\tilde{n}+1},
 $$
 
-which is very similar (but not quite) to the variance of a binomial random variable. 
+which is very similar (but not quite) to the variance of a binomial random variable. \\
+
+Consider now the previous example where $x=13$ and $n=20$, with a uniform prior of $\alpha = \beta = 1$. Then, the posterior is proportional to 
+
+$$
+p^{x+\alpha-1}(1-p)^{n-x+\beta-1} = p^{x}(1-p)^{n-x},
+$$
+
+that is, for the uniform prior, the posterior itself is the likelihood. Consider the instance where $\alpha = \beta = 2$, the posterior is 
+
+$$
+p^{x+\alpha-1}(1-p)^{n-x+\beta-1} = p^{x}(1-p)^{n-x+1} 
+$$
+
+The particular case of $\alpha = \beta = .5$ is called Jeffrey's prior. \\
+
+The posterior, in Bayesian analysis, is the distribution of the parameter given the data and is the object of study of Bayesian analysis. One way to summarize data was to use confidence intervals in frequentist statistics. However, said confidence intervals lies on the idea of obtaining similar results in fictitious repetitions of experiments, idea not compatible with Bayesian statistics.  Therefore, we define a Bayesian credible interval is the Bayesian analog of the confidence interval. A 95\% credible interval $[a,b]$ would satisfy
+
+$$
+\prob(p \in [a,b] | x) = .95,
+$$
+
+ie. it's the random interval which satisfies that the probability of the parameter lying in the interval, given the data, is 95\%. Higher values of the posterior represent better supported values of the parameter, so the best credible intervals chop off the posterior with a horizontal line, similarly to likelihoods. These are called highest posterior density intervals. This can be computed in R by using the \texttt{binom.bayes(13,20,type="highest")} within the \texttt{binom} library, for a default credible level of 95\% and with the default prior being Jeffrey's prior. \\
+
+It's important to understand the correct interpretation of both confidence intervals and Bayesian credible intervals. 
+
+\begin{itemize}
+    \item Formally, a confidence interval is constructed in such a way that in repeated (fictitious) independent experiments, 95\% of the intervals obtained would contain $p$. \\
+    \item A (1/8-th) likelihood interval represents plausible values for $p$ in the sense that for each point in this interval, there is no other point that is more than 8 times better supported given the data. \\
+    \item The Jeffrey's Bayesian credible interval's interpretation is straightforward, it's the random interval constructed in such a way that the probability that $p$ lies in said interval is 95\%, where probability must be interpreted according to the Bayesian approach. \\
+\end{itemize}
+
+\textnormal{ } \\
+
+\paragraph{\textbf{Logs and the Geometric Mean}:}
+
+Taking logs of data is a well-known and widely used technique in data analysis, useful to correct for right skewness, when considering rations, in setting where errors are feasibly multiplicative, such as when dealing with concentration or rates, when analysing data with high orders of magnitude and counts/frecuencies are also logged. \\
+
+The sample geometric mean of a data set $\seq$ is 
+
+$$
+\bigg(\prod_{i=1}^{n} \X_i \bigg)^{\frac{1}{n}},
+$$
+
+provided the $\X_i$ are positive, the log of the geometric mean is then 
+
+$$
+\frac{1}{n}\sum_{i=1}{n} \log \X_i.
+$$
+
+Then, the log of the geometric mean is an average, where the law of large numbers and the central limit theorem apply. The log of geometric mean is the arithmetic mean of the log of observations. Note that the geometric mean is always less than or equal to the sample arithmetic mean. The geometric mean is often used when the $\X_i$ are all multiplicative. Consider the following example 
+
+\begin{tcolorbox}[title=Geometric mean Example]
+
+Suppose that in a population of interest, the prevalence of a disease rose 2\% one year, then fell 1\% the next, then rose 2\%, then rose 1\%; since these factors act multiplicatively it makes sense to consider the geometric mean: 
+
+$$
+(1.02 \times .99 \times 1.02 \times 1.01)^{\frac{1}{4}} = 1.01,
+$$
+
+for a 1\% geometric mean increase in disease prevalence. 
+
+\end{tcolorbox}
 
 \clearpage
 
