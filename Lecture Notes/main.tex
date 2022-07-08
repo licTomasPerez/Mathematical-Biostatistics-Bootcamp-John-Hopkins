@@ -1268,7 +1268,36 @@ $$
 
 for a 1\% geometric mean increase in disease prevalence. 
 
+Note that 1.01 is the constant factor by which you would need to multiply the initial prevalence each year to achieve the same overall increase in prevalence over a four year period. In contrast, the arithmetic mean is the constant factor by which you would need to add each year to achieve the same total increase (1.02+.99+1.02+1.01). In this case, the product and hence the geometric mean make more sense than the arithmetic mean. \\
+
+Another way to interpret the differences between the geometric and arithmetic means is to consider the following example. Let $a$ and $b$ be the lengths of the sides of a rectangle, then
+
+\begin{itemize}
+    \item The arithmetic mean $\frac{a+b}{2}$ is the length of the sides of the square that has the same perimeter, 
+    \item and the geometric mean $\sqrt{ab}$ is the length of the sides of the square that has the same area.
+\end{itemize}
+
+Then if we're interested in perimeters (adding) use the arithmetic mean; if we're interested in areas (multiplying), we use the geometric mean. 
+
 \end{tcolorbox}
+
+\textnormal{ }\\
+
+Now, according to the law of large numbers, the log of the geometric mean converges to $\tilde{\mu} = \E[\log(\X)]$. Therefore, the geometric mean converges to $\exp{\E[\log(\X)]} = e^{\tilde{\mu}}$, the population geometric mean, which is not the population mean on the natural scale,
+
+$$
+\exp{\E[\log(\X)]} \neq \E[\exp{\log(\X)}] = \E[\X].
+$$
+
+Note that if the distribution of $\log \X$ is symmetric, then
+
+$$
+.5 = \prob(\log \X \leq \tilde{\mu}) = \prob(\X \leq e^{\tilde{\mu}}),
+$$
+
+since $\log \cdot$, $\exp(\cdot)$ and $\E[\cdot] $are monotonically increasing functions. This is one of the reasons for taking logs of data. Therefore, for log-symmetric distributions, the geometric mean is estimating the median. \\
+
+If we use the central limit theorem to create a confidence interval for the log-measurements, the interval is estimating $\tilde{\mu}$, the expected value of the log-measurements. By exponentiation of the endpoints of the interval, the interval estimates $e^{\tilde{\mu}}$, the population geometric mean. Should the logged data be symmetric, then $e^{\tilde{\mu}}$ is the population median. This is a useful technique for paired data, when their ratio, rather than their difference, is of interest. 
 
 \clearpage
 
