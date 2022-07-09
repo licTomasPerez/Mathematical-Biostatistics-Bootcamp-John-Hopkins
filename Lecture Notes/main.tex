@@ -1297,7 +1297,57 @@ $$
 
 since $\log \cdot$, $\exp(\cdot)$ and $\E[\cdot] $are monotonically increasing functions. This is one of the reasons for taking logs of data. Therefore, for log-symmetric distributions, the geometric mean is estimating the median. \\
 
-If we use the central limit theorem to create a confidence interval for the log-measurements, the interval is estimating $\tilde{\mu}$, the expected value of the log-measurements. By exponentiation of the endpoints of the interval, the interval estimates $e^{\tilde{\mu}}$, the population geometric mean. Should the logged data be symmetric, then $e^{\tilde{\mu}}$ is the population median. This is a useful technique for paired data, when their ratio, rather than their difference, is of interest. 
+If we use the central limit theorem to create a confidence interval for the log-measurements, the interval is estimating $\tilde{\mu}$, the expected value of the log-measurements. By exponentiation of the endpoints of the interval, the interval estimates $e^{\tilde{\mu}}$, the population geometric mean. Should the logged data be symmetric, then $e^{\tilde{\mu}}$ is the population median. This is a useful technique for paired data, when their ratio, rather than their difference, is of interest. \\
+
+Consider now the following example 
+
+\begin{tcolorbox}[title=Example]
+
+Consider a paired design experiment comparing systolic blood pressure (SBP) for people taking oral contraceptives for users and matched controls. We're interested in analysing the logs of the ratios of test subject group and control group since the ratios give us information about increases and decreases of the SBP. 
+
+\begin{itemize}
+    \item The geometric mean ratio is 1.04 (ie. a 4\% increase in SBP for the OC users),
+    \item The $T$-interval on the difference of the log scale measurements is $\mathds{C}\mathds{i}(\textnormal{log (ratios)})=[0.010, 0.067] \log(\textnormal{mmHg})$.
+    \item Exponentiating yields the confidence interval $\mathds{C}\mathds{i}(\textnormal{(ratios)}) = [1.010, 1.069]\textnormal{mmHg}.$
+\end{itemize}    
+Hence, we can confirm an increase in SBP in the test subjects group compared to the control group. \\
+
+Consider now an experiment involving testing two independent groups, logging the individual data points and creating a confidence interval for the differences in the log means, if the data is symmetric in the log-scale, then it's also equal to a ratio in the population medians. Then exponentiating the endpoints of this interval yields the interval for the ratio of the population geometric means, $\frac{e^{\tilde{\mu}_1}}{e^{\tilde{\mu}_2}}$. 
+
+\end{tcolorbox}
+
+\textnormal{ }\\
+
+A random variable is log-normally distributed if its log is a normally distributed random variable. Note that log-normal random variables are not log of normal random variables. Formally, $\X \sim \mathcal{L}\mathcal{N}(\mu, \sigma^2)$ if $\log \X \sim \mathcal{N}(\mu, \sigma^2)$. Note that if $\X \sim \mathcal{N}(\mu, \sigma^2)$ then ${\bf Y} = e^{\X}$ is log-normal. The log-normal density is given by
+
+$$
+\frac{1}{\sqrt{2\pi}} \frac{\exp[-(\log x -\mu)^2/(2\sigma^2))]}{x},
+$$
+
+with support over $x \in \mathds{R}_{(0,\infty)}$, with a mean of $e^{\mu+\frac{\sigma^2}{2}}$, variance of $e^{2\mu+{\sigma^2}}(e^{\sigma^2}-1)$ and median $e^{\mu}$. \\
+
+Let $\seq$ be sequence of log-normal$(\mu, \sigma^2)$ random variables, then $\seqY | {\bf Y}_k = \log {\bf X}_k$ are normally distributed with mean $\mu$ and variance $\sigma^2$. Therefore, we can create a Gosset's $t$-confidence interval. If $\mu$ is the log of the median of the $\X_i$, then $e^{\mu}$ gives the median on the original scale and it also population geometric mean. Assuming log-normality, exponentiating $t$-confidence intervals for the difference in two log means, again estimates ratios of geometric means. \\
+
+\clearpage
+
+Consider the following example of log-normal random variables.
+
+\begin{tcolorbox}[title=Example of log-normal random variables]
+
+Consider an experiment of gray matter volumes, test subjects being divided amongst two groups, young group and old group. Then we take GM volumes for young and old groups by logging them, the results being
+
+\begin{align*}
+ \mathds{C}\mathds{I}(\textnormal{log old}) &= [13.24, 13.27] \log\textnormal{cm}^3  \textnormal{ and } \mathds{C}\mathds{I}(\textnormal{young}) = [13.29, 13.31] \log\textnormal{cm}^3.
+\end{align*}
+
+By exponentiation, this yields
+
+\begin{align*}
+    \mathds{C}\mathds{I}(\textnormal{old}) &= [564.4, 577.5] cc \textnormal{ and } \mathds{C}\mathds{I}(\textnormal{young}) = [592.0, 606.9] cc.
+\end{align*}
+
+Performing a two group $t$-interval on the difference of the logged measurement yields $\mathds{C}\mathds{I}(\textnormal{log young - log old})=[0.032, 0.066] \log\textnormal{cm}^3$, which exponentiated yields $\mathds{C}\mathds{I}(e^{\textnormal{log young}}/ e^{\textnormal{log old})}=[1.032, 1.068] cm^3$. 
+\end{tcolorbox}
 
 \clearpage
 
