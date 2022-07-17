@@ -1,0 +1,39 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hwsymb}[2021/01/01 hwsymb]
+\usepackage{dsfont}
+\RequirePackage{amsmath, amssymb, amsthm, amscd, graphicx}
+
+\usepackage{mathabx, bm}
+%\usepackage{kpfonts}
+\usepackage{multirow}
+\usepackage{ulem}
+\usepackage{cancel}
+
+% new and renewed commands
+\renewcommand{\qedsymbol}{$_{\scriptstyle \substack{\sc{quod}\\\sc{erat}\\\sc{dem}\scalebox{0.53}{$\blacksquare$}}}$}
+% beamer does not define a \labelenumi therefore this can't be renewed.
+\def\labelenumi{\theenumi)} % to make (n) into n)
+
+% New enviroments
+\newtheorem{df}{Definition}
+
+% Symbols
+\newcommand{\X}{{\bf X}}
+\newcommand{\Y}{{\bf Y}}
+\newcommand{\blank}{\textnormal{ }}
+\newcommand{\comma}{\textnormal{, }}
+
+\newcommand{\seq}{\{{\bf X}_n\}_{n=1}^{\infty}}
+\newcommand{\seqY}{\{{\bf Y}_j\}_{j=1}^{n}}
+\newcommand{\var}{\mathds{V}\textnormal{ar}}
+\newcommand{\cov}{\mathds{C}\textnormal{ov}}
+\newcommand{\n}{n \rightarrow \infty}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Rp}{\mathds{R}_+}
+\newcommand{\R}{\mathds{R}}
+\newcommand{\prob}{\mathds{P}}
+\newcommand{\E}{\mathds{E}}
+
+\newcommand{\tdis}{$t$-distribution }
+\newcommand{\chidis}{$\chi^2$-distribution }
+
