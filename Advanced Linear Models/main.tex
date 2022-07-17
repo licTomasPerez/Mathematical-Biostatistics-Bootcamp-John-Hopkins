@@ -1,0 +1,96 @@
+\documentclass{homework}
+\author{Tomás Pérez}
+\class{Advanced Linear Methods - Lecture Notes}
+\date{\today}
+\title{Theory \& Notes}
+
+\graphicspath{{./media/}}
+
+\begin{document} \maketitle
+
+\section{Analysis of Variance and Regression}
+
+In a wide variety of settings, it's useful to model a random variable with a pdf or a pmf which depends on some parameters to be estimated. In many situations, a random variable can be modeled not only with unknown parameters but also with known, an sometimes controllable covariates. The standard methodology for analysis of variance (ANOVA)and regression analysis rely on a linear relationship among random variables. A basic idea of ANOVA consists on partitioning variations and analysing variations in means. \\
+
+\subsection{\textbf{Simple Linear Regression:}}
+
+A major purpose of regression is to explore the dependence of one variable on others. In simple linear regression, the mean of a random variable, $\Y$, is modelled as a function of another observable variable $\X$, by the relationship $\E[\Y] = \alpha + \beta \X$. In general, the function that gives $\E[\Y]$ as a function of $\X$ is called the \textit{population regression function}. \\
+
+\subsection{\textbf{Oneway Analysis of Variance:}}
+
+In its simplest form, ANOVA is a method of estimating the means of several populations, which are often assumed to be normally distributed. The heart of ANOVA lies on the topic of statistical design. How can we get the most information on the populations with the fewest observations? Classic ANOVA had testing as its main goal, in particular testing what is known as the ANOVA null hypothesis. However, in many settings it's not sufficient to test only one hypothesis in order to make good experimental inference. \\
+
+In the oneway analysis of variance, also known as oneway classification, we assume that the data $Y_{ij}$ are observed according to a model:
+
+$$
+Y_{ij} = \theta_i + \epsilon_{ij} \textnormal{ where } i = 1, \cdots, k \textnormal{, } j = 1, \cdots, n_i,
+$$
+
+where the $\theta_i$ are unknown parameters and where the $\epsilon_{ij}$ are error random variables. Without loss of generality, we can assume $\E \epsilon_{ij} = 0$, since if not, we can re-scale the $\epsilon_{ij}$ and absorb the leftover mean into the $\theta_i$'s. Then 
+
+$$
+\E[Y_{ij}] = \theta_i \textnormal{ where } j = 1, \cdots, n_i.
+$$
+
+Therefore the $\{\theta_i\}_{i=1}^{k}$ are the means of the $\{Y_{ij}\}_{i=1\textnormal{, } j=1}^{k\textnormal{, } n_i}$. The first ones are the \textit{treatment means} (since the index usually correspond to different treatments or to levels of a particular treatment, such as dossage levels of a particular drug)\footnote{There is an alternative model, called the \textit{overparameterized model}, which can be written as 
+
+\begin{equation}
+Y_{ij} = \mu + \tau_i + \epsilon_{ij} \textnormal{ where } i = 1, \cdots, k \textnormal{, } j = 1, \cdots, n_i,
+\label{std linear mod}
+\end{equation}
+
+where, again, $\E \epsilon_{ij} = 0$. In this setting, then 
+
+$$
+\E[Y_{ij}] = \mu+\theta_i \textnormal{ where } j = 1, \cdots, n_i.
+$$
+
+In this formulation, we think of $\mu$ as a grand mean, that is the common mean level of the treatments. The parameters $\tau_i$ then denote the unique effect due to the $i$-th treatment. However, the $\tau_i$ and $\mu$ parameters cannot be estimated independently due to problems with \textit{identifiability}. 
+}. \\
+
+\begin{df}
+
+A parameter $\theta$ for a family of distributions $\{f(x|\theta): \theta \in \Theta\}$ is \textbf{identifiable} if distinct values of $\theta$ correspond to distinct pdfs or pmfs. This is, if $\theta_1 \neq \theta_2\comma f(x|\theta_1)  \neq f(x|\theta_2) \blank \forall x$. \\
+
+\end{df}
+
+Identifiability is a property of the model, not of an estimator or estimation procedure. If the model is not identifiable, there is difficulty in doing inference, eg. if $f(x|\theta_1) = f(x|\theta_2)$, then observations from both distributions will look exactly the same and we would have no way of knowing whichever value was correct. In particular, the likelihood of both values would be equal. Problems con identifiability can usually be solved by redefining the model. In a general overparameterized model, there are $k+1$ values parameters $(\mu, \tau_{1}, \cdots, \tau_k) \in \bm{\Theta} = \Theta_{\mu} \times \bigtimes\limits_{i=1}^k \Theta_{\tau_{i}}$ but only $k$ means, $\{\E[Y_{ij}]\}_{i=1}^{k}$. Without any further restriction on the parameters, more than one set of values $(\mu, \tau_{1}, \cdots, \tau_k)$ will lead to the same distribution. Therefore, it's common in this model to add the restriction that $\sum_{i=1}^{k} \tau_k = 0$, which effectively reduces the number of parameters to $k$ and makes the model identifiable. The restriction also has the effect of giving the $\{\tau_i\}_{i=1}^k$ an interpretation as deviations from an overall mean level. In oneway ANOVA, it's more common to use the \textit{cell means model}, given by \eqref{std linear mod}. \\
+
+\subsection{Model and distribution assumptions}
+
+Under model \eqref{std linear mod}, the minimum assumptions are
+
+\begin{itemize}
+    \item $\E \epsilon_{ij} = 0$
+    \item $\var \epsilon_{ij} < \infty$, for all $i,j$. 
+\end{itemize}
+
+However to do any confidence interval estimation or testing, we need distributional assumptions. Here are the classical ANOVA assumptions: \\
+
+\paragraph{\textbf{Oneway ANOVA assumptions}}
+
+Random variables $Y_{ij}$ are observed according to model \eqref{std linear mod}, where
+
+\begin{itemize}
+    \item $\E \epsilon_{ij} = 0$, $\var \epsilon_{ij} < \infty$, for all $i,j$ and $\cov(\epsilon_{ij}, \epsilon_{mn}) \propto \delta_{im}\delta_{jn}$. 
+    \item The $\epsilon_{ij}$ are independent and normally distributed.
+    \item $\sigma_i^2 = \sigma^2$ for all $i$, this is called \textit{homoscedasticity}. \\
+\end{itemize}
+
+Note that without assumption (II) we could only do point estimation and possibly look estimators that minimize variance within a class, but we could not do interval estimation nor testing. Instead, if we assume some other error distribution other than the normal, intervals and tests can be quite difficult to derive. The homoscedastic condition is also quite important. \\
+
+\paragraph{\textbf{Classic ANOVA Hypothesis}:}
+
+The classic ANOVA test is a test of the null hypothesis
+
+$$
+H_0 : \theta_1 = \theta_2 = \cdots = \theta_k,
+$$
+
+a hypothesis which may be uninteresting in many settings. The alternative hypothesis is 
+
+$$
+H_1 : \theta_i \neq \theta_j \textnormal{ for some i,j }.
+$$
+
+\end{document}
