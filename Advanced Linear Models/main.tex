@@ -61,8 +61,8 @@ Identifiability is a property of the model, not of an estimator or estimation pr
 Under model \eqref{std linear mod}, the minimum assumptions are
 
 \begin{itemize}
-    \item $\E \epsilon_{ij} = 0$
-    \item $\var \epsilon_{ij} < \infty$, for all $i,j$. 
+    \item $\E (\epsilon_{ij}) = 0$
+    \item $\var (\epsilon_{ij}) < \infty$, for all $i,j$. 
 \end{itemize}
 
 However to do any confidence interval estimation or testing, we need distributional assumptions. Here are the classical ANOVA assumptions: \\
@@ -72,7 +72,7 @@ However to do any confidence interval estimation or testing, we need distributio
 Random variables $Y_{ij}$ are observed according to model \eqref{std linear mod}, where
 
 \begin{itemize}
-    \item $\E \epsilon_{ij} = 0$, $\var \epsilon_{ij} < \infty$, for all $i,j$ and $\cov(\epsilon_{ij}, \epsilon_{mn}) \propto \delta_{im}\delta_{jn}$. 
+    \item $\E (\epsilon_{ij}) = 0$, $\var (\epsilon_{ij}) < \infty$, for all $i,j$ and $\cov(\epsilon_{ij}, \epsilon_{mn}) \propto \delta_{im}\delta_{jn}$. 
     \item The $\epsilon_{ij}$ are independent and normally distributed.
     \item $\sigma_i^2 = \sigma^2$ for all $i$, this is called \textit{homoscedasticity}. \\
 \end{itemize}
@@ -90,7 +90,149 @@ $$
 a hypothesis which may be uninteresting in many settings. The alternative hypothesis is 
 
 $$
-H_1 : \theta_i \neq \theta_j \textnormal{ for some i,j }.
+H_1 : \theta_i \neq \theta_j \textnormal{ for some } i,j .
 $$
+
+Equivalently, we can specify $H_1$ as $H_1: \textnormal{ not } H_0$. Either way, note that if $H_0$ is rejected, we can conclude only that there is some difference amongst the $\theta_i$s, but we cannot infer as to where the difference might be. One problem with ANOVA hypothesis is that the interpretation of hypothesis is not easy. What would be more useful than concluding that some $\theta_i$s are different is a statistical description of the  $\theta_i$s. Such a description can be readily found by breaking down the ANOVA hypothesis into smaller, more easily describable pieces. One way to implement this is by using an intersection-union test\footnote{Let
+
+$$
+\prob_{\theta}({\bf X} \in R) = \left\{ \begin{array}{cc}
+    \textnormal{probability of a Type I error } & \textnormal{ if } \theta \in \Theta_0 \\
+    \textnormal{one minus the probability of a Type II error } & \textnormal{ if } \theta \in \Theta_0^c  
+\end{array} \right.
+$$
+
+The previous function is none other than the power function of a hypothesis test with rejection region $R$. Consider the following theorem: 
+
+\begin{theo}
+Consider testing $H_0: \theta \in \cup_{j=1}^k \Theta_j$. For each $j = 1, \cdots, k$, let $R_j$ be the rejection region of an $\alpha$-level test of $H_{0j}$. Suppose that for some $i = 1, \cdots, k$, there exists a sequence of parameters points, $\theta_l \in \Theta_i$, $l = 1,2, \cdots$, such that 
+
+\begin{itemize}
+    \item $\lim_{l \rightarrow \infty} \prob_{\theta_l}(\X \in R_i) = \alpha$,
+    \item for each $j=1, \cdots, k$ and $j \neq i, \lim_{l \in \infty} \prob_{\theta_l}(\X \in R_i) = 1$.
+\end{itemize}
+
+Then the intersection-union test with a rejection region $R = \cap_{j=1}^k R_j$ is a size $\alpha$-test. 
+\end{theo}
+
+\begin{proof}
+Let $\alpha_{\gamma}$ be the size of the $\gamma$-th null hypothesis, $H_{0\gamma}$ with rejection region $R_\gamma$. Then the intersection-union test with rejection region $R = \cap_{\gamma \in \Gamma}$ has a $\Tilde{\alpha}$-level, with $\Tilde{\alpha} = \sup_{\gamma \in \Gamma} \alpha_\gamma$. \\
+
+In effect, let $\theta \in \Theta_0$ be arbitrary. Then, $\exists \gamma \in \Gamma \blank | \blank \theta \in \Theta_\gamma $ such that 
+
+$$
+\prob_{\theta}({\bf X} \in R) \leq P_{\theta}({\bf X} \in R_{\gamma}) \leq \alpha_{\gamma} \leq \alpha,
+$$
+
+thus the IUT is an $\alpha$-level test. 
+
+Then, in our context, R is an $\alpha$-level test. By definition, this implies 
+
+$$
+\sup_{\theta \in \Theta_0} \prob_{\theta} (\X \in R) \leq \alpha.
+$$
+
+But, because all parameter points $\theta_l$ satisfy $\theta_l \in \Theta_i \subset \Theta_0$, then
+
+\begin{align*}
+    \sup_{\theta \in \Theta_0} \prob_{\theta} (\X \in R) &\geq \lim_{l \rightarrow \infty} \prob_{\theta_l}(\X \in R) \\
+    & = \lim_{l \rightarrow \infty} \prob_{\theta_l}\bigg(\X \in \cap_{j=1}^k R_j\bigg) \\
+    &\geq \lim_{l \rightarrow \infty}
+    \sum_{j=1}^{k}  \prob_{\theta_l}(\X \in R_j) - (k-1) \textnormal{ according to Bonferroni's inequality.} \\
+    &= (k-1)  + \alpha - (k-1) = \alpha
+\end{align*}
+\end{proof}}, which is the best suited method as the ANOVA null can be thought as the inteersection of univariate hypotheses, expressed in terms of \textit{contrasts}. 
+
+\begin{df}
+
+Let ${\bf t} =\{t_i\}_{i=1}^k$ be a set of variables, either parameters or statistics, and let ${\bf a} =\{a_i\}_{i=1}^k$ be known constants. Then the function 
+
+$$
+\sum_{i=1}^k a_i t_i 
+$$
+
+is a linear combination of them. If, furthermore, $\sum_{i} a_i = 0$, it is called a \textit{contrast}. \\
+\end{df}
+
+Constrasts are important because they can be used to compare treatment means, eg, if we have means $\{\theta_i\}_{i=1}^k$ and constants ${\bf a} = (1, -1, 0, \cdots, 0)$, then 
+
+$$
+\sum_{i=1}^{k} a_i \theta_i = \theta_1 - \theta_2,
+$$
+
+which is a contrast that compares $\theta_1$ to $\theta_2$. The power of the union approach relies on its increased understanding. The individual null hypotheses, of which the ANOVA null hypothesis is the intersection, are readily seen. 
+
+\begin{theo}
+Let $\theta = \{\theta_i\}_{i=1}^{k}$ be arbitrary parameters. Then, 
+
+$$
+\theta_1 = \theta_2 = \cdots = \theta_k \Leftrightarrow \sum_{i=1}^{k} a_i \theta_i = 0 \blank \forall {\bf a} \in \mathcal{A},
+$$
+
+where $\mathcal{A}$ is the set of constants satisfying $\mathcal{A} = \{{\bf a} = \{a_i\}_{i=1}^{k} | \sum_{i} a_i = 0\}$. \\
+\end{theo}
+
+\begin{proof}
+If $\theta_1 = \theta_2 = \cdots = \theta_k$ then 
+
+$$
+\sum_{i=1}^{k} a_i \theta_i  = \sum_{i=1}^{k} a_i \theta = \theta \sum_{i=1}^{k} a_i = 0,
+$$
+
+since $\sum_{i} a_i = 0$, which proves the left-to-right implication. To prove the right-to-left implication, consider the following basis for $\mathcal{A}$
+
+$$
+\mathcal{B}(\mathcal{A}) = \{a_i\}_{i=1}^{k-1} \blank | \blank (a_i)_j = \left\{ \begin{array}{cc}
+    1 & \textnormal{ if } j = i  \\
+    -1 & \textnormal{ if } j = i+1 \\
+    0 & \textnormal{ otherwise}.
+\end{array} \right. 
+$$
+
+Since it's a basis, we can form contrasts with these ${\bf a_i}$s: 
+
+$$
+a_1 \Rightarrow \theta_1 = \theta_2 \land a_2 \Rightarrow \theta_2 = \theta_3, \cdots a_{k-1} \Rightarrow \theta_{k-1} = \theta_k
+$$
+
+which, taken together, prove the theorem. 
+\end{proof}
+
+Therefore, the ANOVA null can then be expressed as a hypothesis about contrasts. That is, the null hypothesis is true iff the hypothesis 
+
+$$
+H_0: \blank \sum_{i=1}^{k} a_i \theta_i = 0 \textnormal{ for all } {\bf a} \textnormal{ such that } \sum_{i=1}^{k} a_i = 0,
+$$
+
+is true. Moreover, if $H_0$ is false, we now know that there must be at least one nonzero contrasts. That is, the ANOVA alternative, $H_1$: not all $\theta_i$s equal, is equivalent to the alternative 
+
+$$
+H_1: \blank \sum_{i=1}^{k} a_i \theta_i \neq 0 \textnormal{ for all } {\bf a} \textnormal{ such that } \sum_{i=1}^{k} a_i = 0. \\
+$$
+
+\paragraph{\textbf{Inferences regarding Linear combinations of Means}}
+
+Linear combinations, in particular of contrasts, play an extremely important role in the analysis of variance. In the previous section, we proved that the ANOVA null can be decoupled into statements about constrasts. This is also true in general, more elaborate statistical hypothesis tests. We start first by discussing a single linear combination. \\
+
+Working under oneway ANOVA assumptions, we have that
+
+$$
+Y_{ij} \sim \N(\theta_i, \sigma^2), \begin{array}{c}
+     i = 1, \cdots, k  \\
+     j = 1, \cdots, n_i 
+\end{array},
+$$
+
+therefore 
+
+$$
+\Bar{Y}_i = \frac{1}{n_i}\sum_{j=1}^{n_i} Y_{ij} \sim \N(\theta_i, \frac{\sigma^2}{n_i}), \blank i = 1, \cdots, k.
+$$
+
+For any constants ${\bf a} \in \R^{k}$, we have ${\bf a}^{T} \bar{{\bf Y}}$ is also normal with 
+
+\begin{align*}
+    \E\bigg({\bf a}^{T} \bar{{\bf Y}}\bigg) = \sum_{i}
+\end{align*}
 
 \end{document}
