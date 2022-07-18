@@ -210,6 +210,8 @@ $$
 H_1: \blank \sum_{i=1}^{k} a_i \theta_i \neq 0 \textnormal{ for all } {\bf a} \textnormal{ such that } \sum_{i=1}^{k} a_i = 0. \\
 $$
 
+\blank \\
+
 \paragraph{\textbf{Inferences regarding Linear combinations of Means}}
 
 Linear combinations, in particular of contrasts, play an extremely important role in the analysis of variance. In the previous section, we proved that the ANOVA null can be decoupled into statements about constrasts. This is also true in general, more elaborate statistical hypothesis tests. We start first by discussing a single linear combination. \\
@@ -226,13 +228,80 @@ $$
 therefore 
 
 $$
-\Bar{Y}_i = \frac{1}{n_i}\sum_{j=1}^{n_i} Y_{ij} \sim \N(\theta_i, \frac{\sigma^2}{n_i}), \blank i = 1, \cdots, k.
+\Bar{Y}_i = \frac{1}{n_i}\sum_{j=1}^{n_i} Y_{ij} \sim \N\bigg(\theta_i, \frac{\sigma^2}{n_i}\bigg), \blank i = 1, \cdots, k.
 $$
 
-For any constants ${\bf a} \in \R^{k}$, we have ${\bf a}^{T} \bar{{\bf Y}}$ is also normal with 
+For any constants ${\bf a} \in \R^{k}$, we have ${\bf a}^{\textnormal{T}} \bar{{\bf Y}}$ is also normal with 
 
 \begin{align*}
-    \E\bigg({\bf a}^{T} \bar{{\bf Y}}\bigg) = \sum_{i}
+    \E\bigg({\bf a}^{\textnormal{T}} \bar{{\bf Y}}\bigg) &= \sum_{i=1}^{k} a_i \theta_i, & \var \bigg({\bf a}^{\textnormal{T}} \bar{{\bf Y}}\bigg) &= \sigma^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}. 
 \end{align*}
+
+Furthermore, 
+
+$$
+\frac{\sum_{i=1}^k a_i \bar{Y}_i - \sum_{i=1}^k a_i \theta_i}{\sqrt{\sigma^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}} \sim \N(0, 1).
+$$
+
+In practice, we'd like to make inferences about the $\theta_i$s without knowledge of $\sigma$. Therefore, we need to replace $\sigma$ with an estimate, the sample variance $S_i^2$ of the $i-$th population, defined as follows,
+
+$$
+S_i^2 = \frac{1}{n_i - 1} \sum_{j=1}^{n_i} (Y_{ij} - \bar{Y}_i)^2\textnormal{, } i=1, \cdots,k,  
+$$
+
+which is an estimate for $\sigma^2$ with a \chidis, $\frac{(n_i-1)S^2_i}{\sigma^2} \sim \chi^2_{n_i-1}$. Furthermore, under the ANOVA assumptions, since each one of the $S_i^2$ estimates the same $\sigma^2$, we can improve the estimate by combining them into a \textit{pooled variance estimator} $\hat{S}^2_p$, of $\sigma^2$, defined as
+
+$$
+\hat{S}^2_p = \frac{1}{N-k} \sum_{i=1}^{k} (n_i-1)S_i^2 = \frac{1}{N-k} \sum_{i=1}^{k} \sum_{j=1}^{n_i} (Y_{ij}-\bar{Y}_i)^2.
+$$
+
+Note that $N-k =\sum_{i} (n_i - 1)$. Now, since the $S_i^2$ are independent, then $\frac{(N-k)S^2_p}{\sigma^2} \sim \chi^2_{N-k}$. Also, $S_p^2$ is independent of each $\bar{Y}_i$, then
+
+$$
+\frac{\sum_{i=1}^k a_i \bar{Y}_i - \sum_{i=1}^k a_i \theta_i}{\sqrt{S_p^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}} \sim t_{N-k},
+$$
+
+a Student's \tdis with $N-k$ degrees of freedom. \\
+
+Now, consider the null hypothesis, which we'd like to test
+
+$$
+H_0 : \blank \sum_{i=1}^{k} a_i \theta_i = 0 \textnormal{ versus } H_1 : \blank \sum_{i=1}^{k} a_i \theta_i \neq 0,
+$$
+
+at $\alpha$-level, therefore the rejection region $R$ for the null hypothesis is 
+
+$$
+\bigg|\frac{\sum_{i=1}^{k} a_i \bar{Y}_i}{{\sqrt{S_p^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}}}\bigg| > t_{N-k, \blank \frac{\alpha}{2}}.
+$$
+
+Furthermore, this can be inverted by the means of a pivot, the $\frac{\alpha}{2}-$th level quantile of the \tdis with $N-k$ degrees of freedom. With probability $1-\alpha$, we can assert 
+\begin{align*}
+    \sum_{i=1}^{k} a_i \bar{Y}_i - t_{N-k, \blank \frac{\alpha}{2}} \sqrt{S_p^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}} &\leq \sum_{i=1}^{k} a_i \theta_i \\
+    &\leq \sum_{i=1}^{k} a_i \bar{Y}_i + t_{N-k, \blank \frac{\alpha}{2}} \sqrt{S_p^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}.
+\end{align*}
+
+\begin{tcolorbox}[title=Example of ANOVA contrasts]
+
+Special values of ${\bf a}$ will yield particular tests or confidence intervals. For example, to compare treatment 1 and treatment 2 in a clinical exam trial, we can take ${\bf a} = (1, -1, 0, \cdots, 0)$. Then, using the previous results, to test $H_0: \blank \theta_1=\theta_2$ versus $H_1: \blank \theta_1 \neq \theta_2$, we would reject if 
+
+$$
+\left|{\frac{\bar{Y}_1 - \bar{Y}_2}{{\sqrt{S_p^2 \bigg(\frac{1}{n_1}+\frac{1}{n_2}\bigg)}}}}\right| > t_{N-k, \blank \frac{\alpha}{2}}.
+$$
+
+Note that the difference between this test and a two-sample $t$-test is that here information from treatments $3,\cdots,k$, as well as treatments 1 and 2, is used to estimate $\sigma^2$. \\
+
+Alternatively, to compare treatment 1 to the average of treatments $2$ and 3 (eg. treatment 1 might be a control, 2 and 3 might be experimental treatments, and we are looking for some overall effect), we would take ${\bf a} = (1, -\frac{1}{2}, -\frac{1}{2}, 0, \cdots, 0)$ and reject $H_0: \blank \theta_1 = \frac{1}{2}(\theta_2+\theta_3)$ if 
+
+$$
+\left|{\frac{\bar{Y}_1 - \frac{1}{2} \bar{Y}_2 - \frac{1}{2} \bar{Y}_3}{{\sqrt{S_p^2 \bigg(\frac{1}{n_1}+\frac{1}{4n_2}+\frac{1}{4n_3}\bigg)}}}}\right| > t_{N-k, \blank \frac{\alpha}{2}}.
+$$
+
+\blank \\
+
+In general, we have a framework for testing and estimating linear combinations of random variables in the ANOVA. By judiciously choosing our linear combination we can learn much about the treatment means. For example, if we look at the contrasts $\theta_1-\theta_2$, $\theta_2-\theta_3$ and $\theta_1-\theta_3$, we can learn something about the ordering of the $\theta_i$s. Some care must be taken when drawing formal conclusions 
+\end{tcolorbox}
+
+\blank \\
 
 \end{document}
