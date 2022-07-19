@@ -56,7 +56,7 @@ A parameter $\theta$ for a family of distributions $\{f(x|\theta): \theta \in \T
 
 Identifiability is a property of the model, not of an estimator or estimation procedure. If the model is not identifiable, there is difficulty in doing inference, eg. if $f(x|\theta_1) = f(x|\theta_2)$, then observations from both distributions will look exactly the same and we would have no way of knowing whichever value was correct. In particular, the likelihood of both values would be equal. Problems con identifiability can usually be solved by redefining the model. In a general overparameterized model, there are $k+1$ values parameters $(\mu, \tau_{1}, \cdots, \tau_k) \in \bm{\Theta} = \Theta_{\mu} \times \bigtimes\limits_{i=1}^k \Theta_{\tau_{i}}$ but only $k$ means, $\{\E[Y_{ij}]\}_{i=1}^{k}$. Without any further restriction on the parameters, more than one set of values $(\mu, \tau_{1}, \cdots, \tau_k)$ will lead to the same distribution. Therefore, it's common in this model to add the restriction that $\sum_{i=1}^{k} \tau_k = 0$, which effectively reduces the number of parameters to $k$ and makes the model identifiable. The restriction also has the effect of giving the $\{\tau_i\}_{i=1}^k$ an interpretation as deviations from an overall mean level. In oneway ANOVA, it's more common to use the \textit{cell means model}, given by \eqref{std linear mod}. \\
 
-\subsection{Model and distribution assumptions}
+\paragraph{\textbf{Model and distribution assumptions}}
 
 Under model \eqref{std linear mod}, the minimum assumptions are
 
@@ -299,9 +299,49 @@ $$
 
 \blank \\
 
-In general, we have a framework for testing and estimating linear combinations of random variables in the ANOVA. By judiciously choosing our linear combination we can learn much about the treatment means. For example, if we look at the contrasts $\theta_1-\theta_2$, $\theta_2-\theta_3$ and $\theta_1-\theta_3$, we can learn something about the ordering of the $\theta_i$s. Some care must be taken when drawing formal conclusions 
+In general, we have a framework for testing and estimating linear combinations of random variables in the ANOVA. By judiciously choosing our linear combination we can learn much about the treatment means. For example, if we look at the contrasts $\theta_1-\theta_2$, $\theta_2-\theta_3$ and $\theta_1-\theta_3$, we can learn something about the ordering of the $\theta_i$s. Some care must be taken when drawing formal conclusions from combinations of contrasts. For example, consider the hypotheses 
+
+$$
+H_0: \blank \theta_{1} = \frac{1}{2}(\theta_{2}+\theta_{3}) \textnormal{ versus } H_0: \blank \theta_{1} < \frac{1}{2}(\theta_{2}+\theta_{3}),
+$$
+
+and 
+
+$$
+H_0 : \blank \theta_2 = \theta_3 \textnormal{ versus } H_0 : \blank \theta_2 < \theta_3.
+$$
+
+If we reject both null hypotheses, we can conclude $\theta_3$ is greater than both $\theta_1$ and $\theta_2$, although we can draw no formal conclusion about the ordering of $\theta_1$ and $\theta_2$ from these two tests. 
 \end{tcolorbox}
 
 \blank \\
+
+\paragraph{\textbf{The ANOVA \textit{F}-test}}
+
+In the previous section we saw how to deal with single linear combinations of random variables, an in particular, contrasts in the ANOVA, and how the ANOVA null hypothesis is equivalent to a set of hypotheses about contrasts. Using this equivalence, together with the union-intersection method, it's possible to derive a test of the ANOVA hypothesis. \\
+
+The ANOVA hypothesis test can be written as 
+
+\begin{align*}
+    H_0: \blank \forall {\bf a} \in \mathcal{A}, \blank \sum_{i=1}^{k} a_i \theta_i = 0 \textnormal{ versus } H_1: \blank \exists {\bf a} \in \mathcal{A}, \blank \sum_{i=1}^{k} a_i \theta_i \neq 0,
+\end{align*}
+
+where $\mathcal{A} = \{{\bf a} \in \R^{k} \blank | \blank \sum_{i=1}^{k} a_i = 0\}$. To see this more clearly as a union-intersection test, let's define the set $\Theta_a$ for each ${\bf a}$ as 
+
+$$
+\Theta_{\bf a} = \{\theta=(\theta_1, \cdots, \theta_k) \blank | \blank \sum_{i=1}^{k}a_i \theta_i = 0\},
+$$
+
+then we have 
+
+\begin{align*}
+    \theta \in \{\theta: \blank \theta_1 = \theta_2 = \cdots =  \theta_k \} \Leftrightarrow \theta \in \Theta_{\bf a} \blank \forall {\bf a} \in \mathcal{A} \Leftrightarrow \theta \in \cap_{{\bf a} \in \mathcal{A}} \Theta_{\bf a},
+\end{align*}
+
+showing that the ANOVA null can be written as an intersection. Now, recalling the union-intersection methodology, we will reject $H_0 : \theta \in \cap_{{\bf a} \in \mathcal{A}} \Theta_{\bf a}$ (and, hence the ANOVA null) if we can reject 
+
+$$
+H_{0_{\bf a}} : \theta \in \Theta_{\bf a} \textnormal{ versus } H_{1_{\bf a}} : \theta \notin \Theta_{\bf a}
+$$
 
 \end{document}
