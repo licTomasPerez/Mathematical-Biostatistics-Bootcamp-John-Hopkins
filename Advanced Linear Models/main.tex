@@ -535,10 +535,116 @@ if the $d_i$s of the form \eqref{gram schmidt}, satisfy the \eqref{blue conditio
 
 Now, \eqref{blue conditions}'s second constraint is satisfied if $K = \frac{1}{K_{xx}}$. Therefore, we can force the first constraint by setting the $d_i$s as 
 
-$$
+\begin{equation}
   \{d_i\}_{i=1}^{n} \in \R \Rightarrow d_i = \frac{x_i - \bar{x}}{S_{xx}} \blank \forall i = 1, \cdots, n,
+  \label{contrasts estimators}
+\end{equation}
+
+which then produce a maximum. Note that for all finite subsets of real numbers which satisfy \eqref{blue conditions}, 
+
+$$
+\frac{\bigg(\sum_{i=1}^{n} d_i x_i\bigg)^2}{\sum_{i=1} d_i^2} = \frac{1}{\sum_{i=1} d_i^2}.
 $$
 
-which then produce a maximum. 
+Thus, for all $\{\{d_i\}_{i=1}^{n} \in \R : \blank \sum_{i} d_i = 0\}$ which satisfy \eqref{blue conditions}, maximization of \eqref{maximize functional} is equivalent to minimization of $\sum_{i=1}^{n} d_i^2$. Hence, we can conclude that the $d_i$s defined in \eqref{contrasts estimators}, give the minimum value of $\sum_{i=1}^{n} d_i^2$ among all $d_i$ which satisfy \eqref{blue conditions}, with the linear unbiased estimator defined by these $d_i$s, namely,
+
+\begin{equation}
+    \hat{\beta} = \sum_{i=1}^{n} \frac{x_i - \bar{x}}{S_{xx}} y_i = \frac{S_{xy}}{S_{yy}}.
+\end{equation}
+
+The variance of $\beta$ is 
+
+\begin{equation}
+    \var \beta = \sigma^2 \sum_{i=1}^{n} d_i^2 = \frac{\sigma^2}{S_{xx}} = \frac{\sigma^2}{\sum_{i=1}^{n} (x_i - \bar{x})^2},
+\end{equation}
+
+note that, since the values $\{x_i\}_{i=1}^{n}$ are chosen by the experimenter, they can be chosen to make $S_{xx}$ large and the variance of the estimator small. That is, the experiment can be designed to make the estimator more precise. For example, if all the $\{x_i\}_{i=1}^{n}$ must be chosen so that they lie in the $\R_{[a,b]}$ and if $n$ is even, the choice of the $\{x_i\}_{i=1}^{n}$ which makes $S_{xx}$ as large as posible is to take half of the $x_i$s equal to $a$ and half equal to $b$. This would be the best design in that it would give the most precise estimate of the slope $\beta$. In practice, however, this design is seldom used since an experimenter is hardly ever certain of the model and this two-point design only gives information about the value of $\E ({\bf Y}_i\blank|\blank{\bf X}_i)$ at only two values. \\
+
+A similar analysis will show that $\hat{\alpha}$ is the BLUE of the intercept $\alpha$, which must be written in terms of
+$\{\{d_i\}_{i=1}^{n} \in \R$ which must satisfy 
+
+\begin{align}
+    \sum_{i=1}^{n} d_i = 1 \textnormal{ and } \sum_{i=1}^{n} d_i x_i = 0.
+\end{align}
+
+The fact that least squares estimators are BLUEs holds in other linear models as well. This result is called the Gauss-Markov theorem. \\
+
+\subsection{Gauss-Markov Theorem}
+Let 
+
+\begin{equation}
+    {\bf Y} = {\bf X} \bm{\beta} + \bm{\epsilon}, \textnormal{ where } \begin{array}{c}
+         {\bf Y}, \bm{\epsilon} \in \R^{n}, \\
+         \bm{\beta} \in \mathds{R}^{K}, \\
+         {\bf X} \in \R^{n \times K}
+    \end{array},
+\end{equation}
+
+where the $\beta_j$ are non-random but unobservable parameters, the $X_{ij}$ are non-random and observable (the explanatory variables), the $\epsilon_i$ are random (the errors), and thus the $Y_i$ are also random. Note that, should we desire to include a constant in the model above, one can choose to introduce the constant as a $\beta_{K+1}$ variable with a newly introduced last column of ${\bf X}$ being unity ie. ${\bf X}_{i(K+1)} = 1, \blank \forall i$\footnote{Note that although the ${\bf Y}_i$, as sample responses, are observable, the theorem holds only under the condition of knowing $\X_{ij}$, but not the $\Y_{ij}$.}. The Gauss-Markov assumptions concern a set of error random variables ${\bm \epsilon}$ with 
+
+\begin{itemize}
+    \item mean zero: $\E({\epsilon}_i) = 0$, 
+    \item homoscedastic-compatible, having the same finite variance $\var({\epsilon}_i) = \sigma^2 < \infty, \blank \forall i$,
+    \item and with distinct error terms being uncorrelated $\cov({\epsilon}_i, {\epsilon}_j) \propto \delta_{ij}$.
+\end{itemize}
+
+Then a linear estimator of $\beta_j$ is a linear combination 
+
+$$
+\hat{\beta_j} = \sum_{k = 1}^{n} c_{kj} {Y}_k = {\bf c}^{\textnormal{T}} {\bf Y},
+$$
+
+in which the coefficients $c_{ij}$ are not allowed to depend on the underlying coefficients $\beta_j$, since those are not observable, but are allowed to depend on the values $X_{ij}$, since these data are observable\footnote{Note that the dependence on the coefficients on each $X_{ij}$ is typically nonlinear, the estimator is linear in each $Y_i$, and hence in each random $\epsilon$.}. The estimator is said to be unbiased if and only if 
+$$
+\E(\hat{\beta_j}) = {\beta_j},
+$$
+
+regardless of the values of ${X}_{ij}$. Now, let $\sum_{j=1}^{K} \lambda_{j} \beta_{j}$ be some linear combination of the coefficients. Then the mean squared error of the corresponding estimation is 
+
+$$
+\E\bigg[\bigg(\sum_{j=1}^{K} \lambda_j (\hat{\beta_j} - {\beta_j})\bigg)^2\bigg].
+$$
+
+In other words, it's the expectation of the square of the weighted sum (across parameters) of the differences between the estimators and the corresponding parameters to be estimated. Note that since we're considering the case in which all the parameter estimates are unbiased, this mean squared error is the same as the variance of the linear combination. Then, the best linear unbiased estimator BLUE of the vector ${\bm \beta}$, of parameters $\beta_j$, is the one with the smallest mean squared error for every vector $\lambda \in \mathds{R}$ of linear combination parameters. This is equivalent to the condition that
+
+$$
+\var(\Tilde{{\bm \beta}}) - \var({{\bm \beta}}),
+$$
+
+is a positive semi-definite matrix for every other linear unbiased estimator $\Tilde{{\bm \beta}}$. Then, the \textbf{ordinary least squares estimator (OLS)} is then a matrix function 
+
+$$
+\hat{{\bm \beta}} = ({\bf X}^{\textnormal{T}} {\bf X})^{-1} {\bf X}^{\textnormal{T}} {\bf Y},
+$$
+
+which minimizes the sum of squares of residuals 
+
+$$
+\sum_{i=1}^{n} (Y_{i} - \hat{Y}_i) = \sum_{i=1}^{n} \bigg(Y_i - \sum_{j=1}^{K} \hat{\beta}_j X_{ij} \bigg)^2.
+$$
+
+The theorem now states that the OLS estimator is a BLUE. The main point behind the proof is tha the least-squares estimator is uncorrelated with every linear unbiased estimator of zero ie. a linear combination of the $Y_i$s whose coefficients do not depend upon the unobservable $\bm \beta$ but whose expected value is always zero.
+
+\subsubsection{Proof of the Gauss-Markov theorem} TODO
+
+\subsection{Models and Distribution Assumptions}
+
+In this section, we'll treat two models for the paired data $\{(x_i, y_i)\}_{i=1}^n$ that are called simple linear regression models. Up until now, the least squares estimates were not obtained via statistical considerations but via a minimization problem. Therefore, we cannot make any statistical inference on the results. In order to do exactly that, we present two complete probabilistic models.
+
+\paragraph{\textbf{Conditional Normal Model}} \\
+
+The conditional normal model is the most common simple linear regression model and the most straightforward to analyze. The observed data are the $n$ pairs $\{(x_i, y_i)\}_{i=1}^n$. The values of the predictor variable, $\{x_i\}_{i=1}^n$ are assumed to be known, fixed constants, chosen by the experimenter. The values of the response variable $\{y_i\}_{i=1}^n$ are observed values of random variables, $\{{\bf Y}_i\}_{i=1}^n$, which are assumed to be independent. Furthermore, we assume the distribution of the ${\bf Y}_i$s to be normal, specifically
+
+\begin{equation}
+    {\bf Y}_i \sim \N(\alpha+\beta x_i, \sigma^2), \blank i = 1, \cdots, n.
+\end{equation}
+
+Thus the population regression function is a linear function of $x$, that is $\E ({\bf Y}_i\blank|\blank{\bf X}_i = x_i) = \alpha + \beta x_i, $ and all the ${\bf Y}_i$s have the same variance, $\sigma^2$. The (complete) conditional normal model is then
+
+\begin{equation}
+    {\bf Y} = \bm \alpha J_n + \bm \beta {\bf X} + \bm \epsilon,
+\end{equation}
+
+where $(J_n)_k = 1, \blank 1 \leq k \leq n$, where the errors ${\bm \epsilon}$ are assumed to be $\N(0,\sigma^2)$ random variables. 
 
 \end{document}
