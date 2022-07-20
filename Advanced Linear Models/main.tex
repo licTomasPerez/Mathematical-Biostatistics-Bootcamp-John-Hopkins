@@ -341,7 +341,204 @@ then we have
 showing that the ANOVA null can be written as an intersection. Now, recalling the union-intersection methodology, we will reject $H_0 : \theta \in \cap_{{\bf a} \in \mathcal{A}} \Theta_{\bf a}$ (and, hence the ANOVA null) if we can reject 
 
 $$
-H_{0_{\bf a}} : \theta \in \Theta_{\bf a} \textnormal{ versus } H_{1_{\bf a}} : \theta \notin \Theta_{\bf a}
+H_{0_{\bf a}} : \theta \in \Theta_{\bf a} \textnormal{ versus } H_{1_{\bf a}} : \theta \notin \Theta_{\bf a}, \blank  \forall a \in \mathcal{A}.
 $$
+
+We test $H_{0_{\bf a}}$ with a $t$-statistic, 
+
+$$
+T_{\bf a} = \left| \frac{\sum_{i=1}^k a_i \bar{Y}_i - \sum_{i=1}^k a_i \theta_i}{\sqrt{S_p^2 \sum_{i=1}^{k} \frac{a_i^2}{n_i}}} \right|,
+$$
+
+therefore the rejection region is $T_{\bf a} > k$, in which case we'll reject $H_{\bf a}$, for some constant $k \in \R$. From the union-intersection methodology, it follows that if we could reject for any ${\bf a}$, we could reject for the ${\bf a}$ that maximizes $T_{\bf a}$. Thus, the union-intersection test of the ANOVA null is to reject $H_0$ if $\sup_{\bf a} T_{\bf a} > k$, where $k$ is chosen so that $P_{H_0} (\sup_{\bf a} T_{\bf a} > k) = \alpha$. It turns out that the calculation of $\sup_{\bf a} T_{\bf a} $ is not all straightforward. \\
+
+\clearpage
+
+\section{Simple Linear Regression}
+
+In ANOVA, we studied how one factor, a random variable, influenced the means of a response variable. We now turn to understand the functional dependence of one variable on another. In particular, in the case of linear regression, we have a relationship of the form
+
+\begin{equation}
+{\bf Y}_i = \alpha + \beta {\bf X}_i + \epsilon_i,
+\label{linear regression 1}
+\end{equation}
+
+where 
+
+\begin{itemize}
+    \item both ${\bf X}_i$ and ${\bf Y}_i$ are random variables, we call ${\bf X}_i$ as the \textit{predictor} variable while ${\bf Yequation}_i$ is the \textit{response} variable, 
+    \item $\alpha$, $\beta$ are the intercept and the slope of the regression, and are assumed to be fixed and unknown parameters, 
+    \item and where $\epsilon_i$ is a random variable, which can be assume to have $\E(\epsilon_i) = 0$. \\
+\end{itemize}
+
+Due to the imposed condition on the errors, we have 
+
+\begin{equation}
+\E ({\bf Y}_i\blank|\blank{\bf X}_i = x_i) = \alpha + \beta x_i,
+\label{linear regression 2}
+\end{equation}
+
+which is called the \textit{population regression function}. The main purpose of regression is to predict ${\bf Y}_i$ from knowledge of ${\bf X}_i$, using the population regression function. In this context, "regression" refers to a conditional expectation of ${\bf Y}$ given ${\bf X} = x$ and is used, in a statistical context, so signify a relationship between variables. When referring to a "linear regression", this implies that the conditional expectation of ${\bf Y}$ given ${\bf X}=x$ is a linear function of $x$. Note that in \eqref{linear regression 2}, it doesn't matter whether $x_i$ is fixed and known or it is a realization of the observable random variable ${\bf X}_i$, since in either case \eqref{linear regression 2} has the same interpretation. This isn't the case when the concern is to make inferences using the joint distribution of ${\bf X}_i$ and ${\bf Y}_i$. \\
+
+The term \textit{linear regression} refers to a specification that is \textbf{linear in the parameters} ie. the specifications 
+
+\begin{align*}
+    \E ({\bf Y}_i\blank|\blank{\bf X}_i = x_i) = \alpha + \beta x_i^2 \textnormal{ and } \E (\log {\bf Y}_i\blank|\blank{\bf X}_i = x_i) = \alpha + \beta \frac{1}{x_i},
+\end{align*}
+
+both specify linear regressions. The first one specifices a linear relationship between ${\bf Y}_i$ and $x_i^2$, whilst the second one between $\log{\bf Y}_i$ and $\frac{1}{x_i}$. In contrast, the specification $\E ({\bf Y}_i\blank|\blank{\bf X}_i = x_i) = \alpha + \beta^2 x_i$ is not a linear regression. \\
+
+In a simple linear regression problem, we observe data consisting of $n$ pairs of observation $\{(x_i, y_i)\}_{i=1}^n$, where there may be different underlying models for these data. The different models entail different assumptions about whether $x$ or $y$ or both are observed values of random variables ${\bf X}$ and ${\bf Y}$, respectively. In each model we'll be interested in investigating a linear relationship between $x$ and $y$. These $n$ data points will not fall exactly on a straight line but, rather, we're interested in summarizing the sample information by fitting a line to the observed data points. Given a data set $\{(x_i, y_i)\}_{i=1}^n$, we can define the following quantities of interest
+
+\begin{align}
+    \textnormal{The sample means } \begin{array}{c}
+        \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i    \\
+        \bar{y} = \frac{1}{n} \sum_{i=1}^{n} y_i,   
+    \end{array} & \textnormal{ and the sums of squares} \begin{array}{c}
+       S_{xx} = \sum_{i=1}^{n} (x_i - \bar{x})^2  \\
+       S_{yy} = \sum_{i=1}^{n} (y_i - \bar{y})^2   \\
+       S_{xy} = \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+    \end{array}.
+\end{align}
+
+Then the most common estimates of $\alpha$ and $\beta$ are 
+
+\begin{align*}
+    \hat{\beta} = \frac{S_{xy}}{S_{xx}} \textnormal{ and } \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x}.
+\end{align*}
+
+\subsection{Least squares: A mathematical solution}
+
+Our first derivation of estimates for $\alpha$ and $\beta$ makes no statistical assumptions about the observations  $\{(x_i, y_i)\}_{i=1}^n$. Simply consider a scatterplot of the dataset, for any line $y=c+dx$, the \textbf{residual sum of squares} (RSS) is defined to be 
+
+\begin{equation}
+    \textnormal{RSS } = \sum_{i=1}^{n} \left(y_i - (c+dx_i)^2\right), 
+\end{equation}
+
+which measures the vertical distance from each data point to the line $c+dx$, then summing the squares of these distances. The \textbf{least squares estimates} of $\alpha$ and $\beta$, 
+$\hat{\alpha}$ and $\hat{\beta}$, are defined to be those values such that the line $\hat{\alpha} + \hat{\beta} x$ minimizes the RSS. That is, the least squares estimates satisfy
+
+\begin{equation}
+    \min_{c, \blank d \blank \in \R} \sum_{i=1}^{n} (y_i - (c+dx_i))^2 = \sum_{i=1}^{n} (y_i - (\hat{\alpha}+\hat{\beta}x_i))^2.
+\end{equation}
+
+The analytic minimization can be done in the following way. For any fixed value $d \in \R$, the value of $c$ which gives the minimum value can be found by writing 
+
+$$
+\sum_{i=1}^{n} (y_i - (c+dx_i))^2 = \sum_{i=1}^{n} ((y_i - dx_i) -c)^2.
+$$
+
+Then the minimizing value of $c$ is 
+
+\begin{equation}
+    c = \frac{1}{n} \sum_{i=1}^{n} (y_i - dx_i) = \bar{y} - d \bar{x}.
+    \label{least squares 2}
+\end{equation}
+
+Thus, for a given value of $d$, the minimum value of RSS is 
+
+\begin{equation}
+    \sum_{i=1}^{n} \bigg((y_i - dx_i) - (\bar{y} - d \bar{x})\bigg)^2 = \sum_{i=1}^{n} \bigg((y_i - \bar{y}) - d(x_i - \bar{x})\bigg)^2 = S_{yy} - 2dS_{xy} + d^2 S_{xx}.
+\end{equation}
+
+The value of $d$ which gives the overall minimum value of RSS is obtained by setting the derivative of this quadratic function of $d$ equal to $0$. The minimizing value is then 
+
+\begin{align}
+    \frac{d}{d d}  S_{yy} - 2dS_{xy} + d^2 S_{xx} &= 0 \Rightarrow -2 S_{xy} + 2d S_{xx} = 0 \\
+    \Rightarrow d = \frac{S_{xy}}{S_{xx}}.
+    \label{least squares 1}
+\end{align}
+
+This value is, indeed, a minimum since the coefficient of $d^2$ is positive. Therefore, \eqref{least squares 2} and \eqref{least squares 1}, are indeed the values of $c$ and $d$ that minimize the residual sum of the squares. \\
+
+The RSS is only one of the many reasonable ways of measuring the distance from the line $c+dx$ to the data points. For example, rather than using vertical distances we could use horizontal distances. This is equivalent to graphing the $y$ variable on the horizontal axis and the $x$ variabble on the vertical axis and using vertical distances as we did above. Using \eqref{least squares 2} and \eqref{least squares 1}, interchanging the roles of $x$ and $y$, we find the least squares lines is $\hat{x} = \hat{\alpha}' + \hat{\beta}'y$ where 
+
+\begin{align*}
+   \hat{\beta}' = \frac{S_{xy}}{S_{yy}} \textnormal{ and } \hat{\alpha}' = \bar{x} - \hat{\beta}'\bar{y},
+\end{align*}
+
+so that when reexpressing the line so that $y$ is a function of $x$, we obtain $\hat{y} = -\frac{\hat{\alpha}'}{\hat{\beta}'} + \frac{1}{\hat{\beta}' x}$. \\
+
+It should be noted that least squares, as a method, is not statistical inference, since there's no way to construct confidence intervals nor testing hypothesis. In this context, the estimates are simply solutions of a minimization problem. It will turn out that, in some statistical models, these solutions have optimality properties. \\
+
+\subsection{Best Linear Unbiased Estimators: A statistical solution}
+
+In this section, we'll show that the estimates obtained in \eqref{least squares 2} and \eqref{least squares 1}, are optimal in the class of linear unbiased estimates under a general statistical model. Assume that the values $\{x_i\}_{i=1}^{n}$ are known, fixed values. The values $\{y_i\}_{i=1}^{n}$ are observed values of uncorrelated random variables $\{{\bf Y}_i\}_{i=1}^{n}$. The linear relationship assumed is given by \eqref{linear regression 2}, where we'll also asume $\var({\bf Y}_i) = \sigma^2, \blank \forall i \in \mathds{N}_{[1,n]}$. This is called the homoscedastic condition. The previous two assumptions are the only requirements for our model to work, eg. we need not any assumption on the probability distribution on the response variables. \\
+
+To derive estimators for the parameters $\alpha$ and $\beta$, we restrict our attention to the class of linear estimators, ie. estimators which can be written as 
+
+$$
+\exists \{d_i\}_{i=1}^{n} \subset \mathds{R} \blank | \blank \sum_{i=1}^{n} d_i {\bf Y}_i.
+$$
+
+In particular, we'll restrict ourselves only to a subclass of linear estimators, the unbiased linear estimators. \\
+
+An unbiased estimator of the slope $\beta$ must satisfy then 
+
+$$
+\exists \{d_i\}_{i=1}^{n} \subset \mathds{R} \blank | \blank  \E \bigg[\sum_{i=1}^{n} d_i {\bf Y}_i\bigg] = \hat{\beta},
+$$
+
+therefore 
+
+\begin{align*}
+    \hat{\beta} &= \E \bigg[\sum_{i=1}^{n} d_i {\bf Y}_i\bigg]  = \sum_{i=1}^{n} d_i \E({\bf Y}_i) = \sum_{i=1}^{n} d_i (\alpha + \beta x_i) \\
+    &= \alpha \bigg(\sum_{i=1}^{n} d_i\bigg) + \beta \bigg(\sum_{i=1}^{n} d_i x_i\bigg).
+\end{align*}
+
+This equality is true for all $\alpha$ and $\beta$ if and only if 
+
+\begin{align}
+    \sum_{i=1}^{n} d_i = 0 \textnormal{ and } \sum_{i=1}^{n} d_i x_i = 1.
+    \label{blue conditions}
+\end{align}
+
+Then, $\{d_i\}_{i=1}^{n} \in \R$ must satisfy \eqref{blue conditions} in order for the estimator $\hat{\beta}$ to be an unbiased estimator of $\beta$. We say a given estimator is the "best" if it has the smallest variance among all unbiased estimators. Similarly, an estimator is the \textbf{best linear unbiased estimator} (BLUE) if it is the linear unbiased estimator with the smallest variance. Since the  $\{{\bf Y}_i\}_{i=1}^{n}$ are uncorrelated with equal variance $\sigma^2$, the variance of any linear estimator if given by 
+
+\begin{align*}
+    \var \bigg[\sum_{i=1}^{n} d_i {\bf Y}_i\bigg]  = \sum_{i=1}^{n} d_i^2 \var({\bf Y}_i) = \sum_{i=1}^{n} d_i^2 \sigma^2 = \sigma^2 \sum_{i=1}^{n} d_i^2. 
+\end{align*}
+
+The BLUE of $\beta$ is, therefore, defined by a set of constants  $\{d_i\}_{i=1}^{n} \in \R$ which satisfy \eqref{blue conditions} and have the minimum value of $\sum_{i=1}^{n} d_i^2$, with $\sigma^2$ being an overall multiplicative constant. Let 
+
+$$
+k = n, \blank v_i = x_i, \blank c_i = 1 \textnormal{ and } a_i = d_i,
+$$
+
+which imply $\bar{v}_c = \bar{x}$. If $d_i$ is of the form 
+
+\begin{equation}
+    d_i = Kc_i ( v_i - \bar{v}_c) = K (x_i - \bar{x}) \textnormal{ with } i = 1, \cdots, n,
+    \label{gram schmidt}
+\end{equation}
+
+
+then the set $\{d_i\}_{i=1}^{n} \in \R$ maximizes 
+
+\begin{equation}
+    \frac{\bigg(\sum_{i=1}^{n} d_i x_i\bigg)^2}{\sum_{i=1} d_i^2} \blank \forall \{d_i\}_{i=1}^{n} \in \R \blank | \blank \sum_{i} d_i = 0.
+    \label{maximize functional}
+\end{equation}
+
+Furthermore, since 
+
+$$
+\{\{d_i\}_{i=1}^{n} \in \R: \blank \sum_{i}\ d_i \textnormal{ and } \sum_{i=1} d_i x_i = 1 \} \subset \{\{d_i\}_{i=1}^{n} \in \R : \blank \sum_{i} d_i = 0\},
+$$
+
+if the $d_i$s of the form \eqref{gram schmidt}, satisfy the \eqref{blue conditions} as well, then they certainly maximize 
+\eqref{maximize functional} among the set of all real finite-sequences with the sum of its elements being zero: $\{\{d_i\}_{i=1}^{n} \in \R : \blank \sum_{i} d_i = 0\}$. Now, using \eqref{gram schmidt}, we have 
+
+\begin{equation}
+    \sum_{i=1}^{n} d_i x_i = \sum_{i=1}^{n} K(x_i - \bar{x}) x_i = K S_{xx}.
+\end{equation}
+
+Now, \eqref{blue conditions}'s second constraint is satisfied if $K = \frac{1}{K_{xx}}$. Therefore, we can force the first constraint by setting the $d_i$s as 
+
+$$
+  \{d_i\}_{i=1}^{n} \in \R \Rightarrow d_i = \frac{x_i - \bar{x}}{S_{xx}} \blank \forall i = 1, \cdots, n,
+$$
+
+which then produce a maximum. 
 
 \end{document}
