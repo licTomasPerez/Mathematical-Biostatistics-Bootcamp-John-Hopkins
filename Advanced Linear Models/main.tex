@@ -629,9 +629,9 @@ The theorem now states that the OLS estimator is a BLUE. The main point behind t
 
 \subsection{Models and Distribution Assumptions}
 
-In this section, we'll treat two models for the paired data $\{(x_i, y_i)\}_{i=1}^n$ that are called simple linear regression models. Up until now, the least squares estimates were not obtained via statistical considerations but via a minimization problem. Therefore, we cannot make any statistical inference on the results. In order to do exactly that, we present two complete probabilistic models.
+In this section, we'll treat two models for the paired data $\{(x_i, y_i)\}_{i=1}^n$ that are called simple linear regression models. Up until now, the least squares estimates were not obtained via statistical considerations but via a minimization problem. Therefore, we cannot make any statistical inference on the results. In order to do exactly that, we present two complete probabilistic models. \\
 
-\paragraph{\textbf{Conditional Normal Model}} \\
+\paragraph{\textbf{Conditional Normal Model}} 
 
 The conditional normal model is the most common simple linear regression model and the most straightforward to analyze. The observed data are the $n$ pairs $\{(x_i, y_i)\}_{i=1}^n$. The values of the predictor variable, $\{x_i\}_{i=1}^n$ are assumed to be known, fixed constants, chosen by the experimenter. The values of the response variable $\{y_i\}_{i=1}^n$ are observed values of random variables, $\{{\bf Y}_i\}_{i=1}^n$, which are assumed to be independent. Furthermore, we assume the distribution of the ${\bf Y}_i$s to be normal, specifically
 
@@ -645,6 +645,40 @@ Thus the population regression function is a linear function of $x$, that is $\E
     {\bf Y} = \bm \alpha J_n + \bm \beta {\bf X} + \bm \epsilon,
 \end{equation}
 
-where $(J_n)_k = 1, \blank 1 \leq k \leq n$, where the errors ${\bm \epsilon}$ are assumed to be $\N(0,\sigma^2)$ random variables. 
+where $(J_n)_k = 1, \blank 1 \leq k \leq n$, where the errors ${\bm \epsilon}$ are assumed to be $\N(0,\sigma^2)$ random variables. \\
+
+Since the $\seqY$ are independent random variables, the joint pdf is the product of the marginal pdfs, ie.
+
+\begin{align*}
+    f(\Y | \alpha, \beta, \sigma^2) &= f(y_1, \cdots, y_n | \alpha, \beta, \sigma^2) \\
+    &= \prod_{j=1}^{n} f(y_j | \alpha, \beta, \sigma^2) \\
+    &= \prod_{j=1}^{n} \frac{1}{\sqrt{2\pi}\sigma} \exp\bigg[-\frac{(y_j -(\alpha + \beta x_j))^2}{2\sigma^2}\bigg] \\
+    &=  \frac{1}{{(2\pi)}^{\frac{n}{2}}\sigma^{n}} \exp\bigg[-\frac{\bigg(\sum_{j=1}^{n}(y_j -(\alpha + \beta x_j)\bigg)^2}{2\sigma^2}\bigg]. \\
+\end{align*}
+
+\paragraph{\textbf{Biviariate Normal Model}} 
+
+In all the previous models, the values of the predictor variable, $\{x_i\}_{i=1}^n$ have been fixed, known constants. In some situations it's necessary to consider models in which the predictor variable, as well as the response variable, is random ie. sometimes these $\{x_i\}_{i=1}^n$ values are actually observed values of random variables $\{{\bf X}_i\}_{i=1}^n$. One such model is the \textit{bivariate normal model}. \\
+
+In the bivariate normal model, the data $\{(x_i, y_i)\}_{i=1}^n$ are the observed values of the bivariate random vectors $\{({\bf X}_i, {\bf Y}_i)\}_{i=1}^n$. The random vectors are independent and the joint distribution of $({\bf X}_i, {\bf Y}_i)$ is assumed to be bivariate normal. Specifically, it is assumed that 
+
+$$
+({\bf X}_i, {\bf Y}_i) \sim \N(\mu_{\bf X}, \mu_{\bf Y}, \sigma^2_{\bf X}, \sigma^2_{\bf y}, \rho),
+$$
+
+the joint pdf and various properties of the data is $\{({\bf X}_i, {\bf Y}_i)\}_{i=1}^n$ is the product of the bivariate pdfs. In a simple linear regression analysis, we are still thinking of the $x_i$s as the predictor variable and $y$ as the response variable. That is, we are most interested in predicting the value of $y$ having observed the value of $x$. This naturally leads to basing inference on the conditional distribution of $\Y$ given $\X = x$, which for the case of a bivariate normal model, the conditional distribution distribution of $\Y$ given $\X = x$ is normal. The population regression function is now a true conditional expectation, given by
+
+$$
+\E(\Y|\X = x) = \mu_{\Y} + \rho \frac{\sigma_{\Y}}{\sigma_\X} (x-\mu_\X) = \bigg[\mu_\Y - \rho \frac{\sigma_{\Y}}{\sigma_\X} \mu_\X \bigg] + \bigg[ \rho \frac{\sigma_{\Y}}{\sigma_\X}\bigg]x.
+$$
+
+Therefore the bivariate normal model implies that the population regression is a linear function of $x$, where $\beta = \rho \frac{\sigma_{\Y}}{\sigma_\X}$ and where $\alpha = \mu_\Y - \rho \frac{\sigma_{\Y}}{\sigma_\X} \mu_\X$. We need not assume this as in the previous models. Also, as in the conidtional normal model, the conditional variance of the response variable $\Y$ doesn't depend on $x$,
+
+$$
+\var(\Y|\X = x) = \sigma^2_\Y (1-\rho^2).
+$$
+
+For the bivariate normal model, the linear regression analysis is almost always carried out using the conditional distribution of $\{{\bf Y}_i\}_{i=1}^n$ 
+given $\{{\bf X}_i\}_{i=1}^n \blank |\blank \X_i = x_i $, rather than the unconditional distribution of $\{({\bf X}_i, {\bf Y}_i)\}_{i=1}^n$. But then we are in the same situation as the one described by the conditional normal model. The fact that the $\{x_i\}_{i=1}^{n}$ are observed values of random variables is immaterial if we condition on these values and, in general, in simple linear regression we do not use the fact of bivariate normality except to define the conditional distribution. 
 
 \end{document}
