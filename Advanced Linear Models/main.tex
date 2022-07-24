@@ -366,7 +366,7 @@ In ANOVA, we studied how one factor, a random variable, influenced the means of 
 where 
 
 \begin{itemize}
-    \item both ${\bf X}_i$ and ${\bf Y}_i$ are random variables, we call ${\bf X}_i$ as the \textit{predictor} variable while ${\bf Yequation}_i$ is the \textit{response} variable, 
+    \item both ${\bf X}_i$ and ${\bf Y}_i$ are random variables, we call ${\bf X}_i$ as the \textit{predictor} variable while ${\bf Y}_i$ is the \textit{response} variable, 
     \item $\alpha$, $\beta$ are the intercept and the slope of the regression, and are assumed to be fixed and unknown parameters, 
     \item and where $\epsilon_i$ is a random variable, which can be assume to have $\E(\epsilon_i) = 0$. \\
 \end{itemize}
@@ -643,18 +643,20 @@ Thus the population regression function is a linear function of $x$, that is $\E
 
 \begin{equation}
     {\bf Y} = \bm \alpha J_n + \bm \beta {\bf X} + \bm \epsilon,
+    \label{conditional normal model}
 \end{equation}
 
 where $(J_n)_k = 1, \blank 1 \leq k \leq n$, where the errors ${\bm \epsilon}$ are assumed to be $\N(0,\sigma^2)$ random variables. \\
 
 Since the $\seqY$ are independent random variables, the joint pdf is the product of the marginal pdfs, ie.
 
-\begin{align*}
+\begin{align}
     f(\Y | \alpha, \beta, \sigma^2) &= f(y_1, \cdots, y_n | \alpha, \beta, \sigma^2) \\
     &= \prod_{j=1}^{n} f(y_j | \alpha, \beta, \sigma^2) \\
     &= \prod_{j=1}^{n} \frac{1}{\sqrt{2\pi}\sigma} \exp\bigg[-\frac{(y_j -(\alpha + \beta x_j))^2}{2\sigma^2}\bigg] \\
     &=  \frac{1}{{(2\pi)}^{\frac{n}{2}}\sigma^{n}} \exp\bigg[-\frac{\bigg(\sum_{j=1}^{n}(y_j -(\alpha + \beta x_j)\bigg)^2}{2\sigma^2}\bigg]. \\
-\end{align*}
+    \label{conditional normal pdf}
+\end{align}
 
 \paragraph{\textbf{Biviariate Normal Model}} 
 
@@ -679,6 +681,137 @@ $$
 $$
 
 For the bivariate normal model, the linear regression analysis is almost always carried out using the conditional distribution of $\{{\bf Y}_i\}_{i=1}^n$ 
-given $\{{\bf X}_i\}_{i=1}^n \blank |\blank \X_i = x_i $, rather than the unconditional distribution of $\{({\bf X}_i, {\bf Y}_i)\}_{i=1}^n$. But then we are in the same situation as the one described by the conditional normal model. The fact that the $\{x_i\}_{i=1}^{n}$ are observed values of random variables is immaterial if we condition on these values and, in general, in simple linear regression we do not use the fact of bivariate normality except to define the conditional distribution. 
+given $\{{\bf X}_i\}_{i=1}^n \blank |\blank \X_i = x_i $, rather than the unconditional distribution of $\{({\bf X}_i, {\bf Y}_i)\}_{i=1}^n$. But then we are in the same situation as the one described by the conditional normal model. The fact that the $\{x_i\}_{i=1}^{n}$ are observed values of random variables is immaterial if we condition on these values and, in general, in simple linear regression we do not use the fact of bivariate normality except to define the conditional distribution. \\
+
+\paragraph{\textbf{Estimation and Testing with Normal Errors}}
+
+Consider the conditional normal model, where the regression is given by \eqref{conditional normal model}. First, we find the maximum likelihood estimates for the three parameters, $\alpha, \beta$ and $\sigma^2$. To that end, we use the joint pdf given by 
+\eqref{conditional normal pdf}. The log-likelihood functions is 
+
+\begin{equation}
+\log L(\alpha,\beta, \sigma^2 \blank | \blank {\bf x},{\bf y}) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log \sigma^2 - \frac{\sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2}{2\sigma^2}.
+\label{MLE linear regression}
+\end{equation}
+
+For any fixed value of $\sigma^2$, $\log L$ is maximized as a function of $\alpha$ and $\beta$ by those values, the estimators $\hat{\alpha}$ and $\hat{\beta}$, that minimize 
+
+$$
+\sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2,
+$$
+
+which is precisely the RSS. Then the minimizing values are 
+
+
+\begin{align*}
+   \hat{\beta} = \frac{S_{xy}}{S_{xx}} \textnormal{ and } \hat{\alpha} = \bar{y} - \hat{\beta}\bar{x}.
+\end{align*}
+
+Thus, the least squares estimators of $\alpha$ and $\beta$ are also the Maximum Likelihood Estimators. The values $\hat{\beta}$ and $\hat{\alpha}$ are the maximizing values for any fixed value of $\sigma^2$. Now, substituting in the log likelihood, to find the MLE of $\sigma^2$ we need to maximize \eqref{MLE linear regression}, as follows:
+
+\begin{align*}
+    \frac{\partial}{\partial \sigma^2} & \log L(\alpha,\beta, \sigma^2 \blank | \blank {\bf x},{\bf y}) = \frac{\partial}{\partial \sigma^2} \bigg[-\frac{n}{2}\log(2\pi) - \frac{n}{2}\log \sigma^2 - \frac{\sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2}{2\sigma^2}\bigg]_{\sigma^2 = \hat{\sigma}^2} = 0 \\
+    &\Rightarrow -\frac{n}{2} \frac{1}{\hat{\sigma}^2} + \frac{\sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2}{(\hat{\sigma}^2)^2} = -\frac{n}{2} + \frac{\sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2}{\hat{\sigma}^2} = 0 \\
+    &\Rightarrow \hat{\sigma}^2 = \frac{1}{n} \sum_{j=1}^{n}(y_j - \alpha - \beta x_j)^2,
+\end{align*}
+
+ie. the MLE of $\sigma^2$, under the conditional normal model, is the RSS evaluated at the least squares lines, divided by the sample size. It turns out that, though the estimators $\hat{\beta}$ and $\hat{\alpha}$ are unbiased, $\hat{\sigma}^2$ is not. There is, however, an important result regarding the calculation of its expected values, as follow
+
+\begin{lemma}
+Let $\seqY$ be uncorrelated homoscedastic random variables with $\var \Y_i = \sigma^2$. Let $\{c_i\}_{i=1}^{n} \subset \R$, $\{d_i\}_{i=1}^{n} \subset \R$, then
+
+$$
+\cov\bigg(\sum_{i=1}^{n} c_i \Y_i, \sum_{i=1}^{n} d_i \Y_i\bigg) = \sigma^2 \sum_{i=1}^{n} c_i d_i.
+$$
+\end{lemma}
+
+Note that the lemma asks not for normality nor independence of the set $\seqY$ of random variables. \\
+
+Now, we wish to find $\sigma^2$'s bias. From the definition of the linear model, we have $
+\epsilon_i = \Y_i - \alpha - \beta x_i, $ then the \textit{residuals from the regression} as 
+$\hat \epsilon_i = \Y_i - \hat \alpha - \hat \beta x_i$
+and thus 
+
+$$
+\hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} \hat{\epsilon}_i^2 = \frac{\textnormal{RSS}}{n}.
+$$
+
+It can be calculated that $\E \hat{\epsilon}_i = 0$ \footnote{In effect, using the residuals from the regression's definition we have 
+
+\begin{align*}
+    \E \hat{\epsilon}_i &= \E[\Y_i - \hat \alpha - \hat \beta x_i] \\
+    &= \E[\Y_i] - \E[\hat \alpha] - \E[\hat \beta x_i] \\
+    &= \alpha + \beta x_i - \alpha - \beta x_i = 0,
+\end{align*}
+
+since both $\hat{\alpha}$ and $\hat{\beta}$ are unbiased. We can also readily compute $\hat{\epsilon}_i$'s variance as
+
+\begin{align*}
+    \var \hat \epsilon_i &= \var[\Y_i - \hat \alpha - \hat \beta x_i] = \E[\Y_i - \hat \alpha - \hat \beta x_i]^2 - 0 \\
+    &= \E\bigg[(\Y_i - \alpha - \beta x_i) - (\hat \alpha - \alpha) - (\hat \beta - \beta) x_i \bigg]^2 \\
+    &= \E(\Y_i - \alpha - \beta x_i)^2  + \E(\hat \alpha - \alpha)^2 + \E(\hat \beta - \beta)^2 x_i^2 \\ 
+    & \blank \blank \blank + 2\E[(\Y_i - \alpha - \beta x_i) (\hat \alpha - \alpha)] + 2\E[(\hat \alpha - \alpha)(\hat \beta -  \beta)] + 2 \E[(\Y_i - \alpha - \beta x_i)(\hat \beta -  \beta)] \\
+    &= \var \Y_i + \var \hat \alpha + \var \hat \beta - 2\cov (\Y_i, \hat \alpha) - 2x_i \cov(\Y_i, \hat \beta) + 2x_i \cov(\hat \alpha, \hat \beta) 
+\end{align*}
+}
+with its variance given by 
+
+\begin{equation}
+    \var \hat{\epsilon_i} = \E\epsilon^2_i = \sigma^2 \bigg[\frac{n-2}{n} + \frac{1}{S_{xx}} \bigg(\frac{1}{n} \sum_{j=1}^{n} x_j^2 + x_i^2 - 2(x_i - \bar{x})^2 - 2x_i \bar{x}\bigg) \bigg].
+\end{equation}
+
+Thus, 
+
+\begin{align*}
+    \E \hat{\sigma}^2 &= \frac{1}{n} \sum_{i=1}^{n} \E \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} \sigma^2 \bigg[\frac{n-2}{n} + \frac{1}{S_{xx}} \bigg(\frac{1}{n} \sum_{j=1}^{n} x_j^2 + x_i^2 - 2(x_i - \bar{x})^2 - 2x_i \bar{x}\bigg) \bigg]. \\
+    &= \frac{n-2}{n} {\frac{\cancel n}{\cancel n}} + \frac{1}{nS_{xx}} \bigg[\sum_{j=1}^{n} x_j^2 + \sum_{i=1}^{n} x_i^2 - 2S_{xx} - 2\frac{1}{n} \bigg(\sum_{i=1}^{n} x_i\bigg)^2 \bigg] \sigma^2\\
+    &= \frac{n-2}{n} \sigma^2 + \frac{2}{nS_{xx}} \sigma^2 \bigg[\summation x_i^2 - S_{xx} - \frac{1}{n} \bigg(\summation x_i\bigg)^2 \bigg] \textnormal{ but since } \begin{array}{c}
+         \summation x_i \bar{x} = \frac{1}{n} (\summation x_i)^2  \\
+         \summation x_i^2 - \frac{1}{n} (\summation x_i)^2 = S_{xx}
+    \end{array} \\
+    &= \frac{n-2}{n} \sigma^2 + \frac{2}{nS_{xx}} \sigma^2 \cancel{\bigg[S_{xx} - S_{xx} \bigg]} \Rightarrow  \E \hat{\sigma}^2 = \frac{n-2}{n} \sigma^2.
+\end{align*}
+
+Therefore the MLE $\hat{\sigma}^2$ is a biased estimator of $\sigma^2$. However, we can define a new unbiased estimator
+
+$$
+\hat{S}^2 = \frac{n}{n-2} \hat{\sigma}^2 = \frac{1}{n-2} \summation (y_i - \hat{\alpha} - \hat{\beta} x_i)^2 = \frac{1}{n-2} \summation \hat{\epsilon}_i^2.
+$$
+
+\blank \\
+
+To develop estimation and testing procedures, based on these estimators, we need to know their sampling distributions, which are given by the following theorem
+
+\begin{theo}\footnote{\begin{proof}
+First, we are to show that the $\hat{\alpha}$ and $\hat{\beta}$ estimators have the indicated normal distributions. To that end, we note that both estimators are linear functions of the independent normal variables $\seqY$. Therefore, they both have normal distributions. Remember as well, that if $\hat{\beta} = \summation d_i \Y_i$, with $d_i = \frac{x_i - \bar{x}}{S_{xx}} \textnormal{ for } i = 1, \cdots, n$, then 
+
+$$
+\E \hat{\beta} = \beta \textnormal{ and } \var \hat{\beta} = \frac{\sigma^2}{S_{xx}},
+$$
+
+ie. $\hat{\beta}$ is an unbiased estimators with minimal variance (since it's the best linear unbiased estimator). Furthermore, the estimator $\hat{\alpha} = \bar{\Y} - \hat{\beta} \bar{x}$ can be expressed as $\hat{\alpha} = \summation c_i \Y_i$ with $c_i = \frac{1}{n} - \frac{(x_i - \bar{x})\bar{x}}{S_{xx}}$, then 
+
+\begin{align*}
+    \E \hat{\alpha} &= \summation c_i \E \Y_i = \summation \bigg(\frac{1}{n}-\frac{(x_i-\bar{x})\bar{x}}{S_{xx}}\bigg) (\alpha + \beta x_i) = \alpha + \beta \bar{x} - \frac{\bar x \summation(x_i - \bar x)}{\summation (x_i - \bar{x})^2} \alpha - \frac{\bar x \summation(x_i - \bar x) x_i}{\summation (x_i - \bar{x})^2} \beta \\
+    &= \alpha + \beta \bar{x} - \frac{\bar x(\summation x_i -  \summation \bar x)}{\summation (x_i - \bar{x})^2} \alpha - \frac{\bar x (\summation x_i^2 -  \summation x_i\bar x) }{\summation (x_i - \bar{x})^2} \beta \\
+    &= \alpha + {\beta \bar{x}} - \frac{\bar x \cancel{(n \bar x -  n\bar x)}}{\summation (x_i - \bar{x})^2} \alpha - \frac{\beta \bar x}{S_{xx}} {\summation x_i^2 - n\bar{x}^2} = \alpha + {\beta \bar{x}} - \frac{\beta \bar{x}}{S_{xx}} \summation(x_i^2 -2n \bar{x}^2 + n \bar{x}^2) \\
+    &= \alpha + {\beta \bar{x}} - \frac{\beta \bar{x}}{S_{xx}} \underbrace{\summation(x_i - \bar x)^2}_{S_{xx}} = \alpha  \textnormal{ with the variance being }
+    \var \hat \alpha = \sigma^2 \summation c_i^2 = \frac{\sigma^2}{nSx_{xx}} \summation x_i^2
+\end{align*}
+
+\end{proof}}
+Under the conditional normal regression model, the sampling distribution of the unbiased estimators, $\hat{\alpha}, \hat{\beta}$ and $\hat{S}^2$ are 
+
+\begin{align*}
+    \hat{\alpha} \sim \N\bigg(\alpha, \frac{\sigma^2}{nS_{xx}} \summation x_i^2\bigg), \blank  & \hat{\beta} \sim \N\bigg(\beta, \frac{\sigma^2}{S_{xx}}\bigg) \textnormal{ with } \cov(\hat{\alpha}, \hat{\beta}) = -\frac{\sigma^2 \bar{x}}{S_{xx}}.
+\end{align*}
+
+Furthermore, $(\hat{\alpha}, \hat{\beta})$ and $\hat{S}^2$ are independent, with the latter estimator's distribution being 
+
+$$
+\frac{(n-2)\hat{S}^2}{n} \sim \chi_{n-2}^2. 
+$$
+\end{theo}
+
+\blank \textnormal{}
 
 \end{document}
