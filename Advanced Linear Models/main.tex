@@ -735,7 +735,7 @@ $$
 \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} \hat{\epsilon}_i^2 = \frac{\textnormal{RSS}}{n}.
 $$
 
-It can be calculated that $\E \hat{\epsilon}_i = 0$ \footnote{In effect, using the residuals from the regression's definition we have 
+It can be calculated that $\E \hat{\epsilon}_i = 0$ \footnote{Indeed, using the residuals from the regression's definition we have 
 
 \begin{align*}
     \E \hat{\epsilon}_i &= \E[\Y_i - \hat \alpha - \hat \beta x_i] \\
@@ -777,11 +777,12 @@ $$
 \hat{S}^2 = \frac{n}{n-2} \hat{\sigma}^2 = \frac{1}{n-2} \summation (y_i - \hat{\alpha} - \hat{\beta} x_i)^2 = \frac{1}{n-2} \summation \hat{\epsilon}_i^2.
 $$
 
-\blank \\
+\clearpage
 
 To develop estimation and testing procedures, based on these estimators, we need to know their sampling distributions, which are given by the following theorem
 
-\begin{theo}\footnote{\begin{proof}
+\begin{theo}
+\label{linear model distributions}\footnote{\begin{proof}
 First, we are to show that the $\hat{\alpha}$ and $\hat{\beta}$ estimators have the indicated normal distributions. To that end, we note that both estimators are linear functions of the independent normal variables $\seqY$. Therefore, they both have normal distributions. Remember as well, that if $\hat{\beta} = \summation d_i \Y_i$, with $d_i = \frac{x_i - \bar{x}}{S_{xx}} \textnormal{ for } i = 1, \cdots, n$, then 
 
 $$
@@ -794,9 +795,51 @@ ie. $\hat{\beta}$ is an unbiased estimators with minimal variance (since it's th
     \E \hat{\alpha} &= \summation c_i \E \Y_i = \summation \bigg(\frac{1}{n}-\frac{(x_i-\bar{x})\bar{x}}{S_{xx}}\bigg) (\alpha + \beta x_i) = \alpha + \beta \bar{x} - \frac{\bar x \summation(x_i - \bar x)}{\summation (x_i - \bar{x})^2} \alpha - \frac{\bar x \summation(x_i - \bar x) x_i}{\summation (x_i - \bar{x})^2} \beta \\
     &= \alpha + \beta \bar{x} - \frac{\bar x(\summation x_i -  \summation \bar x)}{\summation (x_i - \bar{x})^2} \alpha - \frac{\bar x (\summation x_i^2 -  \summation x_i\bar x) }{\summation (x_i - \bar{x})^2} \beta \\
     &= \alpha + {\beta \bar{x}} - \frac{\bar x \cancel{(n \bar x -  n\bar x)}}{\summation (x_i - \bar{x})^2} \alpha - \frac{\beta \bar x}{S_{xx}} {\summation x_i^2 - n\bar{x}^2} = \alpha + {\beta \bar{x}} - \frac{\beta \bar{x}}{S_{xx}} \summation(x_i^2 -2n \bar{x}^2 + n \bar{x}^2) \\
-    &= \alpha + {\beta \bar{x}} - \frac{\beta \bar{x}}{S_{xx}} \underbrace{\summation(x_i - \bar x)^2}_{S_{xx}} = \alpha  \textnormal{ with the variance being }
-    \var \hat \alpha = \sigma^2 \summation c_i^2 = \frac{\sigma^2}{nSx_{xx}} \summation x_i^2
+    &= \alpha + {\beta \bar{x}} - \frac{\beta \bar{x}}{S_{xx}} \underbrace{\summation(x_i - \bar x)^2}_{S_{xx}} = \alpha,
 \end{align*}
+
+with the variance being 
+
+\begin{align*}
+    \var \hat \alpha = \sigma^2 \summation c_i^2 &= \sigma^2 \summation \bigg[\frac{1}{n}-\frac{(x_i-\bar{x})\bar{x}}{S_{xx}}\bigg]^2 = \sigma^2 \bigg[ \summation \frac{1}{n^2} + \summation \frac{(x_i-\bar{x})^2\bar{x}^2}{S_{xx}^2} - \cancel{2 \summation \frac{1}{n} \frac{(x_i-\bar{x})\bar{x}}{S_{xx}}} \bigg]\\
+    &= \sigma^2 \bigg( \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \bigg) = \frac{\sigma^2 \summation x_i^2}{S_{xx}}
+\end{align*}
+
+We can also compute the covariance between both estimators
+ 
+\begin{align*}
+    \cov(\hat{\alpha}, \hat{\beta}) = \cov \bigg(\summation c_i \Y_i, \summation d_i \Y_i \bigg) = \sigma^2 \summation c_i d_i = \sigma^2 \summation \bigg[\bigg(\frac{1}{n}-\frac{(x_i-\bar{x})\bar{x}}{S_{xx}}\bigg) \frac{x_i - \bar{x}}{S_{xx}}\bigg] \\
+    = \sigma^2 \summation \frac{1}{n} \frac{x_i - \bar{x}}{S_{xx}} - \sigma^2 \summation \frac{(x_i - \bar{x})^2 \bar{x}}{S_{xx}^2} = -\frac{\sigma^2 \bar{x}}{S_{xx}}
+\end{align*}
+
+Next, we must show that $\hat{\alpha}$ and $\hat{\beta}$ are independent of $\hat{S}^2$. From the definition of the $\hat{\epsilon}_i$, we can write $
+\hat{\epsilon}_i = \sum_{j=1}^{n} [\delta_{ij} - (c_j + d_j x_i)] \Y_i$. Now, given that $\hat{\alpha} = \summation c_i \Y_i$ and $\hat{\beta} = \summation d_i \Y_i$, we can compute $\cov(\hat{\epsilon}_i, \hat{\alpha})$ and $\cov(\hat{\epsilon}_i, \hat{\beta})$, as follows 
+
+\begin{align*}
+    \begin{array}{c}
+        \cov(\hat{\epsilon}_i, \hat{\alpha}) = \sigma^2 \sum_{j=1}^{n} c_j [\delta_{ij} - (c_j + d_j x_i)] = \sigma^2[c_i - \sum_{j=1}^{n} c_j (c_j + d_j x_i)] = \sigma^2 [c_i - \sum_{j=1}^{n} c_j^2 - x_i \sum_{j=1}^{n} c_j d_j] \\
+         \blank  \\
+         = \sigma^2 [\frac{1}{n}-\frac{(x_i-\bar{x})\bar{x}}{S_{xx}} - \frac{1}{n} - \frac{\bar{x}^2}{S_xx} - x_i \frac{\bar{x}}{S_{xx}}] = 0 \\
+         \blank  \\
+        \cov(\hat{\epsilon}_i, \hat{\beta}) = \sigma^2 \sum_{j=1}^{n} d_j [\delta_{ij} - (c_j + d_j x_i)] = \sigma^2[d_i - \sum_{j=1}^{n} d_j (c_j + d_j x_i)]  = \sigma^2 [d_i - \sum_{j=1}^{n} c_j d_j - x_i \sum_{j=1}^{n} d_j^2]  \\
+         \blank  \\
+        = \sigma^2 [\frac{(x_i-\bar{x})}{S_{xx}} - \frac{\bar{x}}{S_{xx}} - \frac{x_i}{S_{xx}}] = 0.
+    \end{array}
+\end{align*}
+
+Then, it follows that, under normal sampling, $\hat{S}^2 = \summation \frac{\hat{\epsilon}_i^2}{n-2}$ is indeed independent from $\hat{\alpha}$ and $\hat{\beta}$. Proving that $\frac{(n-2)\hat{S}^2}{\sigma^2} \sim \chi^2_{n-2}$, we'd write $(n-2)\hat{S}^2$ as the sum of $n-2$ independent random variables, each of which has as $\chi^2_1$-distribution, ie. we must find constants $\{a_{ij}\}_{i=1, \blank j = 1}^{i = 1, j = n-2}$ which satisfy 
+
+$$
+\summation \hat{\epsilon}_i^2 = \sum_{j=1}^{n-2}\bigg(\summation a_{ij} \Y_i \bigg)^2,
+$$
+
+where 
+
+$$
+\summation a_{ij} = 0, \blank \forall j = 1, \cdots, n-2 \textnormal{ and } \summation a_{ij} a_{ij'} \propto \delta_{jj'}.
+$$
+
+Then, by Cochran's theorem, it would follow that $\frac{(n-2)\hat{S}^2}{\sigma^2} \sim \chi^2_{n-2}$. The details are somewhat involved because of the general nature of the $\{x_i\}_{i=1}^{n}$. 
 
 \end{proof}}
 Under the conditional normal regression model, the sampling distribution of the unbiased estimators, $\hat{\alpha}, \hat{\beta}$ and $\hat{S}^2$ are 
@@ -813,5 +856,61 @@ $$
 \end{theo}
 
 \blank \textnormal{}
+
+The RSS from the linear regression contains information about the worth of a polynomial fit of a higher order, over and above a linear fit. Since, in this model, we assume that the population regression is linear, the variation in this higher-order fit is just random variation. Robson (1959) gives a general recursion formula for finding coefficients for such higher-order polynomial fits. Alternatively, Cochran's theorem can be used to establish that $\summation \frac{\hat{\epsilon}_i^2}{\sigma} \sim \chi^2_{n-2} $. \\
+
+Inferences regarding the two parameters, $\alpha \textnormal{ and } \beta$, are usually based on the following two Student's \tdis, which follow immediately from the normal and \chidis and from Theorem \ref{linear model distributions}, 
+
+\begin{align*}
+    \frac{\hat{\alpha}-\alpha}{S \sqrt{\frac{\summation x_i^2}{nS_{xx}}}} \sim t_{n-2} \textnormal{ and } \frac{\hat{\beta}-\beta}{\frac{S}{\sqrt{S_{xx}}}} \sim t_{n-2}.
+\end{align*}
+
+The joint distribution of these two $t$-statistics is called a \textit{bivariate Student's \tdis}. This is so, since the joint distribution of $\hat \alpha \textnormal{ and } \hat \beta$ is bivariate normal and the same variance estimate $S$ is used in both univariate $t$-statistics. This joint distribution would be used if we wanted to do simultaneous inference regarding $\alpha \textnormal{ and } \beta$. \\
+
+Usually, there is more interest in $\beta \textnormal{ than in } \alpha$ since, the parameter $\alpha$ is the expected value of $\Y$ at $x = 0$, $\E(\Y | \X = 0)$ whereas $\beta$ is the rate of change of $\E(\Y | \X = x)$ as a function of $x$. That is, $\beta$ is the amount that $\E(\Y | \X = x)$ changes if $x$ is changed by one unit. Thus, this parameter relates to the entire range of $x$ values and contains the information about whatever linear relationship exists between $\Y$ and $x$. \\
+
+Note that if $\beta = 0$, then $\E(\Y | \X = x) = \alpha$, thus $\Y \sim \N(\alpha, \sigma^2)$ and is independent of $x$. The corresponding $\beta = 0$-hypothesis test can be written as a particular type of ANOVA test, one which tests whether all the treatments are equal. In the ANOVA, the null hypothesis states that the treatments $(x)$ are unrelated to the response in any way, while in linear regression the null hypothesis $\beta = 0$ states that the treatments are unrelated to the response in a linear way. 
+
+To test 
+
+$$
+H_0 : \blank \beta = 0 \textnormal{ versus } H_1 : \blank \beta \neq 0,
+$$
+
+we reject $H_0$ at $\alpha$-level if 
+
+\begin{align*}
+\bigg|\frac{\hat{\beta} - 0}{\frac{S}{\sqrt{S_{xx}}}}\bigg| > t_{n-2, \blank \frac{\alpha}{2}} \textnormal{ or equivalently, if } \frac{\hat{\beta}^2}{\frac{S^2}{S_{xx}}} > F_{1, \blank n-2, \blank \alpha}.
+\end{align*}
+
+Recalling $\hat{\beta}$'s definition and that RSS = $\summation \hat{\epsilon}_i^2$ we have
+
+$$
+\frac{\hat{\beta}^2}{\frac{S^2}{S_{xx}}} = \frac{\frac{S_{xy}^2}{S_{xx}}}{\frac{\textnormal{RSS}}{n-2}} = \frac{\textnormal{Regression sum of squares}}{\textnormal{Residual sum of squares/df}}.
+$$
+
+Said information can be succinctly stated in an ANOVA table.
+
+\begin{table}
+    \centering
+    \caption{ANOVA Table for simple linear regression}
+    \rowcolors{5}{}{gray!10}
+    \begin{tabular}{*5c}
+        \toprule
+        Source of Variation & df  & Sum of squares & Mean square & F-statistic \\    
+        Regression (slope) & 1 & Reg. SS = $\frac{S_{xy}^2}{S_{xx}}$     & MS(Reg) = Reg. SS & $F = \frac{\textnormal {MS(Reg)}}{\textnormal {MS(Resid)}}$ \\
+        Residual & $n-2$ & RSS = $\summation \hat{\epsilon}_i^2$ & MS(Resid) = $\frac{\textnormal{RSS}}{n-2}$  \\
+        \hline
+        Total & $n-1$ & SST = $\summation (y_i - \bar{y})^2$ & & \\
+        \midrule
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Note as well that the total sm of squares is the sum of the regression sum of squares and the residual sum of squares, ie. 
+
+$$
+\summation (y_i - \bar{y})^2 = \summation (\hat{y}_i - \bar{y})^2 +  \summation (y_i - \hat{y}_i)^2, \textnormal{ where } \hat{y}_i = \hat \alpha + \hat \beta x_i. 
+$$
 
 \end{document}
