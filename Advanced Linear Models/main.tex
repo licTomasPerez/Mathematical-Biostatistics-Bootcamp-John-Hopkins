@@ -861,9 +861,10 @@ The RSS from the linear regression contains information about the worth of a pol
 
 Inferences regarding the two parameters, $\alpha \textnormal{ and } \beta$, are usually based on the following two Student's \tdis, which follow immediately from the normal and \chidis and from Theorem \ref{linear model distributions}, 
 
-\begin{align*}
+\begin{align}
     \frac{\hat{\alpha}-\alpha}{S \sqrt{\frac{\summation x_i^2}{nS_{xx}}}} \sim t_{n-2} \textnormal{ and } \frac{\hat{\beta}-\beta}{\frac{S}{\sqrt{S_{xx}}}} \sim t_{n-2}.
-\end{align*}
+    \label{parameter distributions}
+\end{align}
 
 The joint distribution of these two $t$-statistics is called a \textit{bivariate Student's \tdis}. This is so, since the joint distribution of $\hat \alpha \textnormal{ and } \hat \beta$ is bivariate normal and the same variance estimate $S$ is used in both univariate $t$-statistics. This joint distribution would be used if we wanted to do simultaneous inference regarding $\alpha \textnormal{ and } \beta$. \\
 
@@ -907,10 +908,126 @@ Said information can be succinctly stated in an ANOVA table.
     \end{tabular}
 \end{table}
 
-Note as well that the total sm of squares is the sum of the regression sum of squares and the residual sum of squares, ie. 
+Equation \eqref{parameter distributions} can be used to construct $100(1-\alpha)\%$-confidence intervals for $\beta$.
+
+\begin{equation}
+    \hat{\beta} - t_{n-2, \blank \frac{\alpha}{2}} \frac{S}{\sqrt{S_{xx}}}< \beta <\hat{\beta} + t_{n-2, \blank \frac{\alpha}{2}} \frac{S}{\sqrt{S_{xx}}}.
+\end{equation}
+
+Also, an $\alpha$-level test of $H_0: \blank \beta = \beta_0$ versus $H_1: \blank \beta \neq \beta_0$ rejects $H_0$ if 
+
+\begin{equation}
+    \bigg|\frac{\hat{\beta} - \beta_0}{\frac{S}{S_{xx}}}\bigg| > t_{n-2, \blank \frac{\alpha}{2}}.
+\end{equation}
+
+As mentioned before, it is indeed common to test these two hypothesis, to determine if there is some linear relationship between the predictor and response variables. However, this test is more general, since any value of $\beta_0$ can be specified. The regression ANOVA can only test the ANOVA null hypothesis $H_0: \beta = 0$\footnote{Note as well that the total sum of squares is the sum of the regression sum of squares and the residual sum of squares, ie. 
 
 $$
 \summation (y_i - \bar{y})^2 = \summation (\hat{y}_i - \bar{y})^2 +  \summation (y_i - \hat{y}_i)^2, \textnormal{ where } \hat{y}_i = \hat \alpha + \hat \beta x_i. 
 $$
+
+Notice the similarity of these sums of squares too those in ANOVA, with the total sum of squares being the same. Indeed, since $y_i - \bar{y}_i = (y_i - \hat y_i) + (\hat y_i - \bar y_i)$, we just have to show that the cross term is zero by itself, 
+
+\begin{align*}
+    \summation (y_i - \hat y_i) (\hat y_i - \bar y_i) &= \summation \bigg[y_i - (\hat \alpha + \hat \beta x_i)\bigg]\bigg[(\hat \alpha + \hat \beta x_i) - \bar{y}\bigg] \\
+    &= \summation \bigg[(\hat{y}_i - \bar{y}) - \hat{\beta} (x_i - \bar{x})\bigg]\bigg[\hat{\beta}(x_i - \bar{x})\bigg] \textnormal{ where we used } \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x} \\
+    &= \hat{\beta} \summation (\hat{y}_i - \bar{y})(x_i - \bar{x}) - \hat{\beta}^2 \cancel{\summation (x_i - \bar{x})^2} \\
+    &= \hat{\beta} \summation[\hat{y}_i x_i - \hat{y}_i\bar{x} - \bar{y} x_i + \bar{x}\bar{y}] = \hat{\beta} \summation [\hat{y}_i x_i - \bar{x}y_i] -\cancel{n\bar{y}\bar{x}} + \cancel{n \bar{x}\bar{y}} = 0.
+\end{align*}
+
+Note as well that 
+
+$$
+\summation (\hat{y}_i - \bar{y})^2 = \hat{\beta}^2 \summation (x_i - \bar{x})^2 = \frac{S_{xy}^2}{S_{xx}}.
+$$}. \\
+
+The RSS measures deviation of the fitted line from the observed values, and the regression sum of squares, analogous to the ANOVA treatment sum of squares, measures the deviation of predicted values ("treatment means") from the grand mean. Also, as in the ANOVA, the sum of squares identity is valid because of the disappearance of the cross term. Also, note as well that 
+
+$$
+\summation (\hat{y}_i - \bar{y})^2 = \hat{\beta}^2 \summation (x_i - \bar{x})^2 = \frac{S_{xy}^2}{S_{xx}},
+$$
+
+which is easier to use for computing and provides the link with the $t$-test. But, $\summation (\hat{y}_i - \bar{y})^2$ is the more easily interpreted expression. \\
+
+A statistic that is used to quantify how well the fitted line describes the data is the \textit{coefficient of determination} $r^2$. It is defined as the ratio of the regression sum of squares to the total sum of squares, which can be written in the various forms 
+
+\begin{align*}
+    r^2 = \frac{\textnormal{Regression sum of squares}}{\textnormal{Total sum of squares}} = \frac{\summation (\hat{y}_i - \bar{y})^2}{\summation (y_i - \bar{y})^2} = \frac{S_{xy}^2}{S_{xx} S_{yy}}.
+\end{align*}
+
+The coefficient of determination measures the proportion of the total variation in the response variable $\{y_i\}_{i=1}^{N}$, measured by $S_{yy}$, that is explained by the fitted line, measured by the regression sum of squares). By definition, $r \in \R_{[0,1]}$. If the data $\{y_i\}_{i=1}^{N}$ fall exactly on the fitted line, then $y_i = \hat{y}_i, \blank \forall i$ and then $r^2 = 1$. If the data are not close to the fitted line, then the residual sum of squares will be large and $r^2 \rightarrow 0$. The coefficient of determination can also be derived as the square of the sample correlation coefficient of the $n$ pairs $\{(x_i, y_i)\}_{i=1}^{N}$ with the $n$ pairs $\{(y_i, \hat{y}_i)\}_{i=1}^{N}$. \\
+
+\clearpage
+
+\section{Regression Models}
+
+In this section we are interested in generalizations to the simple linear regression models, such as models with errors in the predictor (regression with errors in variables EIV), logistc regression, general linear models and we conclude by analyzing the linear regression's robustness. \\
+
+\subsection{Regression with Errors in Variables}
+
+The Regression with errors in variables (EIV), also known as measurement error mode, is fundamentally different from the simple linear regression. \\
+
+Consider again a linear model of the form 
+
+\begin{equation}
+    \Y_i = \alpha + \beta x_i + \epsilon_i,
+\end{equation}
+
+where now it is not assumed that the $\{x_i\}_{i=1}^{N}$ are known, but rather they are sampled from some random vectors. 
+
+\subsubsection{Functional and Structural Relationships}
+
+There are two different types of relationship that can be specified in the EIV model, one which specifies a functional linear relationship and one describing a structural linear relationship, which lead to different estimators with different properties. \\
+
+\paragraph{\textbf{Linear functional relationship model}}
+
+In this model, the parameters of main interest are $\alpha$ and $\beta$, and statistics is performed on these parameters by using the joint distribution of the $\{(\X_i, \Y_i)\}_{i=1}^{N}$. In particular, the data-set $\{(x_i, y_i)\}_{i=1}^{N}$ is observed via sampling from a set of random variables pairs, $\{(\X_i, \Y_i)\}_{i=1}^{N}$, whose means satisfy the \textit{functional} linear relationship
+
+\begin{equation}
+    \E \Y_i = \alpha + \beta \E \X_i.
+\end{equation}
+
+Or in terms of the mean vectors of vector random variables, 
+
+\begin{equation}
+    \begin{array}{c}
+         \E \X = \bm{\zeta} \\
+         \E \Y = \bm{\eta}
+    \end{array} \Rightarrow \bm{\eta} = \alpha J_n + \beta \bm{\zeta}.
+    \label{functional EIV-model}
+\end{equation}
+
+The $ \bm{\zeta}_i, \bm{\eta}$ are sometimes called latent variables. Note that \eqref{functional EIV-model} makes no distinction between $\X$ and $\Y$\footnote{Note that in the special case of $\bm{\delta} = 0$, the simple linear regression model is returned, since there are no measurement errors. If instead, $\alpha = 0$, then 
+
+\begin{equation*}
+     \Y_i \sim \N(\eta_i, \sigma^2_\epsilon) \textnormal{ and } \X_i \sim \N(\zeta_i, \sigma^2_\delta) 
+\end{equation*}}. If we are interested in a regression, however, there should be a reason for choosing $\Y$ as the response and $\X$ as the predictor. Keeping this specification in mind, we can define formally define the EIV model as the observation of independent pairs $\{(x_i, y_i)\}_{i=1}^{N}$, according to 
+
+\begin{equation}
+    \begin{array}{c}
+         \Y = \alpha J_n + \beta \bm{\zeta} + \bm{\epsilon}  \textnormal{ with } \epsilon_i \sim \N(0, \sigma^2_\epsilon), \\
+         \\
+         \X = \bm{\zeta} + \bm{\delta} \textnormal{ with } \delta_i \sim \N(0, \sigma^2_\delta)
+    \end{array}
+\end{equation}
+
+In this model we make inference on the parameters of interest using the joint distribution $\{(\X_i, \Y_i)\}_{i=1}^{N}$, conditional on $\bm{\zeta}$. 
+
+\blank \\
+
+\paragraph{\textbf{Linear structural relationship model}}
+
+This model can be thought of as an extension of the functional relationship model, extended with a hierarchy. As in the functional relationship model, we have random vectors $\X$ and $\Y$, which satisfy $ \E \X = \bm{\zeta}, \E \Y = \bm{\eta}$ as well. The functional relationship $\bm{\eta} = \alpha J_n + \beta \bm{\zeta}$ is also assumed, but now the $\bm{\zeta}-$parameters are themselves a random sample from a common population. Thus, conditional on $\bm{\zeta}$, we observe pairs $\{(\X_i, \Y_i)\}_{i=1}^{N}$ according to 
+
+\begin{equation}
+    \begin{array}{c}
+         \Y = \alpha J_n + \beta \bm{\zeta} + \bm{\epsilon}  \textnormal{ with } \epsilon_i \sim \N(0, \sigma^2_\epsilon), \\
+         \\
+         \X = \bm{\zeta} + \bm{\delta} \textnormal{ with } \delta_i \sim \N(0, \sigma^2_\delta),
+    \end{array} \textnormal{ and } \bm{\zeta} \sim \textnormal{iid } \N(\zeta, \sigma_\zeta^2).
+    \label{structural EIV model}
+\end{equation}
+
+As before, the $\bm{\epsilon}$ and $\bm{\delta}$-vectors are independent and they are also independent from $\bm{\zeta}$. As in the functional model, the parameters of interest are $\alpha$ and $\beta$ as well but the inference on these parameters is made using the joint distribution $\{(\X_i, \Y_i)\}_{i=1}^{N}$, unconditional on $\bm{\zeta}$ (ie. $\bm{\zeta}$ must be integrated out according to the  distribution in \eqref{structural EIV model}. 
 
 \end{document}
