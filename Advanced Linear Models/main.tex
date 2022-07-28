@@ -872,14 +872,7 @@ Usually, there is more interest in $\beta \textnormal{ than in } \alpha$ since, 
 
 Note that if $\beta = 0$, then $\E(\Y | \X = x) = \alpha$, thus $\Y \sim \N(\alpha, \sigma^2)$ and is independent of $x$. The corresponding $\beta = 0$-hypothesis test can be written as a particular type of ANOVA test, one which tests whether all the treatments are equal. In the ANOVA, the null hypothesis states that the treatments $(x)$ are unrelated to the response in any way, while in linear regression the null hypothesis $\beta = 0$ states that the treatments are unrelated to the response in a linear way. 
 
-To test 
-
-$$
-H_0 : \blank \beta = 0 \textnormal{ versus } H_1 : \blank \beta \neq 0,
-$$
-
-we reject $H_0$ at $\alpha$-level if 
-
+To test $H_0: \blank \beta = 0 \textnormal{ versus } H_1: \blank \beta \neq 0, $ we reject $H_0$ at $\alpha$-level if 
 \begin{align*}
 \bigg|\frac{\hat{\beta} - 0}{\frac{S}{\sqrt{S_{xx}}}}\bigg| > t_{n-2, \blank \frac{\alpha}{2}} \textnormal{ or equivalently, if } \frac{\hat{\beta}^2}{\frac{S^2}{S_{xx}}} > F_{1, \blank n-2, \blank \alpha}.
 \end{align*}
