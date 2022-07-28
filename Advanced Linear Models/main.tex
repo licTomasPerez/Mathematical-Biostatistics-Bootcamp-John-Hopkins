@@ -1028,6 +1028,116 @@ This model can be thought of as an extension of the functional relationship mode
     \label{structural EIV model}
 \end{equation}
 
-As before, the $\bm{\epsilon}$ and $\bm{\delta}$-vectors are independent and they are also independent from $\bm{\zeta}$. As in the functional model, the parameters of interest are $\alpha$ and $\beta$ as well but the inference on these parameters is made using the joint distribution $\{(\X_i, \Y_i)\}_{i=1}^{N}$, unconditional on $\bm{\zeta}$ (ie. $\bm{\zeta}$ must be integrated out according to the  distribution in \eqref{structural EIV model}. 
+As before, the $\bm{\epsilon}$ and $\bm{\delta}$-vectors are independent and they are also independent from $\bm{\zeta}$. As in the functional model, the parameters of interest are $\alpha$ and $\beta$ as well but the inference on these parameters is made using the joint distribution $\{(\X_i, \Y_i)\}_{i=1}^{N}$, unconditional on $\bm{\zeta}$ (ie. $\bm{\zeta}$ must be integrated out according to the  distribution in \eqref{structural EIV model}. \\
+
+The two models are quite similar in that statistical properties of estimators in one model (eg. consistency) often carry over into the other model. More precisely, estimators that are consistent in the functional model are also consistent in the structural model. 
+This makes sense since the functional model can be understood as a "conditional version" of the structural model. In particular, estimators which are consistent in the functional model are consistent as well in the structural model, since consistency must be true for all $\bm{\zeta}$ and given that the structural model averages over the $\bm{\zeta}$. The converse, however, is not true. However, there's a useful implication that goes from the structural to the functional relationship model. If a parameter is not \textit{identifiable} in the structural model, it's also not identifiable in the functional model. \\
+
+As stated previously, the main difference between the functional and structural models is that concerning inferences about the parameters $\alpha$ and $\beta$. This difference is of utmost importance. In the functional relationship model, this inference is made conditional on $\bm{\zeta}$ whilst, on the other hand, in the structural relationship model, this inference is made unconditional on $\bm{\zeta}$, using the marginal distribution of the $\X \textnormal{ and } \Y$-random vectors with the $\bm{\zeta}$ integrated out. 
+
+\subsubsection{Least squares solution}
+
+In the ordinary linear squares problem, the standard procedure for finding the best fitting line is to minimize the vertical distance only. In the EIV-models, this is no longer the case, since the $x_i$ now have an associated error with them. \\
+
+One way to account for this fact is to perform \textit{orthogonal least squares}, that is, to find the line that minimizes orthogonal distances rathen than vertical distances alone. This new distance measure does not favour the predictor variable, as does ordinary least squares, but rather treats both variables with the same footing. 
+
+Given a particular data point $(x',y')$, the point on a line $y = a + bx$ that is closest is given by\footnote{We first need to derive this measure. A point $(\hat{x},\hat{y})$ is the closest to the fitting line if it lies on the vertex of the right triangle with vertices $(x', y')$ and $(x', a+bx')$. By the Pythageorean theorem we have
+
+\begin{equation}
+    [(\hat{x} - x')^2 + (\hat{y} - (a+bx'))^2]^2 + [(\hat{x}' - x')^2 + (\hat{y} - y')^2] = (x'-x') 
+\end{equation}... TODO} 
+
+\begin{align}
+    \hat{x}' = \frac{\beta y'+x'-\alpha\beta}{1+\beta ^2} \textnormal{ and } \hat{y}' = \alpha  + \frac{\beta}{1+\beta ^2}(\beta y' + x' - \alpha \beta ).
+    \label{eiv-orth dist}
+\end{align}
+
+Now, given a dataset $\dataset$, the squared distance between an observed point $(x_i, y_i)$ and the closest point on the line $y = \alpha  + \beta x$ is given by $(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2$, where $\hat{x}_i$ and $\hat{y}_i$ are given by \eqref{eiv-orth dist}. Then, the \textit{total least squares problem} is
+
+\begin{equation}
+    \hat{\alpha}, \blank \hat{\beta} =  \min_{\begin{array}{c}
+        \small{\alpha  \in \Theta_{\alpha}} \\
+        \small{\beta  \in \Theta_{\beta}}
+    \end{array}}\summation \bigg[(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2 \bigg]
+    \label{eiv-minimization}
+\end{equation}
+
+Note that 
+
+\begin{align*}
+    \summation & \bigg[(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2 \bigg] = \summation \bigg[\bigg(x_i - \frac{\beta y_i+x_i-\alpha\beta}{1+\beta ^2} \bigg)^2 + \bigg(y_i- \frac{\beta}{1+\beta ^2}(\beta y_i + x_i - \alpha \beta )\bigg)^2  \bigg] \\
+    &= \summation \bigg[\bigg(- \frac{\beta}{1+\beta^2} y_i - \bigg(\frac{1+\beta^2}{1+\beta^2}-\frac{1}{1+\beta^2} \bigg)x_i + \frac{\alpha \beta}{1+\beta^2}\bigg)^2 + \bigg(\bigg(\frac{1+\beta^2}{1+\beta^2}- \frac{\beta^2}{1+\beta^2} \bigg)y_i - \frac{\beta}{1+\beta^2}x_i + \frac{\alpha \beta}{1+\beta^2} \bigg)^2 \bigg] \\
+    &= \summation \bigg[\bigg(- \frac{\beta}{1+\beta^2} y_i -\frac{\beta^2}{1+\beta^2} x_i + \frac{\alpha \beta}{1+\beta^2}\bigg)^2 + \bigg( \frac{1}{1+\beta^2}y_i - \frac{\beta}{1+\beta^2}x_i + \frac{\alpha \beta}{1+\beta^2} \bigg)^2 \bigg] \\ 
+    &= \summation \bigg[\frac{\beta^2}{(1+\beta^2)^2}\bigg(-y_i - \beta x_i + \alpha \bigg)^2 + \frac{1}{(1+\beta^2)^2}\bigg(y_i - \beta x_i + \alpha \beta\bigg)^2 \bigg]\\ 
+    &= \summation \bigg[\frac{\beta^2}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i) \bigg)^2 + \frac{1}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i)\bigg)^2 \bigg] \\
+    &= \frac{1}{1+\beta^2} \summation (y_i - (\alpha +\beta x_i))^2,
+\end{align*}
+
+which, at fixed $\beta$, the minimizing choice for $\alpha$ is $\alpha = \bar{y} - \beta \bar{x}$. Thus, its possible to reduce the two-variable minimization problem given by \eqref{eiv-minimization}, into a one-variable minimization problem, given by 
+
+\begin{equation}
+    \hat{\beta} = \min_{\begin{array}{c}
+        \small{\beta  \in \Theta_{\beta}} 
+    \end{array}} f(\beta) \textnormal{ where } \summation \bigg[(y_i - \bar{y})- \beta(x_i - \bar{x})\bigg]^2
+    \label{eiv-minimization}.
+\end{equation}
+
+Then, let 
+
+\begin{align*}
+    \begin{array}{c}
+       S_{xx} = \sum_{i=1}^{n} (x_i - \bar{x})^2  \\
+       \\
+       S_{yy} = \sum_{i=1}^{n} (y_i - \bar{y})^2   \\
+       \\
+       S_{xy} = \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+    \end{array} \Rightarrow f(\beta) &= \summation \bigg[ (y_i - \bar{y})^2 - 2\beta (x_i - \bar{x}) (y_i - \bar{y}) + \beta^2 (x_i - \bar{x})^2 \bigg]\\
+    &= \summation \bigg[ y_i^2 + \bar{y}^2 - 2y_i \bar{y} - 2\beta x_iy_i + 2\beta _i \bar{y} \\
+    & \textnormal{      +} 2\beta \bar{x} y_i - 2 \beta y_i \bar{x} + \beta^2 x_i^2 + \beta^2 \bar{x}^2 - 2\beta^2 x_i \bar{x}\bigg] \\
+    &= S_{yy} - 2\beta S_{xy} + \beta^2 S_{xx},
+\end{align*}
+
+which can be minimized with standard calculus techniques, yielding the following solutions for the parameters
+
+\begin{equation}
+    \hat{\beta} = \frac{-(S_{xx}-S_{yy}) + \sqrt{(S_{xx}-S_{yy})^2 + 4S_{xy}}}{2S_{xy}} \textnormal{ and } \hat{\alpha} = \bar{y} - \beta \bar{x},
+\end{equation}
+
+which is quite different from the ordinary least squares line, it turns out that this line lies between the ordinary regression of $y$ on $x$ and the ordinary regression of $x$ and $y$. \\
+
+In simple linear regression, the MLE estimators were the same as the those obtained via the ordinary least squares problem under the condition of normality. In the orthogonal least squares problem, this is only true in a special case, when we make certain assumptions about the parameters. 
+
+\subsubsection{Maximum Likelihood Estimation}
+
+Consider the functional linear relationship model, for which a maximum likelihood solution is to be found, the situation for the structural relationship model being similar and, in some cases, easier. With the normality assumption, we have 
+
+$$
+\begin{array}{c}
+    \X \sim \N(\zeta, \bm{\Sigma}_{\X}) \textnormal{ where } (\bm{\Sigma}_{\X})_{ij} = \sigma_{\delta}^2 \delta_{ij}, \\
+    \\
+    \Y \sim \N(\alpha J_n + \beta \bm{\zeta}, \bm{\Sigma}_{\Y}) \textnormal{ where } (\bm{\Sigma}_{\Y})_{ij} = \sigma_{\epsilon}^2 \delta_{ij},
+\end{array}
+$$
+
+where $\X_i$ and $\Y_i$ are independent $\forall i$. Let $\dataset$ be a set of $n$ observations, then the likelihood function is 
+
+\begin{align*}
+    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 ,\sigma_{\epsilon}^2 \blank &| \blank \dataset) =  \\
+    & \frac{1}{(2\pi (\sigma_{\delta}^2  \sigma_{\epsilon}^2)^{\frac{1}{2}})^{n}} \exp\bigg[-\frac{1}{2}{({\bf x} - {\bm \zeta})^{\textnormal{T}} \bm{\Sigma}_{\X}^{-1} ({\bf x} - {\bm \zeta})}\bigg] \\
+    & \times \exp\bigg[-\frac{1}{2}{\bigg({\bf y} - (\alpha J_n + \beta
+    \bm{\zeta})\bigg)^{\textnormal{T}} \bm{\Sigma}_{\Y}^{-1}\bigg({\bf y} - (\alpha J_n + \beta \bm{\zeta})\bigg)}\bigg] 
+\end{align*}
+
+Note that this induces two new measures, one for the $x_i$ and other for the $y_i$ given by 
+
+\begin{equation*}
+    \begin{array}{c}
+         d(\bm{x}, \bm{\zeta}) = \sqrt{({\bf x} - {\bm \zeta})^{\textnormal{T}} \bm{\Sigma}_{\X}^{-1} ({\bf x} - {\bm \zeta})},  \\
+         \\
+         d(\bm{y}, \bm{\eta}) = \sqrt{({\bf y} - {\bm \eta})^{\textnormal{T}} \bm{\Sigma}_{\Y}^{-1} ({\bf y} - {\bm \eta})},
+    \end{array}
+\end{equation*}
+
+which are two types of Mahalanobis distances. 
 
 \end{document}
