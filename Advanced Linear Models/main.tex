@@ -354,7 +354,7 @@ therefore the rejection region is $T_{\bf a} > k$, in which case we'll reject $H
 
 \clearpage
 
-\section{Simple Linear Regression}
+\section{Multivariate Linear Models}
 
 In ANOVA, we studied how one factor, a random variable, influenced the means of a response variable. We now turn to understand the functional dependence of one variable on another. In particular, in the case of linear regression, we have a relationship of the form
 
@@ -1048,10 +1048,10 @@ Given a particular data point $(x',y')$, the point on a line $y = a + bx$ that i
 Now, given a dataset $\dataset$, the squared distance between an observed point $(x_i, y_i)$ and the closest point on the line $y = \alpha  + \beta x$ is given by $(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2$, where $\hat{x}_i$ and $\hat{y}_i$ are given by \eqref{eiv-orth dist}. Then, the \textit{total least squares problem} is
 
 \begin{equation}
-    \hat{\alpha}, \blank \hat{\beta} =  \min_{\begin{array}{c}
+    \hat{\alpha}, \blank \hat{\beta} =  \min_{\substack{
         \small{\alpha  \in \Theta_{\alpha}} \\
         \small{\beta  \in \Theta_{\beta}}
-    \end{array}}\summation \bigg[(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2 \bigg]
+   }}\summation \bigg[(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2 \bigg]
     \label{eiv-minimization}
 \end{equation}
 
@@ -1062,16 +1062,19 @@ Note that
     &= \summation \bigg[\bigg(- \frac{\beta}{1+\beta^2} y_i - \bigg(\frac{1+\beta^2}{1+\beta^2}-\frac{1}{1+\beta^2} \bigg)x_i + \frac{\alpha \beta}{1+\beta^2}\bigg)^2 + \bigg(\bigg(\frac{1+\beta^2}{1+\beta^2}- \frac{\beta^2}{1+\beta^2} \bigg)y_i - \frac{\beta}{1+\beta^2}x_i + \frac{\alpha \beta}{1+\beta^2} \bigg)^2 \bigg] \\
     &= \summation \bigg[\bigg(- \frac{\beta}{1+\beta^2} y_i -\frac{\beta^2}{1+\beta^2} x_i + \frac{\alpha \beta}{1+\beta^2}\bigg)^2 + \bigg( \frac{1}{1+\beta^2}y_i - \frac{\beta}{1+\beta^2}x_i + \frac{\alpha \beta}{1+\beta^2} \bigg)^2 \bigg] \\ 
     &= \summation \bigg[\frac{\beta^2}{(1+\beta^2)^2}\bigg(-y_i - \beta x_i + \alpha \bigg)^2 + \frac{1}{(1+\beta^2)^2}\bigg(y_i - \beta x_i + \alpha \beta\bigg)^2 \bigg]\\ 
-    &= \summation \bigg[\frac{\beta^2}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i) \bigg)^2 + \frac{1}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i)\bigg)^2 \bigg] \\
-    &= \frac{1}{1+\beta^2} \summation (y_i - (\alpha +\beta x_i))^2,
+    &= \summation \bigg[\frac{\beta^2}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i) \bigg)^2 + \frac{1}{(1+\beta^2)^2}\bigg(y_i - (\alpha +\beta x_i)\bigg)^2 \bigg], \textnormal{ ie. }
 \end{align*}
 
-which, at fixed $\beta$, the minimizing choice for $\alpha$ is $\alpha = \bar{y} - \beta \bar{x}$. Thus, its possible to reduce the two-variable minimization problem given by \eqref{eiv-minimization}, into a one-variable minimization problem, given by 
+\begin{align} 
+    \blank & \blank & 
+    \alignedbox{\summation \bigg[(x_i - \hat{x}_i)^2+(y_i - \hat{y}_i)^2 \bigg]}{= \frac{1}{1+\beta^2} \summation (y_i - (\alpha +\beta x_i))^2},
+    \label{eiv identity}
+\end{align}
+
+which, at fixed $\beta$, the minimizing choice for $\alpha$ is $\alpha = \bar{y} - \beta \bar{x}$. Thus, its possible to reduce the two-variable minimization problem given by \eqref{eiv-minimization}, into a one-variable minimization problem, where the cost function is given by
 
 \begin{equation}
-    \hat{\beta} = \min_{\begin{array}{c}
-        \small{\beta  \in \Theta_{\beta}} 
-    \end{array}} f(\beta) \textnormal{ where } \summation \bigg[(y_i - \bar{y})- \beta(x_i - \bar{x})\bigg]^2
+    \hat{\beta} = \min_{\beta  \in \Theta_{\beta}} f(\beta) \textnormal{ where } f(\beta) =  \summation \bigg[(y_i - \bar{y})- \beta(x_i - \bar{x})\bigg]^2
     \label{eiv-minimization}.
 \end{equation}
 
@@ -1092,15 +1095,19 @@ Then, let
 
 which can be minimized with standard calculus techniques, yielding the following solutions for the parameters
 
-\begin{equation}
-    \hat{\beta} = \frac{-(S_{xx}-S_{yy}) + \sqrt{(S_{xx}-S_{yy})^2 + 4S_{xy}}}{2S_{xy}} \textnormal{ and } \hat{\alpha} = \bar{y} - \beta \bar{x},
-\end{equation}
+\begin{align}
+    \blank & \blank & \blank &  \blank &  
+    \alignedbox{\hat{\beta} = \frac{-(S_{xx}-S_{yy}) + \sqrt{(S_{xx}-S_{yy})^2 + 4S_{xy}}}{2S_{xy}}}{ \textnormal{ and } \hat{\alpha} = \bar{y} - \beta \bar{x},}
+    \label{orthogonal least squares}
+\end{align}
 
 which is quite different from the ordinary least squares line, it turns out that this line lies between the ordinary regression of $y$ on $x$ and the ordinary regression of $x$ and $y$. \\
 
 In simple linear regression, the MLE estimators were the same as the those obtained via the ordinary least squares problem under the condition of normality. In the orthogonal least squares problem, this is only true in a special case, when we make certain assumptions about the parameters. 
 
-\subsubsection{Maximum Likelihood Estimation}
+\subsubsection{\textbf{Maximum Likelihood Estimation}}
+
+\paragraph{\textbf{Functional Linear Relationship Model}}
 
 Consider the functional linear relationship model, for which a maximum likelihood solution is to be found, the situation for the structural relationship model being similar and, in some cases, easier. With the normality assumption, we have 
 
@@ -1108,20 +1115,12 @@ $$
 \begin{array}{c}
     \X \sim \N(\zeta, \bm{\Sigma}_{\X}) \textnormal{ where } (\bm{\Sigma}_{\X})_{ij} = \sigma_{\delta}^2 \delta_{ij}, \\
     \\
-    \Y \sim \N(\alpha J_n + \beta \bm{\zeta}, \bm{\Sigma}_{\Y}) \textnormal{ where } (\bm{\Sigma}_{\Y})_{ij} = \sigma_{\epsilon}^2 \delta_{ij},
+    \Y \sim \N(\alpha J_n + \beta \bm{\zeta}, \bm{\Sigma}_{\Y}) \textnormal{ where } (\bm{\Sigma}_{\Y})_{ij} = \sigma_{\epsilon}^2 \delta_{ij},\\
+    \\
 \end{array}
 $$
 
-where $\X_i$ and $\Y_i$ are independent $\forall i$. Let $\dataset$ be a set of $n$ observations, then the likelihood function is 
-
-\begin{align*}
-    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 ,\sigma_{\epsilon}^2 \blank &| \blank \dataset) =  \\
-    & \frac{1}{(2\pi (\sigma_{\delta}^2  \sigma_{\epsilon}^2)^{\frac{1}{2}})^{n}} \exp\bigg[-\frac{1}{2}{({\bf x} - {\bm \zeta})^{\textnormal{T}} \bm{\Sigma}_{\X}^{-1} ({\bf x} - {\bm \zeta})}\bigg] \\
-    & \times \exp\bigg[-\frac{1}{2}{\bigg({\bf y} - (\alpha J_n + \beta
-    \bm{\zeta})\bigg)^{\textnormal{T}} \bm{\Sigma}_{\Y}^{-1}\bigg({\bf y} - (\alpha J_n + \beta \bm{\zeta})\bigg)}\bigg] 
-\end{align*}
-
-Note that this induces two new measures, one for the $x_i$ and other for the $y_i$ given by 
+where $\X_i$ and $\Y_i$ are independent $\forall i$. Let $\dataset$ be a set of $n$ observations, then the likelihood function is given by\footnote{Note that this induces two Mahalanobis measures, one for the $x_i$ and other for the $y_i$ given by 
 
 \begin{equation*}
     \begin{array}{c}
@@ -1129,8 +1128,124 @@ Note that this induces two new measures, one for the $x_i$ and other for the $y_
          \\
          d(\bm{y}, \bm{\eta}) = \sqrt{({\bf y} - {\bm \eta})^{\textnormal{T}} \bm{\Sigma}_{\Y}^{-1} ({\bf y} - {\bm \eta})},
     \end{array}
-\end{equation*}
+\end{equation*}}
 
-which are two types of Mahalanobis distances. 
+\begin{align}
+    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 ,\sigma_{\epsilon}^2 \blank &| \blank \dataset) = \begin{array}{c}
+         {(2\pi (\sigma_{\delta}^2  \sigma_{\epsilon}^2)^{\frac{1}{2}})^{-n}} \exp\bigg[-\frac{1}{2}{({\bf x} - {\bm \zeta})^{\textnormal{T}} \bm{\Sigma}_{\X}^{-1} ({\bf x} - {\bm \zeta})}\bigg] \\
+         \times \exp\bigg[-\frac{1}{2}{\bigg({\bf y} - (\alpha J_n + \beta
+    \bm{\zeta})\bigg)^{\textnormal{T}} \bm{\Sigma}_{\Y}^{-1}\bigg({\bf y} - (\alpha J_n + \beta \bm{\zeta})\bigg)}\bigg] 
+    \end{array}  
+    \label{EIV likelihood}
+\end{align}
+
+The problem with the previous likelihood is that it doesn't have a finite maximum. In effect, consider $\bm{\zeta} = {\bf x}$ and let $\sigma_\delta^2 \rightarrow 0$, the value of the function goes to infinity, showing that here is no maximum likelihood solution. In fact, even if the equation defining the \eqref{EIV likelihood}'s first derivative are set equal to 0 and solved, the result is a saddle point and not a maximum. This entails that, as long as the configuration can be controlled, then the likelihood function can be forced to infinity. In particular, any configuration with zero variance, and the exponential term bounded. \\
+
+A common assumption, which alleviates many of these problems, is to consider $\sigma_\delta^2 = \lambda \sigma_\epsilon^2$, for $\lambda \in \R_{+}$, fixed and known. This assumption is one of the least restricted, stating a fixed, known, ratio of the variances and not, eg., of the individual values. Under this assumption, \eqref{EIV likelihood} can be rewritten as 
+
+\begin{align}
+    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 \blank &| \blank \dataset) =        \frac{{\lambda}^{\frac{n}{2}}}{(2\pi\sigma_{\delta}^2 )^{n}} \exp\bigg[-\summation \frac{(x_i - \zeta_i)^2 + \lambda(y_i - (\alpha + \beta \zeta_i))^2}{2\sigma_\delta^2}\bigg] 
+    \label{EIV likelihood},
+\end{align}
+
+which can then be maximized. First, for each value of $\alpha, \beta$ and $\sigma^2_\delta$, to maximize $\mathcal{L}$ with respect to $\bm{\zeta}$, 
+
+\begin{equation}
+f(\bm{\zeta}) = \summation {(x_i - \zeta_i)^2 + \lambda(y_i - (\alpha + \beta \zeta_i))^2},
+\label{EIV minimization}
+\end{equation}
+
+must be minimized. For each $i$, the minimum is attained at \footnote{In effect, differentiation yields
+
+$$
+\frac{\partial f}{\partial \zeta_j} = - 2(x_i - \zeta_i) - 2 \lambda [y_i - (\alpha + \beta \zeta_i)] = 0 \rightarrow \zeta_i(1+\lambda\beta^2) = x_i - \lambda \beta (y_i - \alpha),
+$$
+
+which is indeed a minimum since $\frac{\partial^2 f}{\partial^2 \zeta_j}= 2(1+\lambda\beta^2) > 0$.}
+
+\begin{align*}
+    \zeta_i^{*} = \frac{x_i + \lambda \beta(y_i - \alpha)}{1+\lambda \beta^2}. 
+\end{align*}
+
+Using this in \eqref{EIV minimization}, yields 
+
+\begin{align*}
+    f(\bm{\zeta}^{*}) = \summation {(x_i - \zeta_i^{*})^2 + \lambda(y_i - (\alpha + \beta \zeta_i^{*}))^2} = \frac{\lambda}{1+\lambda\beta^2} \summation (y_i - (\alpha + \beta x_i))^2.
+\end{align*}
+
+The likelihood fuction thus becomes,
+
+\begin{align}
+    \max_{\bm{\zeta} \in \Theta_{\bm{\zeta}}}
+    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 \blank &| \blank \dataset) =        \frac{{\lambda}^{\frac{n}{2}}}{(2\pi\sigma_{\delta}^2 )^{n}} \exp\bigg[- \frac{1}{2\sigma_\delta^2}  \frac{\lambda}{1+\lambda\beta^2} \summation (y_i - (\alpha + \beta x_i))^2\bigg] 
+    \label{EIV likelihood 2},
+\end{align}
+
+which can then be maximized to yield the maximum likelihood estimators. Note, however, that maximizing the likelihood means minimizing the exponentiated argument. This problem has already been solved by the orthogonal least squares, indicating a correspondence between orthogonal least squares and the EIV-maximum likelihood. Let
+
+\begin{equation}
+    \begin{array}{cc}
+         \alpha^{*} = \sqrt{\lambda} \alpha\\
+         \\
+         \beta^{*} =\sqrt{\lambda} \beta \\
+         \\
+         y_i^{*} = \sqrt{\lambda} y_i 
+    \end{array} \Rightarrow  \frac{\lambda}{1+\lambda\beta^2} \summation (y_i - (\alpha + \beta x_i))^2 =  \frac{1}{1+\beta^{*2}} \summation (y_i^{*} - (\alpha^{*} + \beta^{*} x_i))^2,
+\end{equation}
+
+which is identical to \eqref{eiv identity}. Then, the minimizing values of $\alpha^{*}$ and $\beta^{*}$ are given by \eqref{eiv identity}, which in our case are given by 
+
+\begin{align}
+    \blank & \blank & \blank &  \blank &  
+    \alignedbox{\hat{\beta} = \frac{-(S_{xx}-\lambda S_{yy}) + \sqrt{(S_{xx}-\lambda S_{yy})^2 + 4 \lambda S_{xy}}}{2\lambda S_{xy}}}{ \textnormal{ and } \hat{\alpha} = \bar{y} - \beta \bar{x}}.
+    \label{MLE estimators}
+\end{align}
+
+Therefore, the orthogonal least squares estimators agree with the maximum likelihood estimators only in the special case of $\lambda = 1$. This makes sense, since the orthogonal least squares method, $x$ and $y$ have the same magnitude of error and are thus treated with the same footing. Naturally, these results will agree with those obtained via simple linear regression in the case of fixed $x$-values ie. with zero variance and $\lambda = 0$. In other to find the $\hat{\sigma}^2_\delta$-estimator we plug the \eqref{MLE estimators} into \eqref{EIV likelihood 2}, thus yielding 
+
+\begin{align}
+    \max_{\substack{ \alpha \in \Theta_\alpha, \blank \beta \in \Theta_\beta \\
+    \bm{\zeta} \in \Theta_{\bm{\zeta}}}}
+    \mathcal{L}(\alpha, \beta, \bm{\zeta}, \sigma_{\delta}^2 \blank &| \blank \dataset) =        \frac{{\lambda}^{\frac{n}{2}}}{(2\pi\sigma_{\delta}^2 )^{n}} \exp\bigg[- \frac{1}{2\sigma_\delta^2}  \frac{\lambda}{1+\lambda \hat{\beta}^2} \summation (y_i - ( \hat{\alpha} +  \hat{\beta }x_i))^2\bigg] 
+    \label{EIV likelihood 3},
+\end{align}
+
+which can then be maximized with respect to $\sigma^2_\delta$. The $\hat{\sigma}^2_\delta$-estimator is then\footnote{Indeed, by differentiating $\log \mathcal{L}$, with $\mathcal{L}$ given by \eqref{EIV likelihood 3}, yields 
+
+\begin{align*}
+    \frac{\partial \log \mathcal{L}}{\partial {\sigma}^2_\delta} = \bigg[- \frac{n}{{\sigma}^2_\delta} + \frac{1}{({\sigma}^2_\delta)^2} \frac{\lambda}{1+\lambda \hat{\beta}^2} \summation (y_i - ( \hat{\alpha} +  \hat{\beta }x_i))^2 = 0 \bigg]_{{\sigma}^2_\delta = \hat{{\sigma}}^2_\delta} \Rightarrow \hat{\sigma}^2_\delta = \frac{1}{2n}   \frac{\lambda}{1+\lambda \hat{\beta}^2} \summation (y_i - ( \hat{\alpha} +  \hat{\beta }x_i))^2
+\end{align*}}
+
+\begin{align}
+    \alignedbox{\hat{\sigma}^2_\delta}{ = \frac{1}{2n} \frac{\lambda}{1+\lambda \hat{\beta}^2} \summation (y_i - ( \hat{\alpha} +  \hat{\beta }x_i))^2.}
+\end{align}
+
+From the properties of the MLEs, it follows that ${\sigma}^2_\epsilon$'s MLE is given by $\hat{\sigma}^2_\epsilon = \frac{\hat{\sigma}^2_\delta}{\lambda}$ and $\hat{\bm{\zeta}} = \hat{\alpha} J_n + \hat{\beta}{\bf x}$. It is interesting to not that $\hat{\alpha}$ and $\hat{\beta}$ are consistent estimators, $\hat{\sigma}^2_\delta$ is not. More precisely,
+
+\begin{align}
+    \hat{\alpha}  &\overset{\prob}{\rightarrow} \alpha, & \hat{\beta}  &\overset{\prob}{\rightarrow} \beta ,& \hat{\sigma}^2_\delta  &\overset{\prob}{\rightarrow} \frac{1}{2}\hat{\sigma}^2_\delta.
+\end{align}
+
+\blank \\
+
+\paragraph{\textbf{Linear Structural Relationship Model}}
+
+Consider now the linear structural relationship model, given by \eqref{structural EIV model}. In this model, inference about $\alpha$ and $\beta$ is done using the marginal distribution of $\seqX$ and $\seqY$, that is, the distribution obtained by integrating out $\bm{\zeta}$. By doing this and integrating out $\bm{\zeta}$, the marginal distribution of $(\X_i,\Y_i)$ is a bivariate normal 
+
+$$
+    (\X_i,\Y_i) \sim \bm{\mathcal{N}}\left( \left[\begin{array}{c}
+         \zeta  \\
+         \alpha + \beta \zeta 
+    \end{array}\right], \left[\begin{array}{cc}
+        \sigma_{\delta}^2 + \sigma_{\epsilon}^2 & \beta \sigma_{\epsilon}^2  \\
+        \beta \sigma_{\epsilon}^2 &   \sigma_{\delta}^2 + \beta^2 \sigma_{\epsilon}^2
+    \end{array} \right] \right).
+$$
+
+Note that the functional relationship model, which is conditional on ${\zeta}_i$, has uncorrelated observations, but in the structural relationship model, where the inference is done unconditional of the $\zeta_i$, has correlated observations. In other words, the $\zeta_i$ play a similar role to blocks and the correlation with appears here is similar to an intraclass correlation. \\
+
+Consider now a dataset of observations, $\dataset$, with its likelihood function being that of a bivariante normal distribution. Hence, to find the MLE estimators for the six relevant parameters one has to solve a set of five coupled linear equations. Thus, the system is indeterminate and there no unique value for the six-parameter vector $(\alpha, \beta, \zeta, \sigma_{\epsilon}^2, \sigma_{\delta}^2, \sigma_{zeta}^2)$ that maximizes the likelihood. 
+
+\subsection{General Linear Models}
 
 \end{document}
