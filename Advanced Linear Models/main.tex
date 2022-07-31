@@ -1248,4 +1248,135 @@ Consider now a dataset of observations, $\dataset$, with its likelihood function
 
 \subsection{General Linear Models}
 
+The conditional normal model for the multilinear regression problem is a special case of a generalized linear model (GLM). A GLM describes a relationship 
+between the mean of a response variable $\Y$ and an independent variable $\X$, with the relationship being more complicated than the standard $\E \Y = \alpha J_n + \beta {\bf x}$. \\
+
+\subsubsection{The Model}
+
+A GLM consists of three components, a random component, the systematic component and a link function. 
+
+\begin{itemize}
+    \item The response variables $\seqY$ are the random component, which are assumed to be independent random variables, each with a distribution from a specified exponential family. These random variable are not identically distributed but belong to the same family. 
+    \item The systematic component is the model itself. It's the function of the predictor variable $x_i$, linear in the parameters, that is related to the mean of $\Y_i$. The systematic component could be, for example $\alpha + \beta x_i$ or $\alpha + \frac{\beta}{x_i}$. 
+    \item Finally, the link function $g(\mu)$ links the two components by asserting that $g(\mu_i) = \alpha + \beta x_i$, where $\mu_i = \E \Y_i$. 
+\end{itemize}
+
+The conditional normal model is an example of a GLM, where the responses $\seqY$ all have normal distributions. Note that the normal family is an exponential family, which is the random component. The systematic component is given by the form of the regression function, $\alpha + \beta x_i$. Finally, the relationship $\mu_i = \E \Y_i = \alpha + \beta x_i$ is assumed. This means the link function is simple $g(\mu) = \mu$, which is the identity link. \\
+
+\subsubsection{Logistic Regression}
+
+In the logistic regression model, the responses $\seqY$ are independent where $\Y_i \sim \textnormal{Bernoulli }(\pi_i)$, where the Bernoulli family is an exponential family. In this model, the $\pi_i$ is assumed to be related to $x_i$ by 
+
+\begin{equation}
+    \log \bigg(\frac{\pi_i}{1-\pi_i}\bigg) = \alpha + \beta x_i,
+    \label{logit function}
+\end{equation}
+
+where the left-hand side is the log of the odds of success for $\Y_i$. This model assumed this log-odds or logit is a linear function of the predictor variable $\X$. The Bernoulli probability mass function can be written as an exponential family, as follow 
+
+\begin{equation*}
+    \pi^y (1-\pi)^y = (1-\pi) \exp\bigg(y \log \frac{\pi_i}{1-\pi_i}\bigg),
+\end{equation*}
+
+where the $\frac{\pi_i}{1-\pi_i}$-factor is the natural parameter for this exponential family and gives the canonical link function $g(\pi) = \frac{\pi}{1-\pi}$. \eqref{logit function} can be rewritten as 
+
+\begin{align}
+    \pi_i = \frac{e^{ \alpha + \beta x_i}}{1+e^{ \alpha + \beta x_i}},  \textnormal{ or more generally as } \blank \blank \blank \blank \blank \blank \alignedbox{\pi(x)}{ = \frac{e^{ \alpha + \beta x}}{1+e^{ \alpha + \beta x}}},
+\end{align}
+
+from which it is clear that $\pi(x) \in \R_{[0,1]}$, which is reasonable since it is a probability. However, if it possible that $ \exists x \in \mathds{R} \blank | \blank \pi(x)=1 \lor \blank \pi(x)=0 $, then the model is not appropriate, but by examining its derivative it turns out this is not the case. The derivative is given by 
+
+$$
+\frac{d\pi(x)}{d} = \beta \pi(x) (1-\pi(x)),
+$$
+
+whose sign depends on $\beta$'s sign. If $\beta > 0$, then $\pi(x)$ is a strictly increasing function of $x$, whilst if $\beta < 0$, then $\pi(x)$ is a strictly decreasing function of $x$, and it is constant if $\beta = 0$. As in simple/multivariate linear regression, if $\beta = 0$, there is no relationship between $\pi$ and $x$. \\
+
+The $\alpha, \beta$-parameters, in the logistic model, have similar interpretations than in the multivariate model. $\beta$ is the change in the log-odds of success corresponding to a one-unit increase in the predictor variable. \\
+
+\paragraph{\textbf{Estimation}}
+
+In traditional linear regression, with a linear model of the form $\Y = \alpha J_n + \beta \X + \bm{\epsilon}$, the technique for least squares was an option for calculating estimates for $\alpha$ and $\beta$. In our case, this is no longer the case, given that $\Y  \sim \textnormal{Bernoulli} (\bm{\pi})$, there is no longer a direct connection between $\Y$ and $\alpha J_n + \beta \X$. Thus, least squares is no longer a valid option. \\
+
+The general estimation method is thus maximum likelihood. In the general linear model, 
+
+$$
+\Y \sim \textnormal{Bernoulli} (\bm{\pi}) \textnormal{ where } \pi(x) = F(\alpha + \beta x) = \frac{e^{\alpha + \beta x}}{1+e^{\alpha + \beta x}}.
+$$
+
+Let $F_i =  F(\alpha + \beta x_i)$, in which case, the likelihood function is given by 
+
+\begin{equation}
+    \mathcal{L}(\alpha, \beta | \ydata) = \prod_{i=1}^{n} \pi(x_i)^{y_i} (1-\pi(x_i))^{1-y_i} = \prod_{i=1}^{n} F_i^{y_i} (1-F_i)^{1-y_i},
+\end{equation}
+
+with its log-likehood being given by 
+
+\begin{equation}
+\log \mathcal{L}(\alpha, \beta | \ydata) =  \sum_{i=1}^{n} \bigg[ {y_i} \log F_i + {(1-y_i)} \log (1-F_i) \bigg] = \sum_{i=1}^{n} \log(1-F_i) + y_i \log\bigg(\frac{F_i}{1-F_i}\bigg),
+\end{equation}
+
+from which the likelihood equations can be obtained. 
+
+\begin{align}
+    \frac{\partial}{\partial \alpha} \log \mathcal{L}(\alpha, \beta | \ydata) &=  \sum_{i=1}^{n} \bigg[ -\frac{1}{1-F_i}  \frac{\partial F_i}{\partial \alpha} + y_i \frac{1}{F_i} \frac{\partial F_i}{\partial \alpha} + y_i \frac{1}{1-F_i} \frac{\partial F_i}{\partial \alpha} \bigg]\\
+    &= \sum_{i=1}^{n} \bigg[ -\frac{F_i}{F_i(1-F_i)}  + y_i \frac{1-F_i}{F_i(1-F_i)} + y_i \frac{F_i}{F_i(1-F_i)} \bigg] \frac{\partial F_i}{\partial \alpha} \\
+    &= \summation \bigg[ \frac{-F_i + y_i - y_i F_i + y_i F_i}{F_i (1-F_i)} \bigg] \frac{\partial F_i}{\partial \alpha} \\
+    &= \summation (y_i - F_i) \frac{f_i}{F_i (1-F_i)} \textnormal{ where } f_i (\omega) = \frac{dF}{d\omega}
+    \\
+    \frac{\partial}{\partial \beta} \log \mathcal{L}(\alpha, \beta | \ydata) &=  \sum_{i=1}^{n} \bigg[ -\frac{1}{1-F_i}  \frac{\partial F_i}{\partial \beta} x_i + y_i \frac{1}{F_i} \frac{\partial F_i}{\partial \beta} x_i + y_i \frac{1}{1-F_i} \frac{\partial F_i}{\partial \beta} x_i \bigg]\\
+    &= \summation (y_i - F_i) \frac{f_i}{F_i (1-F_i)} x_i,
+\end{align}
+
+where $f_i (\omega) = \frac{dF}{d\omega}$ (ie. $f$ is $F$'s probability density function). Both of these equations can then be set to zero and numerically solved (for these are non-linear equations) to yield the estimators. In logistic regression, $F(\omega) = \frac{e^{\omega}}{1+e^{\omega}}$, which makes $\frac{f_i}{F_i(1-F_i)} = 1$, yielding somewhat simpler estimates. For both logistic and probit regression, the log-likelihood is strictly concave, thus, if the likelihood equations have a solution, it is unique and it is the maximum likelihood estimators. However, for some extreme data, the likelihood equations do not have a solution as the maximum of the likelihood occurs in some limit as the parameters go to $ \pm \infty$. This is so since logistic models assume $0<\pi(x)<1$, but for certain data set, the maximum of the logistic likelihood occurs in a limit with $\pi(x) = 0$ or $1$. The probability of obtaining such data converges to 0 if the logistic model is true. \\
+
+So for, it was assumed that at each value of $x_i$, there was only one Bernoulli trial observation being performed. Consider a more general case, where there are $J$ different values of the predictor $x$ in the data set $\{x_i\}_{i=1}^{J}$. Let $n_J$ denote the number of Bernoulli observations at $x_j$, and let $\Y^{*}$ denote the number of successes in these $n_j$ observations. Thus, $\Y^{*} \sim \textnormal{Binomial}(n_j, \pi(x_j))$, then the likelihood reads as 
+
+\begin{equation}
+\mathcal{L}(\alpha, \beta | \{y_i\}_{i=1}^{J}) = \prod_{i=1}^{J} \pi(x_j)^{y_i^{*}} (1-\pi(x_j))^{n_i-y_i^{*}} = \prod_{i=1}^{J} F_i^{y_i^{*}} (1-F_i)^{n_i-y_i^{*}},
+\end{equation}
+
+and the likelihood equations are then 
+
+\begin{align}
+     \sum_{j=1}^{J} (y_j^{*} - n_j F_j) \frac{f_j}{F_j (1-F_j)} = 0 \\
+    \sum_{j=1}^{J} (y_j^{*} - n_j F_j) \frac{f_j}{F_j (1-F_j)} x_j = 0.
+\end{align}
+
+The approximate variances can then be calculated using maximum likelihood assymptotics using a $2 \times 2$-information matrix, given by 
+
+\begin{equation}
+    I(\theta_1, \theta_2) = \left(\begin{array}{cc}
+        -\frac{\partial^2}{\partial \theta_1^2} \log \mathcal{L}(\theta_1, \theta_2 \blank |\blank \ydata) & -\frac{\partial^2}{\partial \theta_1 \partial \theta_1} \log \mathcal{L}(\theta_1, \theta_2 \blank |\blank \ydata) \\
+         -\frac{\partial^2}{\partial \theta_1 \partial \theta_1} \log \mathcal{L}(\theta_1, \theta_2 \blank |\blank \ydata) & -\frac{\partial^2}{\partial \theta_2^2} \log \mathcal{L}(\theta_1, \theta_2 \blank |\blank \ydata)
+    \end{array}\right),
+\end{equation}
+
+which, for logistic regression, is given by 
+
+\begin{equation}
+    I(\alpha, \beta) = \left(\begin{array}{cc}
+       \sum_{j=1}^{J} n_j F_j (1-F_j) & - \sum_{j=1}^{J} x_j n_j F_j (1-F_j) \\
+         \sum_{j=1}^{J} x_j n_j F_j (1-F_j) & \sum_{j=1}^{J} x_j^2 n_j F_j (1-F_j)
+    \end{array}\right),
+\end{equation}
+
+and the variances of the MLE $\hat{\alpha}$ and $\hat{\beta}$ can then be approximated with this method. Note that the elements of $I(\alpha, \beta)$ do not depend on the $\Y_j^{*}$. Thus, the observed information is the same as the information in this case. \\
+
+%\subsubsection{Robust Regression}
+
+%In statistical inference it is often the case that the fitted model is not correct. Thus it is necessary to analyse the performance of statistical methods if the underlying model is not correct, looking for some robust alternatives to least squares estimation. \\
+
+%Let $\xdata$ be an observation, then the mean and median can be defined as the minimizers of the following quantities 
+
+%\begin{align}    \textnormal{mean }& : \min_{m \in \Theta} \summation (x_i - m)^2, &   \textnormal{median }& : \min_{m \in \Theta} \summation |(x_i - m)|.\end{align}
+
+%For simple linear regression, observing $\dataset$, the least squares satisfy 
+
+%\begin{align*}    \textnormal{least squares }: \min_{\substack{a \in \Theta \\                      b \in \Theta }} \summation |y_i - (\alpha + \beta x_i)|^2.\end{align*}
+
+%Analogously, the least absolute deviation regression estimates are given by 
+
+%\begin{equation}    \textnormal{least absolute deviation }: \min_{\substack{a \in \Theta \\                     b \in \Theta }} \summation |y_i - (\alpha + \beta x_i)|.\end{equation}
+
 \end{document}
